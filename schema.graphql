@@ -1,0 +1,558 @@
+type AccountsConfig @entity {
+  id: ID!
+  owner: Bytes
+  registrar_contract: Bytes
+  next_account_id: BigInt
+  max_general_category_id: BigInt
+}
+
+type Categories @entity{
+  id: ID!
+  sdgs: [BigInt!]
+  general: [BigInt!]
+}
+
+enum EndowmentType {
+  Charity,
+  Normal,
+  None
+}
+
+type AccountStrategies @entity{
+  id: ID!
+  locked_vault: [String!]
+  locked_percentage: [BigInt!]
+  liquid_vault: [String!]
+  liquid_percentage: [BigInt!]
+}
+
+enum EndowmentStatus {
+  Inactive,
+  Approved,
+  Frozen,
+  Closed
+}
+
+type OneOffVaults @entity{
+  id: ID!
+  locked: [String!]
+  locked_amount: [BigInt!]
+  liquid: [String!]
+  liquid_amount: [BigInt!]
+}
+
+type RebalanceDetails @entity{
+  id: ID!
+  rebalance_liquid_invested_profits: Boolean
+  locked_interests_to_liquid: Boolean
+  interest_distribution: Int
+  locked_principle_to_liquid: Boolean
+  principle_distribution: Int
+}
+
+type EndowmentFee @entity{
+  id: ID!
+  payout_address: Bytes
+  fee_percentage: BigInt
+  active: Boolean
+}
+
+type Delegate @entity{
+  id: ID!
+  addr: Bytes
+  expires: BigInt
+}
+type SettingsPermission @entity{
+  id: ID!
+  owner_controlled: Boolean
+  gov_controlled: Boolean
+  modifiable_after_init: Boolean
+  delegate: Delegate
+}
+type SettingsController @entity{
+  id: ID!
+  endowment_controller: SettingsPermission
+  strategies: SettingsPermission
+  whitelisted_beneficiaries: SettingsPermission
+  whitelisted_contributors: SettingsPermission
+  maturity_whitelist: SettingsPermission
+  maturity_time: SettingsPermission
+  profile: SettingsPermission
+  earnings_fee: SettingsPermission
+  withdraw_fee: SettingsPermission
+  deposit_fee: SettingsPermission
+  aum_fee: SettingsPermission
+  kyc_donors_only: SettingsPermission
+  name: SettingsPermission
+  image: SettingsPermission
+  logo: SettingsPermission
+  categories: SettingsPermission
+  split_to_liquid: SettingsPermission
+  ignore_user_splits: SettingsPermission
+}
+
+type SplitDetails @entity{
+  id: ID!
+  max: BigInt
+  min: BigInt
+  defaultSplit: BigInt
+}
+
+type Endowment @entity {
+  id: ID!
+  owner: Bytes
+  name: String
+  tier: BigInt
+  logo: String
+  image: String
+  deposit_approved: Boolean
+  withdraw_approved: Boolean
+  maturity_time: BigInt
+  categories: Categories
+  endow_type: EndowmentType
+  status: EndowmentStatus
+  strategies: AccountStrategies
+  oneoff_vaults: OneOffVaults
+  rebalance: RebalanceDetails
+  kyc_donors_only: Boolean
+  pending_redemptions: Int
+  copycat_strategy: Int
+  proposal_link: BigInt
+  dao: Bytes
+  dao_token: Bytes
+  donation_match_active: Boolean
+  donation_match_contract: Bytes
+  whitelisted_beneficiaries: [Bytes!]
+  whitelisted_contributors: [Bytes!]
+  maturity_whitelist: [Bytes!]
+  earnings_fee: BigInt
+  withdraw_fee: BigInt
+  deposit_fee: BigInt
+  aum_fee: BigInt
+  settings_controller: SettingsController
+  parent: Int
+  ignore_user_splits: Boolean
+  split_to_liquid: SplitDetails
+  transaction: MultisigTransaction
+  indexfund: [FundEndowment!] @derivedfrom(field: "endowment")
+  withdrawal: Withdrawal
+}
+
+type SocialMedialUrls @entity{
+  id: ID!
+  facebook: String
+  twitter: String
+  linkedin: String
+}
+type Profile @entity{
+  id: ID!
+  overview: String
+  url: String
+  registration_number: String
+  country_of_origin: String
+  street_address: String
+  contact_email: String
+  social_media_urls: SocialMedialUrls
+  number_of_employees: BigInt
+  average_annual_budget: String
+  annual_revenue: String
+  charity_navigator_rating: String
+}
+
+type AllowanceData @entity{
+  id: ID!
+  height: BigInt
+  timestamp: BigInt
+  expires: Boolean
+  allow: AccountState
+  allowanceAmount: BigInt
+  configured: Boolean
+}
+type AllowanceRemove @entity{
+  id: ID!
+  sender: Bytes
+  spender: Bytes
+  tokenAddress: Bytes
+}
+
+type TokenSwap @entity{
+  id: ID!
+  accountType: Int
+  amount: BigInt
+  tokenIn: Bytes
+  tokenOut: Bytes
+  amountOut: BigInt
+}
+
+type GenericBalance @entity{
+  id: ID!
+  coin_native_amount: BigInt
+  Cw20CoinVerified_amount: [BigInt!]
+  Cw20CoinVerified_addr: [Bytes!]
+}
+type BalanceInfo @entity{
+  id: ID!
+  locked: GenericBalance
+  liquid: GenericBalance
+}
+type DonationsReceived @entity{
+  id: ID!
+  locked: BigInt
+  liquid: BigInt
+}
+type DonationMatchSet @entity{
+  id: ID!
+  donation_match_contract: Bytes
+}
+type EndowmentState @entity{
+  id: ID!
+  donations_received: DonationsReceived
+  balances: BalanceInfo
+  closing_endowment: Boolean
+  closing_beneficiary: Bytes
+}
+
+type AccountState @entity {
+  id: ID!
+  DAOTOKENBALANCE: [Int!]! @mapping(name: "DAOTOKENBALANCE")
+  STATES:[EndowmentState!]! @mapping(name: "STATES")
+  ENDOWMENTS: [Endowment!]! @mapping(name: "Endowment")
+  PROFILES: [Profile!]! @mapping(name: "Profile")
+  ALLOWANCE_DATA: [AllowanceData!]! @derivedfrom(field: "allow", relation: "allowanceData")
+  CONFIG: AccountsConfig
+  subDao: Bytes
+  gateway: Bytes
+  gasRevicer: Bytes
+  reentrancyGuardLocked: Boolean
+}
+
+type SubDAOConfig @entity{
+  id: ID!
+  registrar_contract: Bytes
+  owner: Bytes
+  dao_token: Bytes
+  ve_token: Bytes
+  swap_factory: Bytes
+  quorum: BigInt
+  threshold: BigInt
+  voting_period: BigInt
+  timelock_period: BigInt
+  expiration_period: BigInt
+  proposal_deposit: BigInt
+  snapshot_period: BigInt
+}
+type SubDAOState @entity{
+  id: ID!
+  poll_count: BigInt
+  total_share: BigInt
+  total_deposit: BigInt
+}
+
+type SubdaoTransfer @entity{
+  id: ID!
+  tokenAddress: Bytes
+  recipient: Bytes
+  amount: BigInt
+}
+type SubdaoTransferFrom @entity{
+  id: ID!
+  tokenAddress: Bytes
+  from: Bytes
+  to: Bytes
+  amount: BigInt
+}
+
+enum PollStatus {
+  InProgress,
+  Passed,
+  Rejected,
+  Executed,
+  Expired
+}
+type ExecuteData @entity{
+  id: ID!
+  order: [BigInt!]
+  contract_address: [Bytes!]
+  execution_message: [Bytes!]
+}
+type Poll @entity{
+  id: ID!
+  creator: Bytes
+  status: PollStatus
+  yes_votes: BigInt
+  no_votes: BigInt
+  start_block: BigInt
+  start_time: BigInt
+  end_height: BigInt
+  title: String
+  description: String
+  link: String
+  execute_data: ExecuteData
+  deposit_amount: BigInt
+  total_balance_at_end_poll: BigInt
+  staked_amount: BigInt
+}
+
+type VotingStatus @entity{
+  id: ID!
+  poll_id: BigInt
+  voter_address: Bytes
+  voterInfo: VoterInfo
+}
+enum VoteOption {
+  Yes,
+  No
+}
+type VoterInfo @entity{
+  id: ID!
+  votes: VoteOption
+  balance: BigInt
+  voted: Boolean
+}
+
+type MultisigConfig @entity{
+  id: ID!
+  owners: [Bytes!]
+  required: Boolean
+  transactionCount: BigInt
+  require_execution: Boolean
+}
+
+type MultisigTransaction @entity{
+  id: ID!
+  title: String
+  description: String
+  destination: Bytes
+  value: BigInt
+  data: Bytes
+  executed: Boolean
+  endowments: Endowment
+  confirmation: [Confirmation!] @derivedfrom(field: "transaction", relation: "id")
+}
+
+type Confirmation @entity{
+  id: ID!
+  confirmations: [Bytes!]
+  transaction: MultisigTransaction
+}
+
+type CharityConfig @entity{
+  id: ID!
+  proposalExpiry: BigInt
+  applicationMultisig: Bytes
+  accountsContract: Bytes
+  seedSplitToLiquid: BigInt
+  newEndowGasMoney: Boolean
+  gasAmount: BigInt
+  fundSeedAsset: Boolean
+  seedAsset: Bytes
+  seedAssetAmount: BigInt
+}
+
+type GasDispatched @entity{
+  id: ID!
+  gassent_address: Bytes
+  gasAmount: BigInt
+}
+type SeedFunded @entity{
+  id: ID!
+  seedAsset: Bytes
+  seedAssetAmount: BigInt
+}
+
+type DepositCharity @entity{
+  id: ID!
+  charity_sender: Bytes
+  amount: BigInt
+}
+
+enum ProposalStatus {
+  None,
+  Pending,
+  Approved,
+  Rejected
+}
+type CharityApplicationProposal @entity{
+  id: ID!
+  proposalId: BigInt
+  proposer: Bytes
+  charityApplication: Endowment
+  meta: String
+  expiry: BigInt
+  status: ProposalStatus
+}
+
+type IndexfundConfig @entity{
+  id: ID!
+  owner: Bytes
+  registrar_contract: Bytes
+  fund_rotation: BigInt
+  fund_member_limit: BigInt
+  funding_goal: BigInt
+  alliance_members: [Bytes!]
+}
+
+type IndexfundState @entity{
+  id: ID!
+  total_funds: BigInt
+  active_fund: BigInt
+  round_donations: BigInt
+  next_rotation_block: BigInt
+  next_fund_id: BigInt
+}
+
+type IndexFund @entity{
+  id: ID!
+  name: String
+  description: String
+  members: [BigInt!]
+  rotating_fund: Boolean
+  split_to_liquid: BigInt
+  expiry_time: BigInt
+  expiry_height: BigInt
+  endowment: [FundEndowment!] @derivedfrom(field: "members", relation:"members")
+}
+
+type FundEndowment @entity{
+  id: ID!
+  members: IndexFund
+  endowment: Endowment
+}
+
+type AcceptedTokens @entity{
+  id: ID!
+  cw20:[Bytes!]
+}
+type RegistrarConfig @entity{
+  id:ID!
+  owner:Bytes
+  applications_review:Bytes
+  index_fund_contract:Bytes
+  accounts_contract:Bytes
+  treasury:Bytes
+  subdao_gov_code:Bytes
+  subdao_cw20_token_code:Bytes 
+  subdao_bonding_token_code:Bytes 
+  subdao_cw900_code:Bytes 
+  subdao_distributor_code:Bytes 
+  subdao_emitter:Bytes
+  donation_match_code:Bytes
+  donation_match_charites_contract:Bytes
+  donation_match_emitter:Bytes
+  accepted_tokens:AcceptedTokens
+  split_to_liquid:SplitDetails
+  halo_token:Bytes 
+  halo_token_lp_contract:Bytes
+  gov_contract:Bytes 
+  collector_addr:Bytes 
+  collector_share:Int
+  charity_shares_contract:Bytes
+  fundraising_contract:Bytes
+  rebalance:RebalanceDetails
+  swaps_router:Bytes
+  multisig_factory:Bytes
+  multisig_emitter:Bytes
+  charity_proposal:Bytes
+  locked_withdrawal:Bytes
+  proxy_admin:Bytes
+  USDC_address:Bytes
+  Weth_address:Bytes
+  cw900lv_address:Bytes
+}
+
+enum AccountType {
+  Locked,
+  Liquid,
+  None
+}
+enum VaultType {
+ Native, 
+  Ibc, 
+  Evm,
+  None
+}
+type YieldVault @entity{
+  id: ID!
+  addr:String
+  network:Int
+  input_denom:Bytes
+  yield_token:Bytes
+  approved:Boolean
+  restricted_from:EndowmentType
+  acct_type:AccountType
+  vault_type:VaultType
+  network_connect: [Network_Connection!] @derivedfrom(field: "vaults", relation: "id")
+}
+
+type NetworkInfo @entity{
+  id: ID!
+  name:String
+  chain_id:Int
+  router:Bytes
+  axelerGateway:Bytes
+  ibc_channe:String
+  transfer_channel:String
+  ibc_host_contract:Bytes
+  gas_limit:Int
+}
+type Network_Connection @entity{
+  id:ID!
+  vaults:YieldVault
+  network_connect:NetworkInfo
+  vaultType:VaultType
+}
+
+type Fee @entity{
+  id:String!
+  fees: [Int!] @mapping(name: "Int")
+}
+
+type Withdrawal @entity{
+  id:ID!
+  pending:Bytes
+  beneficiary:Bytes
+  tokenAddress:[Bytes!]
+  amount:[BigInt!]
+  endowment: [Endowment!] @derivedfrom(field: "withdrawal", relation: "id")
+}
+
+type LockedWihtdrawalConfig @entity{
+  id:ID!
+  registrar:Bytes
+  accounts:Bytes
+  apTeamMultisig:Bytes
+  endowFactory:Bytes
+}
+
+type DonationMatchCharity @entity{
+  id:ID!
+  version:Int
+}
+
+type DonationMatchConfig @entity{
+  id:ID!
+  donation_match: Bytes
+  reserve_token:Bytes
+  uniswap_factory:Bytes
+  USDC_address:Bytes
+  registrar_contract:Bytes
+  pool_fee:Int
+}
+
+type DonationMatchExecute @entity{
+  id:ID!
+  tokenAddress:Bytes
+  amount:BigInt
+  accounts_contract:Bytes
+  donation_match: Bytes
+  donor: Bytes
+}
+
+type erc20 @entity{
+  id:ID!
+  tokenAddress:Bytes
+  amount: BigInt
+  recipient:Bytes
+  spender: Bytes
+}
+

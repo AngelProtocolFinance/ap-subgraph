@@ -1,0 +1,504 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Angel
+    network: {{network}}
+    source:
+      address: "{{contracts.Accounts.address}}"
+      startBlock: {{startBlock}}
+      abi: Angel
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AccountsConfig
+        - Categories
+        - AccountStrategies
+        - OneOffVaults
+        - RebalanceDetails
+        - EndowmentFee
+        - Delegate
+        - SettingsPermission
+        - SettingsController
+        - SplitDetails
+        - Endowment
+        - SocialMedialUrls
+        - Profile
+        - AllowanceData
+        - AllowanceRemove
+        - TokenSwap
+        - GenericBalance
+        - BalanceInfo
+        - DonationsReceived
+        - DonationMatchSet
+        - EndowmentState
+        - EndowmentType
+        - AccountState
+        - SubDAOConfig
+        - ExecuteData
+        - Poll
+        - MultisigConfig
+        - MultisigTransaction
+        - Confirmation
+        - CharityConfig
+        - CharityApplicationProposal
+        - IndexfundConfig
+        - IndexfundState
+        - IndexFund
+        - Fund
+        - AcceptedTokens
+        - RegistrarConfig
+        - YieldVault
+        - Valuts
+        - NetworkInfo
+        - Network_Connection
+        - Fee
+      abis:
+        - name: Angel
+          file: ./abis/Angel.json
+      eventHandlers:
+        - event: AllowanceStateUpdatedTo(address,address,address,(uint256,uint256,bool,uint256,bool))
+          handler: handleAllowanceStateUpdatedTo
+        - event: DaoContractCreated((uint256,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,(uint8,(address,uint256,string,string,(uint8,(uint128,uint256,uint128,uint128)),string,string,uint256,address,uint256,uint256)),uint8,address,address),address)
+          handler: handleDaoContractCreated
+        - event: DonationDeposited(uint256,uint256)
+          handler: handleDonationDeposited
+        - event: DonationMatchSetup(uint256,address)
+          handler: handleDonationMatchSetup
+        - event: DonationWithdrawn(uint256,address,uint256)
+          handler: handleDonationWithdrawn
+        - event: EndowmentCreated(uint256,(address,string,(uint256[],uint256[]),uint256,uint8,string,string,uint8,bool,bool,uint256,(string[],uint256[],string[],uint256[]),(string[],uint256[],string[],uint256[]),(bool,bool,uint256,bool,uint256),bool,uint256,uint256,uint256,address,address,bool,address,address[],address[],address[],(address,uint256,bool),(address,uint256,bool),(address,uint256,bool),(address,uint256,bool),((bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256))),uint256,bool,(uint256,uint256,uint256)))
+          handler: handleEndowmentCreated
+        - event: RemoveAllowance(address,address,address)
+          handler: handleRemoveAllowance
+        - event: SwapToken(uint256,uint8,uint256,address,address,uint256)
+          handler: handleSwapToken
+        - event: UpdateConfig((address,address,address,uint256,uint256))
+          handler: handleUpdateConfig
+        - event: UpdateEndowment(uint256,(address,string,(uint256[],uint256[]),uint256,uint8,string,string,uint8,bool,bool,uint256,(string[],uint256[],string[],uint256[]),(string[],uint256[],string[],uint256[]),(bool,bool,uint256,bool,uint256),bool,uint256,uint256,uint256,address,address,bool,address,address[],address[],address[],(address,uint256,bool),(address,uint256,bool),(address,uint256,bool),(address,uint256,bool),((bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256))),uint256,bool,(uint256,uint256,uint256)))
+          handler: handleUpdateEndowment
+        - event: UpdateEndowmentState(uint256,((uint256,uint256),((uint256,uint256[],address[]),(uint256,uint256[],address[])),bool,((uint256,address),uint8)))
+          handler: handleUpdateEndowmentState
+      file: ./src/angel.ts
+  
+  - kind: ethereum
+    name: ApplicationMultisig
+    network: {{network}}
+    source:
+      address: "{{contracts.ApplicationMultisig.address}}"
+      startBlock: {{startBlock}}
+      abi: ApplicationMultisig
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ApplicationMultisigConfirmation
+        - Deposit
+        - Execution
+        - ExecutionFailure
+        - Initialized
+        - OwnerAddition
+        - OwnerRemoval
+        - RequirementChange
+        - Revocation
+        - Submission
+      abis:
+        - name: ApplicationMultisig
+          file: ./abis/ApplicationMultisig.json
+      eventHandlers:
+        - event: ApplicationMultisigConfirmation(indexed address,indexed uint256)
+          handler: handleApplicationMultisigConfirmation
+        - event: Deposit(indexed address,uint256)
+          handler: handleDeposit
+        - event: Execution(indexed uint256)
+          handler: handleExecution
+        - event: ExecutionFailure(indexed uint256)
+          handler: handleExecutionFailure
+        - event: Initialized(uint8)
+          handler: handleInitialized
+        - event: OwnerAddition(indexed address)
+          handler: handleOwnerAddition
+        - event: OwnerRemoval(indexed address)
+          handler: handleOwnerRemoval
+        - event: RequirementChange(uint256)
+          handler: handleRequirementChange
+        - event: Revocation(indexed address,indexed uint256)
+          handler: handleRevocation
+        - event: Submission(indexed uint256,(string,string,address,uint256,bytes,bool))
+          handler: handleSubmission
+      file: ./src/application-multisig.ts
+  - kind: ethereum
+    name: APTeamMultisig
+    network: {{network}}
+    source:
+      address: "{{contracts.APTeamMultisig.address}}"
+      startBlock: {{startBlock}}
+      abi: APTeamMultisig
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - APTeamMultisigConfirmation
+        - APTeamMultisigDeposit
+        - APTeamMultisigExecution
+        - APTeamMultisigExecutionFailure
+        - APTeamMultisigInitialized
+        - APTeamMultisigOwnerAddition
+        - APTeamMultisigOwnerRemoval
+        - APTeamMultisigRequirementChange
+        - APTeamMultisigRevocation
+        - APTeamMultisigSubmission
+      abis:
+        - name: APTeamMultisig
+          file: ./abis/APTeamMultisig.json
+      eventHandlers:
+        - event: APTeamMultisigConfirmation(indexed address,indexed uint256)
+          handler: handleAPTeamMultisigConfirmation
+        - event: APTeamMultisigDeposit(indexed address,uint256)
+          handler: handleAPTeamMultisigDeposit
+        - event: APTeamMultisigExecution(indexed uint256)
+          handler: handleAPTeamMultisigExecution
+        - event: APTeamMultisigExecutionFailure(indexed uint256)
+          handler: handleAPTeamMultisigExecutionFailure
+        - event: APTeamMultisigInitialized(uint8)
+          handler: handleAPTeamMultisigInitialized
+        - event: APTeamMultisigOwnerAddition(indexed address)
+          handler: handleAPTeamMultisigOwnerAddition
+        - event: APTeamMultisigOwnerRemoval(indexed address)
+          handler: handleAPTeamMultisigOwnerRemoval
+        - event: APTeamMultisigRequirementChange(uint256)
+          handler: handleAPTeamMultisigRequirementChange
+        - event: APTeamMultisigRevocation(indexed address,indexed uint256)
+          handler: handleAPTeamMultisigRevocation
+        - event: APTeamMultisigSubmission(indexed
+            uint256,(string,string,address,uint256,bytes,bool))
+          handler: handleAPTeamMultisigSubmission
+      file: ./src/ap-team-multisig.ts
+  - kind: ethereum
+    name: EndowmentsMultisig
+    network: {{network}}
+    source:
+      address: "{{contracts.EndowmentsMultisig.address}}"
+      startBlock: {{startBlock}}
+      abi: EndowmentsMultisig
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - EndowmentsMultisigEndowmentConfirmation
+        - EndowmentsMultisigEndowmentDeposit
+        - EndowmentsMultisigEndowmentExecution
+        - EndowmentsMultisigEndowmentExecutionFailure
+        - EndowmentsMultisigEndowmentOwnerAddition
+        - EndowmentsMultisigEndowmentOwnerRemoval
+        - EndowmentsMultisigEndowmentRequirementChange
+        - EndowmentsMultisigEndowmentRevocation
+        - EndowmentsMultisigEndowmentSubmission
+        - EndowmentsMultisigMultisigCreated
+      abis:
+        - name: EndowmentsMultisig
+          file: ./abis/EndowmentsMultisig.json
+      eventHandlers:
+        - event: EndowmentsMultisigEndowmentConfirmation(uint256,address,uint256)
+          handler: handleEndowmentsMultisigEndowmentConfirmation
+        - event: EndowmentsMultisigEndowmentDeposit(uint256,address,uint256)
+          handler: handleEndowmentsMultisigEndowmentDeposit
+        - event: EndowmentsMultisigEndowmentExecution(uint256,uint256)
+          handler: handleEndowmentsMultisigEndowmentExecution
+        - event: EndowmentsMultisigEndowmentExecutionFailure(uint256,uint256)
+          handler: handleEndowmentsMultisigEndowmentExecutionFailure
+        - event: EndowmentsMultisigEndowmentOwnerAddition(uint256,address)
+          handler: handleEndowmentsMultisigEndowmentOwnerAddition
+        - event: EndowmentsMultisigEndowmentOwnerRemoval(uint256,address)
+          handler: handleEndowmentsMultisigEndowmentOwnerRemoval
+        - event: EndowmentsMultisigEndowmentRequirementChange(uint256,uint256)
+          handler: handleEndowmentsMultisigEndowmentRequirementChange
+        - event: EndowmentsMultisigEndowmentRevocation(uint256,address,uint256)
+          handler: handleEndowmentsMultisigEndowmentRevocation
+        - event: EndowmentsMultisigEndowmentSubmission(uint256,uint256,(string,string,address,uint256,bytes,bool))
+          handler: handleEndowmentsMultisigEndowmentSubmission
+      file: ./src/endowments-multisig.ts
+  - kind: ethereum
+    name: Indexfund
+    network: {{network}}
+    source:
+      address: "{{contracts.Indexfund.address}}"
+      startBlock: {{startBlock}}
+      abi: Indexfund
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - IndexfundInitialized
+        - allianceMemberAdded
+        - allianceMemberRemoved
+        - configUpdated
+        - donationMessagesUpdated
+        - indexFundCreated
+        - indexFundRemoved
+        - memberAdded
+        - memberRemoved
+        - ownerUpdated
+        - registrarUpdated
+        - updateActiveFund
+        - updateIndexFundState
+      abis:
+        - name: Indexfund
+          file: ./abis/Indexfund.json
+      eventHandlers:
+        - event: allianceMemberAdded(address)
+          handler: handleallianceMemberAdded
+        - event: allianceMemberRemoved(address)
+          handler: handleallianceMemberRemoved
+        - event: configUpdated((address,address,uint256,uint256,uint256,address[]))
+          handler: handleconfigUpdated
+        - event: donationMessagesUpdated((uint256[],uint256[],uint256[],uint256[],uint256[]))
+          handler: handledonationMessagesUpdated
+        - event: indexFundCreated(uint256,(uint256,string,string,uint256[],bool,uint256,uint256,uint256))
+          handler: handleindexFundCreated
+        - event: indexFundRemoved(uint256)
+          handler: handleindexFundRemoved
+        - event: memberAdded(uint256,uint256)
+          handler: handlememberAdded
+        - event: memberRemoved(uint256,uint256)
+          handler: handlememberRemoved
+        - event: ownerUpdated(address)
+          handler: handleownerUpdated
+        - event: registrarUpdated(address)
+          handler: handleregistrarUpdated
+        - event: updateActiveFund(uint256)
+          handler: handleupdateActiveFund
+        - event: updateIndexFundState((uint256,uint256,uint256,uint256,uint256))
+          handler: handleupdateIndexFundState
+      file: ./src/indexfund.ts
+  - kind: ethereum
+    name: Lockedwithdraw
+    network: {{network}}
+    source:
+      address: "{{contracts.Lockedwithdraw.address}}"
+      startBlock: {{startBlock}}
+      abi: Lockedwithdraw
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - LockedwithdrawInitialized
+        - LockedWithdrawAPTeam
+        - LockedWithdrawApproved
+        - LockedWithdrawEndowment
+        - LockedWithdrawInitiated
+        - LockedWithdrawRejected
+      abis:
+        - name: Lockedwithdraw
+          file: ./abis/Lockedwithdraw.json
+      eventHandlers:
+        - event: LockedwithdrawInitialized(uint8)
+          handler: handleLockedwithdrawInitialized
+        - event: LockedWithdrawAPTeam(uint256,address)
+          handler: handleLockedWithdrawAPTeam
+        - event: LockedWithdrawApproved(indexed uint256,indexed address,address[],uint256[])
+          handler: handleLockedWithdrawApproved
+        - event: LockedWithdrawEndowment(uint256,address)
+          handler: handleLockedWithdrawEndowment
+        - event: LockedWithdrawInitiated(indexed uint256,indexed address,indexed
+            address,address[],uint256[])
+          handler: handleLockedWithdrawInitiated
+        - event: LockedWithdrawRejected(indexed uint256)
+          handler: handleLockedWithdrawRejected
+      file: ./src/lockedwithdraw.ts
+  - kind: ethereum
+    name: registrar
+    network: {{network}}
+    source:
+      address: "{{contracts.registrar.address}}"
+      startBlock: {{startBlock}}
+      abi: registrar
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - addVault
+        - deleteNetworkConnection
+        - postNetworkConnection
+        - removeVault
+        - updateRegistrarConfig
+        - updateRegistrarFees
+        - updateRegistrarOwner
+        - updateVault
+      abis:
+        - name: registrar
+          file: ./abis/registrar.json
+      eventHandlers:
+        - event: addVault(string,(string,uint256,address,address,bool,uint8[],uint8,uint8))
+          handler: handleaddVault
+        - event: deleteNetworkConnection(uint256)
+          handler: handledeleteNetworkConnection
+        - event: postNetworkConnection(uint256,(string,uint256,address,address,string,string,address,uint256))
+          handler: handlepostNetworkConnection
+        - event: removeVault(string)
+          handler: handleremoveVault
+        - event: updateRegistrarConfig((address,address,address,address,address,address,address,address,address,address,address,address,address,address,(uint256,uint256,uint256),address,address,address,address,uint256,address,(address[]),address,(bool,bool,uint256,bool,uint256),address,address,address,address,address,address,address,address,address))
+          handler: handleupdateRegistrarConfig
+        - event: updateRegistrarFees((string[],uint256[]))
+          handler: handleupdateRegistrarFees
+        - event: updateRegistrarOwner(address)
+          handler: handleupdateRegistrarOwner
+        - event: updateVault(string,bool,uint8[])
+          handler: handleupdateVault
+      file: ./src/registrar.ts
+  - kind: ethereum
+    name: charityApplication
+    network: {{network}}
+    source:
+      address: "{{contracts.charityApplication.address}}"
+      startBlock: {{startBlock}}
+      abi: charityApplication
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - CharityApproved
+        - CharityProposed
+        - CharityRejected
+        - charityApplicationDeposit
+        - GasSent
+        - SeedAssetSent
+        - initilizedCharityApplication
+      abis:
+        - name: charityApplication
+          file: ./abis/charityApplication.json
+      eventHandlers:
+        - event: CharityApproved(indexed uint256,indexed uint256)
+          handler: handleCharityApproved
+        - event: CharityProposed(indexed address,indexed
+            uint256,(address,bool,uint256,uint256,string,(uint256[],uint256[]),uint256,uint8,string,string,address[],bool,(uint8,(uint256,uint256,uint256,uint256)),(uint8,(uint256,uint256)),address[],address[],uint256,uint256,uint256,(address,uint256,bool),(address,uint256,bool),(address,uint256,bool),(address,uint256,bool),(uint256,uint256,uint256,uint256,uint256,uint128,uint256,(uint8,(address,uint256,string,string,(uint8,(uint128,uint256,uint128,uint128)),string,string,uint256,address,uint256,uint256))),bool,uint256,((bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256)),(bool,bool,bool,(address,uint256))),uint256,address[],bool,(uint256,uint256,uint256)),string)
+          handler: handleCharityProposed
+        - event: CharityRejected(indexed uint256)
+          handler: handleCharityRejected
+        - event: charityApplicationDeposit(indexed address,uint256)
+          handler: handlecharityApplicationDeposit
+        - event: GasSent(indexed uint256,indexed address,uint256)
+          handler: handleGasSent
+        - event: SeedAssetSent(indexed uint256,indexed address,uint256)
+          handler: handleSeedAssetSent
+        - event: initilizedCharityApplication((uint256,address,address,uint256,bool,uint256,bool,address,uint256))
+          handler: handleinitilizedCharityApplication
+      file: ./src/charity-application.ts
+  - kind: ethereum
+    name: donationMatch
+    network: {{network}}
+    source:
+      address: "{{contracts.donationMatch.address}}"
+      startBlock: {{startBlock}}
+      abi: donationMatch
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - donationMatchExecuted
+        - donationMatchInitialized
+        - erc20ApprovalGiven
+        - erc20Burned
+        - erc20Transfer
+      abis:
+        - name: donationMatch
+          file: ./abis/donationMatch.json
+      eventHandlers:
+        - event: donationMatchExecuted(address,address,uint256,address,uint256,address)
+          handler: handledonationMatchExecuted
+        - event: donationMatchInitialized(uint256,address,(address,address,address,address,uint24))
+          handler: handledonationMatchInitialized
+        - event: erc20ApprovalGiven(uint256,address,address,uint256)
+          handler: handleerc20ApprovalGiven
+        - event: erc20Burned(uint256,address,uint256)
+          handler: handleerc20Burned
+        - event: erc20Transfer(uint256,address,address,uint256)
+          handler: handleerc20Transfer
+      file: ./src/donation-match.ts
+  - kind: ethereum
+    name: donationMatchCharity
+    network: {{network}}
+    source:
+      address: "{{contracts.donationMatchCharity.address}}"
+      startBlock: {{startBlock}}
+      abi: donationMatchCharity
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - donationMatchCharityInitialized
+        - donationMatchCharityErc20ApprovalGiven
+        - donationMatchCharityErc20Burned
+        - donationMatchCharityErc20Transfer
+        - donationMatchCharityExecuted
+        - donationMatchCharityInitialized1
+      abis:
+        - name: donationMatchCharity
+          file: ./abis/donationMatchCharity.json
+      eventHandlers:
+        - event: donationMatchCharityInitialized(uint8)
+          handler: handledonationMatchCharityInitialized
+        - event: donationMatchCharityErc20ApprovalGiven(uint256,address,address,uint256)
+          handler: handledonationMatchCharityErc20ApprovalGiven
+        - event: donationMatchCharityErc20Burned(uint256,address,uint256)
+          handler: handledonationMatchCharityErc20Burned
+        - event: donationMatchCharityErc20Transfer(uint256,address,address,uint256)
+          handler: handledonationMatchCharityErc20Transfer
+        - event: donationMatchCharityExecuted(address,address,uint256,address,uint256,address)
+          handler: handledonationMatchCharityExecuted
+        - event: donationMatchCharityInitialized(address,(address,address,address,address,uint24))
+          handler: handledonationMatchCharityInitialized1
+      file: ./src/donation-match-charity.ts
+  - kind: ethereum
+    name: subDAO
+    network: {{network}}
+    source:
+      address: "{{contracts.subDAO.address}}"
+      startBlock: {{startBlock}}
+      abi: subDAO
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - subdaoInitialized
+        - subdaoTransfer
+        - subdaoTransferFrom
+        - subdaoUpdateConfig
+        - subdaoUpdatePoll
+        - subdaoUpdatePollStatus
+        - subdaoUpdateState
+        - subdapUpdateVotingStatus
+      abis:
+        - name: subDAO
+          file: ./abis/subDAO.json
+      eventHandlers:
+        - event: subdaoInitialized(address,(uint256,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,(uint8,(address,uint256,string,string,(uint8,(uint128,uint256,uint128,uint128)),string,string,uint256,address,uint256,uint256)),uint8,address,address))
+          handler: handlesubdaoInitialized
+        - event: subdaoTransfer(address,address,address,uint256)
+          handler: handlesubdaoTransfer
+        - event: subdaoTransferFrom(address,address,address,address,uint256)
+          handler: handlesubdaoTransferFrom
+        - event: subdaoUpdateConfig(address,(address,address,address,address,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256))
+          handler: handlesubdaoUpdateConfig
+        - event: subdaoUpdatePoll(address,uint256,(uint256,address,uint8,uint256,uint256,uint256,uint256,uint256,string,string,string,(uint256[],address[],bytes[]),uint256,uint256,uint256))
+          handler: handlesubdaoUpdatePoll
+        - event: subdaoUpdatePollStatus(address,uint256,uint8)
+          handler: handlesubdaoUpdatePollStatus
+        - event: subdaoUpdateState(address,(uint256,uint256,uint256))
+          handler: handlesubdaoUpdateState
+        - event: subdapUpdateVotingStatus(address,uint256,address,(uint8,uint256,bool))
+          handler: handlesubdapUpdateVotingStatus
+      file: ./src/sub-dao.ts

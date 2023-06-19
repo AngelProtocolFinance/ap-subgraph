@@ -1,172 +1,288 @@
-
-import{
-  registrar as registrarContract,
-  addVault as addVaultEvent,
-  removeVault as removeVaultEvent,
-  deleteNetworkConnection as deleteNetworkConnectionEvent,
-  postNetworkConnection as postNetworkConnectionEvent,
-  updateRegistrarConfig as updateRegistrarConfigEvent,
-  updateRegistrarFees as updateRegistrarFeesEvent,
-  updateRegistrarOwner as updateRegistrarOwnerEvent,
-  updateVault as updateVaultEvent,
-} from "../generated/registrar/registrar"
+import { Value } from "@graphprotocol/graph-ts"
 import {
-    RebalanceDetails, AcceptedTokens, RegistrarConfig, YieldVault, NetworkInfo, Network_Connection, Fee,SplitDetails
-  } from "../generated/schema"
-  import { Bytes, Address, log } from '@graphprotocol/graph-ts';
-  // Convert an array of Ethereum addresses to an array of 20-byte values
-function addressesToBytes(addresses: Address[]) : Bytes[]{
-    let bytes = new Array<Bytes>(addresses.length)
-    for(let i = 0; i < addresses.length; i++){
-      bytes[i] = Bytes.fromHexString(addresses[i].toHexString().slice(2))
-    }
-    return bytes
-  }
-  
-export function handleupdateRegistrarConfig(event: updateRegistrarConfigEvent): void{
-    let registrarConfigUpdate = new RegistrarConfig(event.params.details.owner.toHexString())
-    if(registrarConfigUpdate){
-      registrarConfigUpdate.owner = event.params.details.owner
-      registrarConfigUpdate.applications_review = event.params.details.applications_review
-      registrarConfigUpdate.index_fund_contract = event.params.details.index_fund_contract
-      registrarConfigUpdate.accounts_contract = event.params.details.accounts_contract
-      registrarConfigUpdate.treasury = event.params.details.treasury
-      registrarConfigUpdate.subdao_gov_code = event.params.details.subdao_gov_code
-      registrarConfigUpdate.subdao_cw20_token_code = event.params.details.subdao_cw20_token_code
-      registrarConfigUpdate.subdao_bonding_token_code = event.params.details.subdao_bonding_token_code
-      registrarConfigUpdate.subdao_cw900_code = (event.params.details.subdao_cw900_code)
-      registrarConfigUpdate.subdao_distributor_code = event.params.details.subdao_distributor_code
-      registrarConfigUpdate.subdao_emitter = event.params.details.subdao_emitter
-      registrarConfigUpdate.donation_match_code = event.params.details.donation_match_code
-      registrarConfigUpdate.donation_match_charites_contract = event.params.details.donation_match_charites_contract
-      registrarConfigUpdate.donation_match_emitter = event.params.details.donation_match_emitter
-  
-      let accepted_tokens = new AcceptedTokens(event.params.details.owner.toHexString())
-      accepted_tokens.id = event.params.details.owner.toHexString()
-      accepted_tokens.cw20 = addressesToBytes(event.params.details.accepted_tokens.cw20)
-      accepted_tokens.save()
-  
-      // registrarConfigUpdate.split_to_liquid = event.params.details.split_to_liquid.toString()
-      let split_to_liquid = new SplitDetails(event.params.details.owner.toHexString())
-      split_to_liquid.id = event.params.details.owner.toHexString()
-      split_to_liquid.max = event.params.details.split_to_liquid.max
-      split_to_liquid.min = event.params.details.split_to_liquid.min
-      split_to_liquid.defaultSplit = event.params.details.split_to_liquid.defaultSplit
-      split_to_liquid.save()
-  
-      registrarConfigUpdate.halo_token = event.params.details.halo_token
-      registrarConfigUpdate.halo_token_lp_contract = event.params.details.halo_token_lp_contract
-      registrarConfigUpdate.gov_contract = event.params.details.gov_contract
-      registrarConfigUpdate.collector_addr = event.params.details.collector_addr
-      registrarConfigUpdate.collector_share = event.params.details.collector_share.toI32()
-      registrarConfigUpdate.charity_shares_contract = event.params.details.charity_shares_contract
-      registrarConfigUpdate.fundraising_contract = event.params.details.fundraising_contract
-  
-      // registrarConfigUpdate.rebalance = event.params.details.rebalance.toString()
-      let rebalance = new RebalanceDetails(event.params.details.owner.toHexString())
-      rebalance.id = event.params.details.owner.toHexString()
-      rebalance.rebalance_liquid_invested_profits = event.params.details.rebalance.rebalance_liquid_invested_profits
-      rebalance.locked_interests_to_liquid = event.params.details.rebalance.locked_interests_to_liquid
-      rebalance.interest_distribution = event.params.details.rebalance.interest_distribution.toI32()
-      rebalance.locked_principle_to_liquid = event.params.details.rebalance.locked_principle_to_liquid
-      rebalance.principle_distribution = event.params.details.rebalance.principle_distribution.toI32()
-      rebalance.save()
-  
-      registrarConfigUpdate.swaps_router = event.params.details.swaps_router
-      registrarConfigUpdate.multisig_factory = event.params.details.multisig_factory
-      registrarConfigUpdate.multisig_emitter = event.params.details.multisig_emitter
-      registrarConfigUpdate.charity_proposal = event.params.details.charity_proposal
-      registrarConfigUpdate.locked_withdrawal = event.params.details.locked_withdrawal
-      registrarConfigUpdate.proxy_admin = event.params.details.proxy_admin
-      registrarConfigUpdate.USDC_address = event.params.details.USDC_address
-      registrarConfigUpdate.Weth_address = event.params.details.Weth_address
-      registrarConfigUpdate.cw900lv_address = event.params.details.cw900lv_address
-  
-      registrarConfigUpdate.save()
-    }
-  }
-  
-  export function handleupdateRegistrarOwner(event: updateRegistrarOwnerEvent): void{
-    let registrarOwnerUpdate = RegistrarConfig.load(event.params.newOwner.toHexString())
-    if(registrarOwnerUpdate){
-      registrarOwnerUpdate.owner = event.params.newOwner
-      registrarOwnerUpdate.save()
-    }
-  }
-  
-  export function handleupdateRegistrarFees(event: updateRegistrarFeesEvent): void{
-    let registrarFeesUpdate = new Fee(event.params.details.keys.toString())
-    if(registrarFeesUpdate){
-      registrarFeesUpdate.id = event.params.details.keys.toString()
-  
-      for(let i=0;i<event.params.details.keys.length;i++){
-        let fee = new Fee(event.params.details.keys[i].toString())
-        fee.id = event.params.details.keys[i].toString()
-        fee.fees = [event.params.details.values[i].toI32()]
-      }
-      registrarFeesUpdate.save()
-    }
-  }
-  
-  export function handleaddVault(event: addVaultEvent): void{
-    let vaultAdd = new YieldVault(event.params.vault.addr)
-    if(vaultAdd){
-      vaultAdd.addr = event.params.vault.addr
-      vaultAdd.network = event.params.vault.network.toI32()
-      vaultAdd.input_denom = event.params.vault.input_denom
-      vaultAdd.yield_token = event.params.vault.yield_token
-      vaultAdd.approved = event.params.vault.approved
-      vaultAdd.restricted_from = "Charity"
-      vaultAdd.acct_type = "None"
-      vaultAdd.vault_type = "Native"
-  
-      let tempnetwork = new Array<string>()
-      for(let i=0;i<event.params.vault.network.length;i++){
-        let temp2 = new Network_Connection(event.params.vault.network[i].toString())
-        temp2.id = event.params.vault.network[i].toString()
-        // vaultAdd.network_connect = networkType
-        let network_info = new NetworkInfo(event.params.vault.network.toI32().toString())
-        network_info.name = event.params.strategyName.toString()
-        network_info.save()
-        temp2.save()
-        tempnetwork.push(temp2.id)
-      }
-  
-      vaultAdd.save()
-    }
-  }
-  
-  export function handleremoveVault(event: removeVaultEvent): void{
-    let vaultRemove = YieldVault.load(event.params.strategyName)
-    if(vaultRemove){
-      vaultRemove.addr = event.params.strategyName
-      vaultRemove.save()
-      
-    }
-  }
-  
-  export function handleupdateVault(event: updateVaultEvent): void{
-    let vaultUpdate = YieldVault.load(event.params.strategyName)
-    if(vaultUpdate){
-      vaultUpdate.addr = event.params.strategyName
-      vaultUpdate.approved = event.params.approved
-      vaultUpdate.restricted_from = "Charity"
-      vaultUpdate.save()
-    }
-  }
-  
-  export function handledeleteNetworkConnection(event: deleteNetworkConnectionEvent): void{
-    let networkConnectionDelete = NetworkInfo.load(event.params.chainId.toI32().toString())
-    if(networkConnectionDelete){
-      networkConnectionDelete.chain_id = event.params.chainId.toI32()
-      networkConnectionDelete.save()
-    }
-  }
-  
-  export function handlepostNetworkConnection(event: postNetworkConnectionEvent): void{
-    let networkConnectionPost = new NetworkInfo(event.params.chainId.toI32().toString())
-    if(networkConnectionPost){
-      networkConnectionPost.chain_id = event.params.chainId.toI32()
-      networkConnectionPost.save()
-    }
-  }
+  AccountsContractStorageChanged as AccountsContractStorageChangedEvent,
+  AngelProtocolParamsChanged as AngelProtocolParamsChangedEvent,
+  DeleteNetworkConnection as DeleteNetworkConnectionEvent,
+  FeeUpdated as FeeUpdatedEvent,
+  GasFeeUpdated as GasFeeUpdatedEvent,
+  Initialized as InitializedEvent,
+  OwnershipTransferred as OwnershipTransferredEvent,
+  PostNetworkConnection as PostNetworkConnectionEvent,
+  RebalanceParamsChanged as RebalanceParamsChangedEvent,
+  StrategyApprovalChanged as StrategyApprovalChangedEvent,
+  StrategyParamsChanged as StrategyParamsChangedEvent,
+  TokenAcceptanceChanged as TokenAcceptanceChangedEvent,
+  UpdateRegistrarConfig as UpdateRegistrarConfigEvent
+} from "../generated/Registrar/Registrar"
+import {
+  AccountsContractStorageChanged,
+  AngelProtocolParamsChanged,
+  DeleteNetworkConnection,
+  FeeUpdated,
+  GasFeeUpdated,
+  Initialized,
+  OwnershipTransferred,
+  PostNetworkConnection,
+  RebalanceParamsChanged,
+  StrategyApprovalChanged,
+  StrategyParamsChanged,
+  TokenAcceptanceChanged,
+  UpdateRegistrarConfig
+} from "../generated/schema"
+
+export function handleAccountsContractStorageChanged(
+  event: AccountsContractStorageChangedEvent
+): void {
+  let entity = new AccountsContractStorageChanged(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity._chainName = Value.fromBytes(event.params._chainName).toString()
+  entity._accountsContractAddress = Value.fromBytes(event.params._accountsContractAddress).toString()
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleAngelProtocolParamsChanged(
+  event: AngelProtocolParamsChangedEvent
+): void {
+  let entity = new AngelProtocolParamsChanged(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity._newAngelProtocolParams_routerAddr =
+    event.params._newAngelProtocolParams.routerAddr
+  entity._newAngelProtocolParams_refundAddr =
+    event.params._newAngelProtocolParams.refundAddr
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleDeleteNetworkConnection(
+  event: DeleteNetworkConnectionEvent
+): void {
+  let entity = new DeleteNetworkConnection(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.chainId = event.params.chainId
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleFeeUpdated(event: FeeUpdatedEvent): void {
+  let entity = new FeeUpdated(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity._fee = event.params._fee
+  entity._rate = event.params._rate
+  entity._payout = event.params._payout
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleGasFeeUpdated(event: GasFeeUpdatedEvent): void {
+  let entity = new GasFeeUpdated(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity._tokenAddr = event.params._tokenAddr
+  entity._gasFee = event.params._gasFee
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleInitialized(event: InitializedEvent): void {
+  let entity = new Initialized(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.version = event.params.version
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleOwnershipTransferred(
+  event: OwnershipTransferredEvent
+): void {
+  let entity = new OwnershipTransferred(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.previousOwner = event.params.previousOwner
+  entity.newOwner = event.params.newOwner
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handlePostNetworkConnection(
+  event: PostNetworkConnectionEvent
+): void {
+  let entity = new PostNetworkConnection(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.chainId = event.params.chainId
+  entity.networkInfo_name = event.params.networkInfo.name
+  entity.networkInfo_chainId = event.params.networkInfo.chainId
+  entity.networkInfo_router = event.params.networkInfo.router
+  entity.networkInfo_axelarGateway = event.params.networkInfo.axelarGateway
+  entity.networkInfo_ibcChannel = event.params.networkInfo.ibcChannel
+  entity.networkInfo_transferChannel = event.params.networkInfo.transferChannel
+  entity.networkInfo_gasReceiver = event.params.networkInfo.gasReceiver
+  entity.networkInfo_gasLimit = event.params.networkInfo.gasLimit
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleRebalanceParamsChanged(
+  event: RebalanceParamsChangedEvent
+): void {
+  let entity = new RebalanceParamsChanged(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity._newRebalanceParams_rebalanceLiquidProfits =
+    event.params._newRebalanceParams.rebalanceLiquidProfits
+  entity._newRebalanceParams_lockedRebalanceToLiquid =
+    event.params._newRebalanceParams.lockedRebalanceToLiquid
+  entity._newRebalanceParams_interestDistribution =
+    event.params._newRebalanceParams.interestDistribution
+  entity._newRebalanceParams_lockedPrincipleToLiquid =
+    event.params._newRebalanceParams.lockedPrincipleToLiquid
+  entity._newRebalanceParams_principleDistribution =
+    event.params._newRebalanceParams.principleDistribution
+  entity._newRebalanceParams_basis = event.params._newRebalanceParams.basis
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleStrategyApprovalChanged(
+  event: StrategyApprovalChangedEvent
+): void {
+  let entity = new StrategyApprovalChanged(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity._strategyId = event.params._strategyId
+  entity._approvalState = event.params._approvalState
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleStrategyParamsChanged(
+  event: StrategyParamsChangedEvent
+): void {
+  let entity = new StrategyParamsChanged(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity._strategyId = event.params._strategyId
+  entity._lockAddr = event.params._lockAddr
+  entity._liqAddr = event.params._liqAddr
+  entity._approvalState = event.params._approvalState
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleTokenAcceptanceChanged(
+  event: TokenAcceptanceChangedEvent
+): void {
+  let entity = new TokenAcceptanceChanged(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity._tokenAddr = event.params._tokenAddr
+  entity._isAccepted = event.params._isAccepted
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleUpdateRegistrarConfig(
+  event: UpdateRegistrarConfigEvent
+): void {
+  let entity = new UpdateRegistrarConfig(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.details_applicationsReview = event.params.details.applicationsReview
+  entity.details_indexFundContract = event.params.details.indexFundContract
+  entity.details_accountsContract = event.params.details.accountsContract
+  entity.details_treasury = event.params.details.treasury
+  entity.details_subdaoGovContract = event.params.details.subdaoGovContract
+  entity.details_subdaoTokenContract = event.params.details.subdaoTokenContract
+  entity.details_subdaoBondingTokenContract =
+    event.params.details.subdaoBondingTokenContract
+  entity.details_subdaoCw900Contract = event.params.details.subdaoCw900Contract
+  entity.details_subdaoDistributorContract =
+    event.params.details.subdaoDistributorContract
+  entity.details_subdaoEmitter = event.params.details.subdaoEmitter
+  entity.details_donationMatchContract =
+    event.params.details.donationMatchContract
+  entity.details_donationMatchCharitesContract =
+    event.params.details.donationMatchCharitesContract
+  entity.details_donationMatchEmitter =
+    event.params.details.donationMatchEmitter
+  entity.details_splitToLiquid_max = event.params.details.splitToLiquid.max
+  entity.details_splitToLiquid_min = event.params.details.splitToLiquid.min
+  entity.details_splitToLiquid_defaultSplit =
+    event.params.details.splitToLiquid.defaultSplit
+  entity.details_haloToken = event.params.details.haloToken
+  entity.details_haloTokenLpContract = event.params.details.haloTokenLpContract
+  entity.details_govContract = event.params.details.govContract
+  entity.details_collectorShare = event.params.details.collectorShare
+  entity.details_charitySharesContract =
+    event.params.details.charitySharesContract
+  entity.details_fundraisingContract = event.params.details.fundraisingContract
+  entity.details_uniswapSwapRouter = event.params.details.uniswapSwapRouter
+  entity.details_multisigFactory = event.params.details.multisigFactory
+  entity.details_multisigEmitter = event.params.details.multisigEmitter
+  entity.details_charityProposal = event.params.details.charityProposal
+  entity.details_lockedWithdrawal = event.params.details.lockedWithdrawal
+  entity.details_proxyAdmin = event.params.details.proxyAdmin
+  entity.details_usdcAddress = event.params.details.usdcAddress
+  entity.details_wMaticAddress = event.params.details.wMaticAddress
+  entity.details_cw900lvAddress = event.params.details.cw900lvAddress
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}

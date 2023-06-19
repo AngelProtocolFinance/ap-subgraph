@@ -37,6 +37,9 @@ graph init \
   --network goerli \
   --index-events \
 ```
+
+### Adding contract configuration
+When using `graph add` to add contracts that use proxies, make sure to use the implementation address for the `graph add` command and after all the config files are generated, replace the implementation address with the proxy address (as events are emitted by the proxy, using its address is necessary to get those events correctly registered by Subgraph).
     
 ### Unit Testing Framework
 Matchstick is a unit testing framework that enables subgraph developers to test their mapping logic in a sandboxed environment and deploy their subgraphs with confidence!

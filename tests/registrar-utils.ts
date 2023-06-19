@@ -1,41 +1,67 @@
 import { newMockEvent } from "matchstick-as"
-import { ethereum, BigInt, Address } from "@graphprotocol/graph-ts"
+import { ethereum, BigInt, Address, Bytes } from "@graphprotocol/graph-ts"
 import {
-  addVault,
-  deleteNetworkConnection,
-  postNetworkConnection,
-  removeVault,
-  updateRegistrarConfig,
-  updateRegistrarFees,
-  updateRegistrarOwner,
-  updateVault
-} from "../generated/registrar/registrar"
+  AccountsContractStorageChanged,
+  AngelProtocolParamsChanged,
+  DeleteNetworkConnection,
+  FeeUpdated,
+  GasFeeUpdated,
+  Initialized,
+  OwnershipTransferred,
+  PostNetworkConnection,
+  RebalanceParamsChanged,
+  StrategyApprovalChanged,
+  StrategyParamsChanged,
+  TokenAcceptanceChanged,
+  UpdateRegistrarConfig
+} from "../generated/Registrar/Registrar"
 
-export function createaddVaultEvent(
-  strategyName: string,
-  vault: ethereum.Tuple
-): addVault {
-  let addVaultEvent = changetype<addVault>(newMockEvent())
+export function createAccountsContractStorageChangedEvent(
+  _chainName: string,
+  _accountsContractAddress: string
+): AccountsContractStorageChanged {
+  let accountsContractStorageChangedEvent = changetype<
+    AccountsContractStorageChanged
+  >(newMockEvent())
 
-  addVaultEvent.parameters = new Array()
+  accountsContractStorageChangedEvent.parameters = new Array()
 
-  addVaultEvent.parameters.push(
+  accountsContractStorageChangedEvent.parameters.push(
+    new ethereum.EventParam("_chainName", ethereum.Value.fromString(_chainName))
+  )
+  accountsContractStorageChangedEvent.parameters.push(
     new ethereum.EventParam(
-      "strategyName",
-      ethereum.Value.fromString(strategyName)
+      "_accountsContractAddress",
+      ethereum.Value.fromString(_accountsContractAddress)
     )
   )
-  addVaultEvent.parameters.push(
-    new ethereum.EventParam("vault", ethereum.Value.fromTuple(vault))
-  )
 
-  return addVaultEvent
+  return accountsContractStorageChangedEvent
 }
 
-export function createdeleteNetworkConnectionEvent(
+export function createAngelProtocolParamsChangedEvent(
+  _newAngelProtocolParams: ethereum.Tuple
+): AngelProtocolParamsChanged {
+  let angelProtocolParamsChangedEvent = changetype<AngelProtocolParamsChanged>(
+    newMockEvent()
+  )
+
+  angelProtocolParamsChangedEvent.parameters = new Array()
+
+  angelProtocolParamsChangedEvent.parameters.push(
+    new ethereum.EventParam(
+      "_newAngelProtocolParams",
+      ethereum.Value.fromTuple(_newAngelProtocolParams)
+    )
+  )
+
+  return angelProtocolParamsChangedEvent
+}
+
+export function createDeleteNetworkConnectionEvent(
   chainId: BigInt
-): deleteNetworkConnection {
-  let deleteNetworkConnectionEvent = changetype<deleteNetworkConnection>(
+): DeleteNetworkConnection {
+  let deleteNetworkConnectionEvent = changetype<DeleteNetworkConnection>(
     newMockEvent()
   )
 
@@ -51,11 +77,98 @@ export function createdeleteNetworkConnectionEvent(
   return deleteNetworkConnectionEvent
 }
 
-export function createpostNetworkConnectionEvent(
+export function createFeeUpdatedEvent(
+  _fee: i32,
+  _rate: BigInt,
+  _payout: Address
+): FeeUpdated {
+  let feeUpdatedEvent = changetype<FeeUpdated>(newMockEvent())
+
+  feeUpdatedEvent.parameters = new Array()
+
+  feeUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "_fee",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_fee))
+    )
+  )
+  feeUpdatedEvent.parameters.push(
+    new ethereum.EventParam("_rate", ethereum.Value.fromUnsignedBigInt(_rate))
+  )
+  feeUpdatedEvent.parameters.push(
+    new ethereum.EventParam("_payout", ethereum.Value.fromAddress(_payout))
+  )
+
+  return feeUpdatedEvent
+}
+
+export function createGasFeeUpdatedEvent(
+  _tokenAddr: Address,
+  _gasFee: BigInt
+): GasFeeUpdated {
+  let gasFeeUpdatedEvent = changetype<GasFeeUpdated>(newMockEvent())
+
+  gasFeeUpdatedEvent.parameters = new Array()
+
+  gasFeeUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "_tokenAddr",
+      ethereum.Value.fromAddress(_tokenAddr)
+    )
+  )
+  gasFeeUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "_gasFee",
+      ethereum.Value.fromUnsignedBigInt(_gasFee)
+    )
+  )
+
+  return gasFeeUpdatedEvent
+}
+
+export function createInitializedEvent(version: i32): Initialized {
+  let initializedEvent = changetype<Initialized>(newMockEvent())
+
+  initializedEvent.parameters = new Array()
+
+  initializedEvent.parameters.push(
+    new ethereum.EventParam(
+      "version",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(version))
+    )
+  )
+
+  return initializedEvent
+}
+
+export function createOwnershipTransferredEvent(
+  previousOwner: Address,
+  newOwner: Address
+): OwnershipTransferred {
+  let ownershipTransferredEvent = changetype<OwnershipTransferred>(
+    newMockEvent()
+  )
+
+  ownershipTransferredEvent.parameters = new Array()
+
+  ownershipTransferredEvent.parameters.push(
+    new ethereum.EventParam(
+      "previousOwner",
+      ethereum.Value.fromAddress(previousOwner)
+    )
+  )
+  ownershipTransferredEvent.parameters.push(
+    new ethereum.EventParam("newOwner", ethereum.Value.fromAddress(newOwner))
+  )
+
+  return ownershipTransferredEvent
+}
+
+export function createPostNetworkConnectionEvent(
   chainId: BigInt,
   networkInfo: ethereum.Tuple
-): postNetworkConnection {
-  let postNetworkConnectionEvent = changetype<postNetworkConnection>(
+): PostNetworkConnection {
+  let postNetworkConnectionEvent = changetype<PostNetworkConnection>(
     newMockEvent()
   )
 
@@ -77,25 +190,115 @@ export function createpostNetworkConnectionEvent(
   return postNetworkConnectionEvent
 }
 
-export function createremoveVaultEvent(strategyName: string): removeVault {
-  let removeVaultEvent = changetype<removeVault>(newMockEvent())
+export function createRebalanceParamsChangedEvent(
+  _newRebalanceParams: ethereum.Tuple
+): RebalanceParamsChanged {
+  let rebalanceParamsChangedEvent = changetype<RebalanceParamsChanged>(
+    newMockEvent()
+  )
 
-  removeVaultEvent.parameters = new Array()
+  rebalanceParamsChangedEvent.parameters = new Array()
 
-  removeVaultEvent.parameters.push(
+  rebalanceParamsChangedEvent.parameters.push(
     new ethereum.EventParam(
-      "strategyName",
-      ethereum.Value.fromString(strategyName)
+      "_newRebalanceParams",
+      ethereum.Value.fromTuple(_newRebalanceParams)
     )
   )
 
-  return removeVaultEvent
+  return rebalanceParamsChangedEvent
 }
 
-export function createupdateRegistrarConfigEvent(
+export function createStrategyApprovalChangedEvent(
+  _strategyId: Bytes,
+  _approvalState: i32
+): StrategyApprovalChanged {
+  let strategyApprovalChangedEvent = changetype<StrategyApprovalChanged>(
+    newMockEvent()
+  )
+
+  strategyApprovalChangedEvent.parameters = new Array()
+
+  strategyApprovalChangedEvent.parameters.push(
+    new ethereum.EventParam(
+      "_strategyId",
+      ethereum.Value.fromFixedBytes(_strategyId)
+    )
+  )
+  strategyApprovalChangedEvent.parameters.push(
+    new ethereum.EventParam(
+      "_approvalState",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_approvalState))
+    )
+  )
+
+  return strategyApprovalChangedEvent
+}
+
+export function createStrategyParamsChangedEvent(
+  _strategyId: Bytes,
+  _lockAddr: Address,
+  _liqAddr: Address,
+  _approvalState: i32
+): StrategyParamsChanged {
+  let strategyParamsChangedEvent = changetype<StrategyParamsChanged>(
+    newMockEvent()
+  )
+
+  strategyParamsChangedEvent.parameters = new Array()
+
+  strategyParamsChangedEvent.parameters.push(
+    new ethereum.EventParam(
+      "_strategyId",
+      ethereum.Value.fromFixedBytes(_strategyId)
+    )
+  )
+  strategyParamsChangedEvent.parameters.push(
+    new ethereum.EventParam("_lockAddr", ethereum.Value.fromAddress(_lockAddr))
+  )
+  strategyParamsChangedEvent.parameters.push(
+    new ethereum.EventParam("_liqAddr", ethereum.Value.fromAddress(_liqAddr))
+  )
+  strategyParamsChangedEvent.parameters.push(
+    new ethereum.EventParam(
+      "_approvalState",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_approvalState))
+    )
+  )
+
+  return strategyParamsChangedEvent
+}
+
+export function createTokenAcceptanceChangedEvent(
+  _tokenAddr: Address,
+  _isAccepted: boolean
+): TokenAcceptanceChanged {
+  let tokenAcceptanceChangedEvent = changetype<TokenAcceptanceChanged>(
+    newMockEvent()
+  )
+
+  tokenAcceptanceChangedEvent.parameters = new Array()
+
+  tokenAcceptanceChangedEvent.parameters.push(
+    new ethereum.EventParam(
+      "_tokenAddr",
+      ethereum.Value.fromAddress(_tokenAddr)
+    )
+  )
+  tokenAcceptanceChangedEvent.parameters.push(
+    new ethereum.EventParam(
+      "_isAccepted",
+      ethereum.Value.fromBoolean(_isAccepted)
+    )
+  )
+
+  return tokenAcceptanceChangedEvent
+}
+
+export function createUpdateRegistrarConfigEvent(
   details: ethereum.Tuple
-): updateRegistrarConfig {
-  let updateRegistrarConfigEvent = changetype<updateRegistrarConfig>(
+): UpdateRegistrarConfig {
+  let updateRegistrarConfigEvent = changetype<UpdateRegistrarConfig>(
     newMockEvent()
   )
 
@@ -106,62 +309,4 @@ export function createupdateRegistrarConfigEvent(
   )
 
   return updateRegistrarConfigEvent
-}
-
-export function createupdateRegistrarFeesEvent(
-  details: ethereum.Tuple
-): updateRegistrarFees {
-  let updateRegistrarFeesEvent = changetype<updateRegistrarFees>(newMockEvent())
-
-  updateRegistrarFeesEvent.parameters = new Array()
-
-  updateRegistrarFeesEvent.parameters.push(
-    new ethereum.EventParam("details", ethereum.Value.fromTuple(details))
-  )
-
-  return updateRegistrarFeesEvent
-}
-
-export function createupdateRegistrarOwnerEvent(
-  newOwner: Address
-): updateRegistrarOwner {
-  let updateRegistrarOwnerEvent = changetype<updateRegistrarOwner>(
-    newMockEvent()
-  )
-
-  updateRegistrarOwnerEvent.parameters = new Array()
-
-  updateRegistrarOwnerEvent.parameters.push(
-    new ethereum.EventParam("newOwner", ethereum.Value.fromAddress(newOwner))
-  )
-
-  return updateRegistrarOwnerEvent
-}
-
-export function createupdateVaultEvent(
-  strategyName: string,
-  approved: boolean,
-  endowmentTypes: Array<i32>
-): updateVault {
-  let updateVaultEvent = changetype<updateVault>(newMockEvent())
-
-  updateVaultEvent.parameters = new Array()
-
-  updateVaultEvent.parameters.push(
-    new ethereum.EventParam(
-      "strategyName",
-      ethereum.Value.fromString(strategyName)
-    )
-  )
-  updateVaultEvent.parameters.push(
-    new ethereum.EventParam("approved", ethereum.Value.fromBoolean(approved))
-  )
-  updateVaultEvent.parameters.push(
-    new ethereum.EventParam(
-      "endowmentTypes",
-      ethereum.Value.fromI32Array(endowmentTypes)
-    )
-  )
-
-  return updateVaultEvent
 }

@@ -4,20 +4,15 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node undefined vraj-pedalsup/angel-protocol",
-    "create-local": "graph create --node http://localhost:8020/ vraj-pedalsup/angel-protocol",
-    "remove-local": "graph remove --node http://localhost:8020/ vraj-pedalsup/angel-protocol",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 vraj-pedalsup/angel-protocol",
-    "test": "graph test",
-    "prepare:polygon": "mustache config/polygon.json subgraph.template.yaml > subgraph.yaml",
-    "prepare:mumbai": "mustache config/mumbai.json subgraph.template.yaml > subgraph.yaml"
+    "deploy": "graph deploy --node undefined ap-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ ap-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ ap-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 ap-subgraph",
+    "test": "graph test"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.41.0",
-    "@graphprotocol/graph-ts": "^0.29.1",
-    "mustache": "^3.1.0"
+    "@graphprotocol/graph-cli": "0.51.1",
+    "@graphprotocol/graph-ts": "0.30.0"
   },
-  "devDependencies": {
-    "matchstick-as": "^0.5.1"
-  }
+  "devDependencies": { "matchstick-as": "0.5.0" }
 }

@@ -1,3 +1,4 @@
+import { Value } from "@graphprotocol/graph-ts"
 import {
   AccountsContractStorageChanged as AccountsContractStorageChangedEvent,
   AngelProtocolParamsChanged as AngelProtocolParamsChangedEvent,
@@ -35,8 +36,8 @@ export function handleAccountsContractStorageChanged(
   let entity = new AccountsContractStorageChanged(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity._chainName = event.params._chainName
-  entity._accountsContractAddress = event.params._accountsContractAddress
+  entity._chainName = Value.fromBytes(event.params._chainName).toString()
+  entity._accountsContractAddress = Value.fromBytes(event.params._accountsContractAddress).toString()
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

@@ -11,7 +11,7 @@ import {
   CharityApproved,
   CharityProposed,
   CharityRejected,
-  Deposit,
+  CharityApplicationDeposit,
   GasSent,
   InitilizedCharityApplication,
   SeedAssetSent
@@ -60,7 +60,7 @@ export function handleCharityRejected(event: CharityRejectedEvent): void {
 }
 
 export function handleDeposit(event: DepositEvent): void {
-  let entity = new Deposit(
+  let entity = new CharityApplicationDeposit(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.sender = event.params.sender

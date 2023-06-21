@@ -13,7 +13,7 @@ import {
 } from "../generated/APTeamMultiSig/APTeamMultiSig"
 import {
   Confirmation,
-  Deposit,
+  APTeamMultiSigDeposit,
   Execution,
   ExecutionFailure,
   ExecutionRequiredChange,
@@ -40,7 +40,7 @@ export function handleConfirmation(event: ConfirmationEvent): void {
 }
 
 export function handleDeposit(event: DepositEvent): void {
-  let entity = new Deposit(
+  let entity = new APTeamMultiSigDeposit(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.sender = event.params.sender

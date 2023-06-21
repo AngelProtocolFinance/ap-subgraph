@@ -3,6 +3,34 @@
     "Router": {
       "address": "0xdf05B770A292480e50172217Ec9b80B1C150103B",
       "startBlock": 35000000
+    },
+    "APTeamMultiSig": {
+      "address": "0xD812901336D4f1c910a2Ac51921E0105BD980887",
+      "startBlock": 35000000
+    },
+    "EndowmentMultiSigFactory": {
+      "address": "0xBCB725c55e729d39BFD16eB4eC735A39BC0550DD",
+      "startBlock": 35000000
+    },
+    "Registrar": {
+      "address": "0x74f62eE5330EE95B72c6CDFA301Be106bDe5D454",
+      "startBlock": 35000000
+    },
+    "Accounts": {
+      "address": "0x8657f7a1512905FCabF6053c187881Fd4264117b",
+      "startBlock": 35000000
+    },
+    "CharityApplication": {
+      "address": "0x6c2336467Ba4056313F8c8a3399531D4b652d042",
+      "startBlock": 35000000
+    },
+    "IndexFund": {
+      "address": "0xE036D1034640fa16280682fd8CC00Ccf3D42e8E4",
+      "startBlock": 35000000
+    },
+    "ApplicationsMultiSig": {
+      "address": "0xaDC97799AAC1430e297edb86136579710B081e0A",
+      "startBlock": 35000000
     }
   }
 }

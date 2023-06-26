@@ -76,6 +76,20 @@ export class CharityRejected__Params {
   }
 }
 
+export class ConfigUpdated extends ethereum.Event {
+  get params(): ConfigUpdated__Params {
+    return new ConfigUpdated__Params(this);
+  }
+}
+
+export class ConfigUpdated__Params {
+  _event: ConfigUpdated;
+
+  constructor(event: ConfigUpdated) {
+    this._event = event;
+  }
+}
+
 export class Deposit extends ethereum.Event {
   get params(): Deposit__Params {
     return new Deposit__Params(this);
@@ -93,7 +107,7 @@ export class Deposit__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get value(): BigInt {
+  get amount(): BigInt {
     return this._event.parameters[1].value.toBigInt();
   }
 }
@@ -124,30 +138,30 @@ export class GasSent__Params {
   }
 }
 
-export class InitilizedCharityApplication extends ethereum.Event {
-  get params(): InitilizedCharityApplication__Params {
-    return new InitilizedCharityApplication__Params(this);
+export class Initialized extends ethereum.Event {
+  get params(): Initialized__Params {
+    return new Initialized__Params(this);
   }
 }
 
-export class InitilizedCharityApplication__Params {
-  _event: InitilizedCharityApplication;
+export class Initialized__Params {
+  _event: Initialized;
 
-  constructor(event: InitilizedCharityApplication) {
+  constructor(event: Initialized) {
     this._event = event;
   }
 }
 
-export class SeedAssetSent extends ethereum.Event {
-  get params(): SeedAssetSent__Params {
-    return new SeedAssetSent__Params(this);
+export class SeedAssetTransfer extends ethereum.Event {
+  get params(): SeedAssetTransfer__Params {
+    return new SeedAssetTransfer__Params(this);
   }
 }
 
-export class SeedAssetSent__Params {
-  _event: SeedAssetSent;
+export class SeedAssetTransfer__Params {
+  _event: SeedAssetTransfer;
 
-  constructor(event: SeedAssetSent) {
+  constructor(event: SeedAssetTransfer) {
     this._event = event;
   }
 
@@ -289,68 +303,72 @@ export class CharityApplication__proposalsResultCharityApplicationStruct extends
     return this[9].toBigInt();
   }
 
+  get duration(): BigInt {
+    return this[10].toBigInt();
+  }
+
   get allowlistedBeneficiaries(): Array<Address> {
-    return this[10].toAddressArray();
+    return this[11].toAddressArray();
   }
 
   get allowlistedContributors(): Array<Address> {
-    return this[11].toAddressArray();
+    return this[12].toAddressArray();
   }
 
   get earlyLockedWithdrawFee(): CharityApplication__proposalsResultCharityApplicationEarlyLockedWithdrawFeeStruct {
     return changetype<
       CharityApplication__proposalsResultCharityApplicationEarlyLockedWithdrawFeeStruct
-    >(this[12].toTuple());
+    >(this[13].toTuple());
   }
 
   get withdrawFee(): CharityApplication__proposalsResultCharityApplicationWithdrawFeeStruct {
     return changetype<
       CharityApplication__proposalsResultCharityApplicationWithdrawFeeStruct
-    >(this[13].toTuple());
+    >(this[14].toTuple());
   }
 
   get depositFee(): CharityApplication__proposalsResultCharityApplicationDepositFeeStruct {
     return changetype<
       CharityApplication__proposalsResultCharityApplicationDepositFeeStruct
-    >(this[14].toTuple());
+    >(this[15].toTuple());
   }
 
   get balanceFee(): CharityApplication__proposalsResultCharityApplicationBalanceFeeStruct {
     return changetype<
       CharityApplication__proposalsResultCharityApplicationBalanceFeeStruct
-    >(this[15].toTuple());
+    >(this[16].toTuple());
   }
 
   get proposalLink(): BigInt {
-    return this[16].toBigInt();
+    return this[17].toBigInt();
   }
 
   get settingsController(): CharityApplication__proposalsResultCharityApplicationSettingsControllerStruct {
     return changetype<
       CharityApplication__proposalsResultCharityApplicationSettingsControllerStruct
-    >(this[17].toTuple());
+    >(this[18].toTuple());
   }
 
   get parent(): BigInt {
-    return this[18].toBigInt();
+    return this[19].toBigInt();
   }
 
   get maturityAllowlist(): Array<Address> {
-    return this[19].toAddressArray();
+    return this[20].toAddressArray();
   }
 
   get ignoreUserSplits(): boolean {
-    return this[20].toBoolean();
+    return this[21].toBoolean();
   }
 
   get splitToLiquid(): CharityApplication__proposalsResultCharityApplicationSplitToLiquidStruct {
     return changetype<
       CharityApplication__proposalsResultCharityApplicationSplitToLiquidStruct
-    >(this[21].toTuple());
+    >(this[22].toTuple());
   }
 
   get referralId(): BigInt {
-    return this[22].toBigInt();
+    return this[23].toBigInt();
   }
 }
 
@@ -1040,7 +1058,7 @@ export class CharityApplication extends ethereum.SmartContract {
   proposals(param0: BigInt): CharityApplication__proposalsResult {
     let result = super.call(
       "proposals",
-      "proposals(uint256):(uint256,address,(bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256),string,uint256,uint8)",
+      "proposals(uint256):(uint256,address,(bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256),string,uint256,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -1061,7 +1079,7 @@ export class CharityApplication extends ethereum.SmartContract {
   ): ethereum.CallResult<CharityApplication__proposalsResult> {
     let result = super.tryCall(
       "proposals",
-      "proposals(uint256):(uint256,address,(bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256),string,uint256,uint8)",
+      "proposals(uint256):(uint256,address,(bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256),string,uint256,uint8)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -1332,68 +1350,72 @@ export class ProposeCharityCallCharityApplicationStruct extends ethereum.Tuple {
     return this[9].toBigInt();
   }
 
+  get duration(): BigInt {
+    return this[10].toBigInt();
+  }
+
   get allowlistedBeneficiaries(): Array<Address> {
-    return this[10].toAddressArray();
+    return this[11].toAddressArray();
   }
 
   get allowlistedContributors(): Array<Address> {
-    return this[11].toAddressArray();
+    return this[12].toAddressArray();
   }
 
   get earlyLockedWithdrawFee(): ProposeCharityCallCharityApplicationEarlyLockedWithdrawFeeStruct {
     return changetype<
       ProposeCharityCallCharityApplicationEarlyLockedWithdrawFeeStruct
-    >(this[12].toTuple());
+    >(this[13].toTuple());
   }
 
   get withdrawFee(): ProposeCharityCallCharityApplicationWithdrawFeeStruct {
     return changetype<ProposeCharityCallCharityApplicationWithdrawFeeStruct>(
-      this[13].toTuple()
+      this[14].toTuple()
     );
   }
 
   get depositFee(): ProposeCharityCallCharityApplicationDepositFeeStruct {
     return changetype<ProposeCharityCallCharityApplicationDepositFeeStruct>(
-      this[14].toTuple()
+      this[15].toTuple()
     );
   }
 
   get balanceFee(): ProposeCharityCallCharityApplicationBalanceFeeStruct {
     return changetype<ProposeCharityCallCharityApplicationBalanceFeeStruct>(
-      this[15].toTuple()
+      this[16].toTuple()
     );
   }
 
   get proposalLink(): BigInt {
-    return this[16].toBigInt();
+    return this[17].toBigInt();
   }
 
   get settingsController(): ProposeCharityCallCharityApplicationSettingsControllerStruct {
     return changetype<
       ProposeCharityCallCharityApplicationSettingsControllerStruct
-    >(this[17].toTuple());
+    >(this[18].toTuple());
   }
 
   get parent(): BigInt {
-    return this[18].toBigInt();
+    return this[19].toBigInt();
   }
 
   get maturityAllowlist(): Array<Address> {
-    return this[19].toAddressArray();
+    return this[20].toAddressArray();
   }
 
   get ignoreUserSplits(): boolean {
-    return this[20].toBoolean();
+    return this[21].toBoolean();
   }
 
   get splitToLiquid(): ProposeCharityCallCharityApplicationSplitToLiquidStruct {
     return changetype<ProposeCharityCallCharityApplicationSplitToLiquidStruct>(
-      this[21].toTuple()
+      this[22].toTuple()
     );
   }
 
   get referralId(): BigInt {
-    return this[22].toBigInt();
+    return this[23].toBigInt();
   }
 }
 

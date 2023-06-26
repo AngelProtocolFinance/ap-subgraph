@@ -4,10 +4,11 @@ import {
   CharityApproved,
   CharityProposed,
   CharityRejected,
+  ConfigUpdated,
   Deposit,
   GasSent,
-  InitilizedCharityApplication,
-  SeedAssetSent
+  Initialized,
+  SeedAssetTransfer
 } from "../generated/CharityApplication/CharityApplication"
 
 export function createCharityApprovedEvent(
@@ -76,7 +77,15 @@ export function createCharityRejectedEvent(
   return charityRejectedEvent
 }
 
-export function createDepositEvent(sender: Address, value: BigInt): Deposit {
+export function createConfigUpdatedEvent(): ConfigUpdated {
+  let configUpdatedEvent = changetype<ConfigUpdated>(newMockEvent())
+
+  configUpdatedEvent.parameters = new Array()
+
+  return configUpdatedEvent
+}
+
+export function createDepositEvent(sender: Address, amount: BigInt): Deposit {
   let depositEvent = changetype<Deposit>(newMockEvent())
 
   depositEvent.parameters = new Array()
@@ -85,7 +94,7 @@ export function createDepositEvent(sender: Address, value: BigInt): Deposit {
     new ethereum.EventParam("sender", ethereum.Value.fromAddress(sender))
   )
   depositEvent.parameters.push(
-    new ethereum.EventParam("value", ethereum.Value.fromUnsignedBigInt(value))
+    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
   )
 
   return depositEvent
@@ -116,37 +125,35 @@ export function createGasSentEvent(
   return gasSentEvent
 }
 
-export function createInitilizedCharityApplicationEvent(): InitilizedCharityApplication {
-  let initilizedCharityApplicationEvent = changetype<
-    InitilizedCharityApplication
-  >(newMockEvent())
+export function createInitializedEvent(): Initialized {
+  let initializedEvent = changetype<Initialized>(newMockEvent())
 
-  initilizedCharityApplicationEvent.parameters = new Array()
+  initializedEvent.parameters = new Array()
 
-  return initilizedCharityApplicationEvent
+  return initializedEvent
 }
 
-export function createSeedAssetSentEvent(
+export function createSeedAssetTransferEvent(
   endowmentId: BigInt,
   asset: Address,
   amount: BigInt
-): SeedAssetSent {
-  let seedAssetSentEvent = changetype<SeedAssetSent>(newMockEvent())
+): SeedAssetTransfer {
+  let seedAssetTransferEvent = changetype<SeedAssetTransfer>(newMockEvent())
 
-  seedAssetSentEvent.parameters = new Array()
+  seedAssetTransferEvent.parameters = new Array()
 
-  seedAssetSentEvent.parameters.push(
+  seedAssetTransferEvent.parameters.push(
     new ethereum.EventParam(
       "endowmentId",
       ethereum.Value.fromUnsignedBigInt(endowmentId)
     )
   )
-  seedAssetSentEvent.parameters.push(
+  seedAssetTransferEvent.parameters.push(
     new ethereum.EventParam("asset", ethereum.Value.fromAddress(asset))
   )
-  seedAssetSentEvent.parameters.push(
+  seedAssetTransferEvent.parameters.push(
     new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
   )
 
-  return seedAssetSentEvent
+  return seedAssetTransferEvent
 }

@@ -1,41 +1,60 @@
 import { newMockEvent } from "matchstick-as"
-import { ethereum, Address, BigInt } from "@graphprotocol/graph-ts"
+import { ethereum, BigInt, Address } from "@graphprotocol/graph-ts"
 import {
-  Confirmation,
+  ApprovalsRequiredChanged,
+  ConfirmationRevoked,
   Deposit,
-  Execution,
-  ExecutionFailure,
-  ExecutionRequiredChange,
   Initialized,
-  OwnerAddition,
-  OwnerRemoval,
-  RequirementChange,
-  Revocation,
-  Submission
+  OwnerAdded,
+  OwnerRemoved,
+  RequireExecutionChanged,
+  TransactionConfirmed,
+  TransactionExecuted,
+  TransactionExpiryChanged,
+  TransactionSubmitted
 } from "../generated/APTeamMultiSig/APTeamMultiSig"
 
-export function createConfirmationEvent(
+export function createApprovalsRequiredChangedEvent(
+  approvalsRequired: BigInt
+): ApprovalsRequiredChanged {
+  let approvalsRequiredChangedEvent = changetype<ApprovalsRequiredChanged>(
+    newMockEvent()
+  )
+
+  approvalsRequiredChangedEvent.parameters = new Array()
+
+  approvalsRequiredChangedEvent.parameters.push(
+    new ethereum.EventParam(
+      "approvalsRequired",
+      ethereum.Value.fromUnsignedBigInt(approvalsRequired)
+    )
+  )
+
+  return approvalsRequiredChangedEvent
+}
+
+export function createConfirmationRevokedEvent(
   sender: Address,
   transactionId: BigInt
-): Confirmation {
-  let confirmationEvent = changetype<Confirmation>(newMockEvent())
+): ConfirmationRevoked {
+  let confirmationRevokedEvent = changetype<ConfirmationRevoked>(newMockEvent())
 
-  confirmationEvent.parameters = new Array()
+  confirmationRevokedEvent.parameters = new Array()
 
-  confirmationEvent.parameters.push(
+  confirmationRevokedEvent.parameters.push(
     new ethereum.EventParam("sender", ethereum.Value.fromAddress(sender))
   )
-  confirmationEvent.parameters.push(
+  confirmationRevokedEvent.parameters.push(
     new ethereum.EventParam(
       "transactionId",
       ethereum.Value.fromUnsignedBigInt(transactionId)
     )
   )
 
-  return confirmationEvent
+  return confirmationRevokedEvent
 }
 
-export function createDepositEvent(sender: Address, value: BigInt): Deposit {
+export function createDepositEvent(sender: Address, amount: BigInt): Deposit {
   let depositEvent = changetype<Deposit>(newMockEvent())
 
   depositEvent.parameters = new Array()
@@ -44,61 +63,10 @@ export function createDepositEvent(sender: Address, value: BigInt): Deposit {
     new ethereum.EventParam("sender", ethereum.Value.fromAddress(sender))
   )
   depositEvent.parameters.push(
-    new ethereum.EventParam("value", ethereum.Value.fromUnsignedBigInt(value))
+    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
   )
 
   return depositEvent
-}
-
-export function createExecutionEvent(transactionId: BigInt): Execution {
-  let executionEvent = changetype<Execution>(newMockEvent())
-
-  executionEvent.parameters = new Array()
-
-  executionEvent.parameters.push(
-    new ethereum.EventParam(
-      "transactionId",
-      ethereum.Value.fromUnsignedBigInt(transactionId)
-    )
-  )
-
-  return executionEvent
-}
-
-export function createExecutionFailureEvent(
-  transactionId: BigInt
-): ExecutionFailure {
-  let executionFailureEvent = changetype<ExecutionFailure>(newMockEvent())
-
-  executionFailureEvent.parameters = new Array()
-
-  executionFailureEvent.parameters.push(
-    new ethereum.EventParam(
-      "transactionId",
-      ethereum.Value.fromUnsignedBigInt(transactionId)
-    )
-  )
-
-  return executionFailureEvent
-}
-
-export function createExecutionRequiredChangeEvent(
-  requireExecution: boolean
-): ExecutionRequiredChange {
-  let executionRequiredChangeEvent = changetype<ExecutionRequiredChange>(
-    newMockEvent()
-  )
-
-  executionRequiredChangeEvent.parameters = new Array()
-
-  executionRequiredChangeEvent.parameters.push(
-    new ethereum.EventParam(
-      "requireExecution",
-      ethereum.Value.fromBoolean(requireExecution)
-    )
-  )
-
-  return executionRequiredChangeEvent
 }
 
 export function createInitializedEvent(version: i32): Initialized {
@@ -116,79 +84,127 @@ export function createInitializedEvent(version: i32): Initialized {
   return initializedEvent
 }
 
-export function createOwnerAdditionEvent(owner: Address): OwnerAddition {
-  let ownerAdditionEvent = changetype<OwnerAddition>(newMockEvent())
+export function createOwnerAddedEvent(owner: Address): OwnerAdded {
+  let ownerAddedEvent = changetype<OwnerAdded>(newMockEvent())
 
-  ownerAdditionEvent.parameters = new Array()
+  ownerAddedEvent.parameters = new Array()
 
-  ownerAdditionEvent.parameters.push(
+  ownerAddedEvent.parameters.push(
     new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner))
   )
 
-  return ownerAdditionEvent
+  return ownerAddedEvent
 }
 
-export function createOwnerRemovalEvent(owner: Address): OwnerRemoval {
-  let ownerRemovalEvent = changetype<OwnerRemoval>(newMockEvent())
+export function createOwnerRemovedEvent(owner: Address): OwnerRemoved {
+  let ownerRemovedEvent = changetype<OwnerRemoved>(newMockEvent())
 
-  ownerRemovalEvent.parameters = new Array()
+  ownerRemovedEvent.parameters = new Array()
 
-  ownerRemovalEvent.parameters.push(
+  ownerRemovedEvent.parameters.push(
     new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner))
   )
 
-  return ownerRemovalEvent
+  return ownerRemovedEvent
 }
 
-export function createRequirementChangeEvent(
-  required: BigInt
-): RequirementChange {
-  let requirementChangeEvent = changetype<RequirementChange>(newMockEvent())
+export function createRequireExecutionChangedEvent(
+  requireExecution: boolean
+): RequireExecutionChanged {
+  let requireExecutionChangedEvent = changetype<RequireExecutionChanged>(
+    newMockEvent()
+  )
 
-  requirementChangeEvent.parameters = new Array()
+  requireExecutionChangedEvent.parameters = new Array()
 
-  requirementChangeEvent.parameters.push(
+  requireExecutionChangedEvent.parameters.push(
     new ethereum.EventParam(
-      "required",
-      ethereum.Value.fromUnsignedBigInt(required)
+      "requireExecution",
+      ethereum.Value.fromBoolean(requireExecution)
     )
   )
 
-  return requirementChangeEvent
+  return requireExecutionChangedEvent
 }
 
-export function createRevocationEvent(
+export function createTransactionConfirmedEvent(
   sender: Address,
   transactionId: BigInt
-): Revocation {
-  let revocationEvent = changetype<Revocation>(newMockEvent())
+): TransactionConfirmed {
+  let transactionConfirmedEvent = changetype<TransactionConfirmed>(
+    newMockEvent()
+  )
 
-  revocationEvent.parameters = new Array()
+  transactionConfirmedEvent.parameters = new Array()
 
-  revocationEvent.parameters.push(
+  transactionConfirmedEvent.parameters.push(
     new ethereum.EventParam("sender", ethereum.Value.fromAddress(sender))
   )
-  revocationEvent.parameters.push(
+  transactionConfirmedEvent.parameters.push(
     new ethereum.EventParam(
       "transactionId",
       ethereum.Value.fromUnsignedBigInt(transactionId)
     )
   )
 
-  return revocationEvent
+  return transactionConfirmedEvent
 }
 
-export function createSubmissionEvent(transactionId: BigInt): Submission {
-  let submissionEvent = changetype<Submission>(newMockEvent())
+export function createTransactionExecutedEvent(
+  transactionId: BigInt
+): TransactionExecuted {
+  let transactionExecutedEvent = changetype<TransactionExecuted>(newMockEvent())
 
-  submissionEvent.parameters = new Array()
+  transactionExecutedEvent.parameters = new Array()
 
-  submissionEvent.parameters.push(
+  transactionExecutedEvent.parameters.push(
     new ethereum.EventParam(
       "transactionId",
       ethereum.Value.fromUnsignedBigInt(transactionId)
     )
   )
 
-  return submissionEvent
+  return transactionExecutedEvent
+}
+
+export function createTransactionExpiryChangedEvent(
+  transactionExpiry: BigInt
+): TransactionExpiryChanged {
+  let transactionExpiryChangedEvent = changetype<TransactionExpiryChanged>(
+    newMockEvent()
+  )
+
+  transactionExpiryChangedEvent.parameters = new Array()
+
+  transactionExpiryChangedEvent.parameters.push(
+    new ethereum.EventParam(
+      "transactionExpiry",
+      ethereum.Value.fromUnsignedBigInt(transactionExpiry)
+    )
+  )
+
+  return transactionExpiryChangedEvent
+}
+
+export function createTransactionSubmittedEvent(
+  sender: Address,
+  transactionId: BigInt
+): TransactionSubmitted {
+  let transactionSubmittedEvent = changetype<TransactionSubmitted>(
+    newMockEvent()
+  )
+
+  transactionSubmittedEvent.parameters = new Array()
+
+  transactionSubmittedEvent.parameters.push(
+    new ethereum.EventParam("sender", ethereum.Value.fromAddress(sender))
+  )
+  transactionSubmittedEvent.parameters.push(
+    new ethereum.EventParam(
+      "transactionId",
+      ethereum.Value.fromUnsignedBigInt(transactionId)
+    )
+  )
+
+  return transactionSubmittedEvent
 }

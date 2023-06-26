@@ -13,62 +13,7 @@ type Deposit @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type FallbackRefund @entity(immutable: true) {
-  id: Bytes!
-  action_destinationChain: String! # string
-  action_strategyId: Bytes! # bytes4
-  action_selector: Bytes! # bytes4
-  action_accountIds: [BigInt!]! # uint32[]
-  action_token: Bytes! # address
-  action_lockAmt: BigInt! # uint256
-  action_liqAmt: BigInt! # uint256
-  action_status: Int! # uint8
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Harvest @entity(immutable: true) {
-  id: Bytes!
-  action_destinationChain: String! # string
-  action_strategyId: Bytes! # bytes4
-  action_selector: Bytes! # bytes4
-  action_accountIds: [BigInt!]! # uint32[]
-  action_token: Bytes! # address
-  action_lockAmt: BigInt! # uint256
-  action_liqAmt: BigInt! # uint256
-  action_status: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Initialized @entity(immutable: true) {
-  id: Bytes!
-  version: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type LogError @entity(immutable: true) {
-  id: Bytes!
-  action_destinationChain: String! # string
-  action_strategyId: Bytes! # bytes4
-  action_selector: Bytes! # bytes4
-  action_accountIds: [BigInt!]! # uint32[]
-  action_token: Bytes! # address
-  action_lockAmt: BigInt! # uint256
-  action_liqAmt: BigInt! # uint256
-  action_status: Int! # uint8
-  message: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type LogErrorBytes @entity(immutable: true) {
+type ErrorBytesLogged @entity(immutable: true) {
   id: Bytes!
   action_destinationChain: String! # string
   action_strategyId: Bytes! # bytes4
@@ -84,6 +29,30 @@ type LogErrorBytes @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
+type ErrorLogged @entity(immutable: true) {
+  id: Bytes!
+  action_destinationChain: String! # string
+  action_strategyId: Bytes! # bytes4
+  action_selector: Bytes! # bytes4
+  action_accountIds: [BigInt!]! # uint32[]
+  action_token: Bytes! # address
+  action_lockAmt: BigInt! # uint256
+  action_liqAmt: BigInt! # uint256
+  action_status: Int! # uint8
+  message: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Initialized @entity(immutable: true) {
+  id: Bytes!
+  version: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type OwnershipTransferred @entity(immutable: true) {
   id: Bytes!
   previousOwner: Bytes! # address
@@ -93,7 +62,7 @@ type OwnershipTransferred @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type Redemption @entity(immutable: true) {
+type Redeem @entity(immutable: true) {
   id: Bytes!
   action_destinationChain: String! # string
   action_strategyId: Bytes! # bytes4
@@ -109,7 +78,7 @@ type Redemption @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type TokensSent @entity(immutable: true) {
+type Refund @entity(immutable: true) {
   id: Bytes!
   action_destinationChain: String! # string
   action_strategyId: Bytes! # bytes4
@@ -124,7 +93,46 @@ type TokensSent @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
-type Confirmation @entity(immutable: true) {
+
+type RewardsHarvested @entity(immutable: true) {
+  id: Bytes!
+  action_destinationChain: String! # string
+  action_strategyId: Bytes! # bytes4
+  action_selector: Bytes! # bytes4
+  action_accountIds: [BigInt!]! # uint32[]
+  action_token: Bytes! # address
+  action_lockAmt: BigInt! # uint256
+  action_liqAmt: BigInt! # uint256
+  action_status: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type Transfer @entity(immutable: true) {
+  id: Bytes!
+  action_destinationChain: String! # string
+  action_strategyId: Bytes! # bytes4
+  action_selector: Bytes! # bytes4
+  action_accountIds: [BigInt!]! # uint32[]
+  action_token: Bytes! # address
+  action_lockAmt: BigInt! # uint256
+  action_liqAmt: BigInt! # uint256
+  action_status: Int! # uint8
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+type ApprovalsRequiredChanged @entity(immutable: true) {
+  id: Bytes!
+  approvalsRequired: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ConfirmationRevoked @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   transactionId: BigInt! # uint256
@@ -136,31 +144,7 @@ type Confirmation @entity(immutable: true) {
 type APTeamMultiSigDeposit @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
-  value: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Execution @entity(immutable: true) {
-  id: Bytes!
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ExecutionFailure @entity(immutable: true) {
-  id: Bytes!
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ExecutionRequiredChange @entity(immutable: true) {
-  id: Bytes!
-  requireExecution: Boolean! # bool
+  amount: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -174,7 +158,7 @@ type APTeamMultiSigInitialized @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OwnerAddition @entity(immutable: true) {
+type OwnerAdded @entity(immutable: true) {
   id: Bytes!
   owner: Bytes! # address
   blockNumber: BigInt!
@@ -182,7 +166,7 @@ type OwnerAddition @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OwnerRemoval @entity(immutable: true) {
+type OwnerRemoved @entity(immutable: true) {
   id: Bytes!
   owner: Bytes! # address
   blockNumber: BigInt!
@@ -190,15 +174,15 @@ type OwnerRemoval @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type RequirementChange @entity(immutable: true) {
+type RequireExecutionChanged @entity(immutable: true) {
   id: Bytes!
-  required: BigInt! # uint256
+  requireExecution: Boolean! # bool
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type Revocation @entity(immutable: true) {
+type TransactionConfirmed @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   transactionId: BigInt! # uint256
@@ -207,17 +191,42 @@ type Revocation @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type Submission @entity(immutable: true) {
+type TransactionExecuted @entity(immutable: true) {
   id: Bytes!
   transactionId: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
-type ContractInstantiation @entity(immutable: true) {
+
+type TransactionExpiryChanged @entity(immutable: true) {
+  id: Bytes!
+  transactionExpiry: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type TransactionSubmitted @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  transactionId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+type ContractInstantiated @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   instantiation: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ImplementationUpdated @entity(immutable: true) {
+  id: Bytes!
+  implementationAddress: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -231,7 +240,23 @@ type EndowmentMultiSigFactoryOwnershipTransferred @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
-type EndowmentMultiSigConfirmation @entity(immutable: true) {
+
+type ProxyAdminUpdated @entity(immutable: true) {
+  id: Bytes!
+  admin: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+type EndowmentMultiSigApprovalsRequiredChanged @entity(immutable: true) {
+  id: Bytes!
+  approvalsRequired: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EndowmentMultiSigConfirmationRevoked @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   transactionId: BigInt! # uint256
@@ -243,31 +268,7 @@ type EndowmentMultiSigConfirmation @entity(immutable: true) {
 type EndowmentMultiSigDeposit @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
-  value: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentMultiSigExecution @entity(immutable: true) {
-  id: Bytes!
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentMultiSigExecutionFailure @entity(immutable: true) {
-  id: Bytes!
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentMultiSigExecutionRequiredChange @entity(immutable: true) {
-  id: Bytes!
-  requireExecution: Boolean! # bool
+  amount: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -281,7 +282,7 @@ type EndowmentMultiSigInitialized @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type EndowmentMultiSigOwnerAddition @entity(immutable: true) {
+type EndowmentMultiSigOwnerAdded @entity(immutable: true) {
   id: Bytes!
   owner: Bytes! # address
   blockNumber: BigInt!
@@ -289,7 +290,7 @@ type EndowmentMultiSigOwnerAddition @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type EndowmentMultiSigOwnerRemoval @entity(immutable: true) {
+type EndowmentMultiSigOwnerRemoved @entity(immutable: true) {
   id: Bytes!
   owner: Bytes! # address
   blockNumber: BigInt!
@@ -297,15 +298,15 @@ type EndowmentMultiSigOwnerRemoval @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type EndowmentMultiSigRequirementChange @entity(immutable: true) {
+type EndowmentMultiSigRequireExecutionChanged @entity(immutable: true) {
   id: Bytes!
-  required: BigInt! # uint256
+  requireExecution: Boolean! # bool
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type EndowmentMultiSigRevocation @entity(immutable: true) {
+type EndowmentMultiSigTransactionConfirmed @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   transactionId: BigInt! # uint256
@@ -314,14 +315,31 @@ type EndowmentMultiSigRevocation @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type EndowmentMultiSigSubmission @entity(immutable: true) {
+type EndowmentMultiSigTransactionExecuted @entity(immutable: true) {
   id: Bytes!
   transactionId: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
-type AccountsContractStorageChanged @entity(immutable: true) {
+
+type EndowmentMultiSigTransactionExpiryChanged @entity(immutable: true) {
+  id: Bytes!
+  transactionExpiry: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EndowmentMultiSigTransactionSubmitted @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
+  transactionId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+type AccountsContractStorageUpdated @entity(immutable: true) {
   id: Bytes!
   _chainName: String! # string
   _accountsContractAddress: String! # string
@@ -330,7 +348,7 @@ type AccountsContractStorageChanged @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type AngelProtocolParamsChanged @entity(immutable: true) {
+type AngelProtocolParamsUpdated @entity(immutable: true) {
   id: Bytes!
 
   blockNumber: BigInt!
@@ -338,19 +356,19 @@ type AngelProtocolParamsChanged @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type DeleteNetworkConnection @entity(immutable: true) {
+type ConfigUpdated @entity(immutable: true) {
   id: Bytes!
-  chainId: BigInt! # uint256
+
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type FeeUpdated @entity(immutable: true) {
+type FeeSettingsUpdated @entity(immutable: true) {
   id: Bytes!
-  _fee: Int! # uint8
-  _rate: BigInt! # uint256
-  _payout: Bytes! # address
+  _feeType: Int! # uint8
+  _bpsRate: BigInt! # uint256
+  _payoutAddress: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -373,6 +391,22 @@ type RegistrarInitialized @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
+type NetworkConnectionPosted @entity(immutable: true) {
+  id: Bytes!
+  chainId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type NetworkConnectionRemoved @entity(immutable: true) {
+  id: Bytes!
+  chainId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type RegistrarOwnershipTransferred @entity(immutable: true) {
   id: Bytes!
   previousOwner: Bytes! # address
@@ -382,15 +416,7 @@ type RegistrarOwnershipTransferred @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type PostNetworkConnection @entity(immutable: true) {
-  id: Bytes!
-  chainId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RebalanceParamsChanged @entity(immutable: true) {
+type RebalanceParamsUpdated @entity(immutable: true) {
   id: Bytes!
 
   blockNumber: BigInt!
@@ -398,7 +424,7 @@ type RebalanceParamsChanged @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type StrategyApprovalChanged @entity(immutable: true) {
+type StrategyApprovalUpdated @entity(immutable: true) {
   id: Bytes!
   _strategyId: Bytes! # bytes4
   _approvalState: Int! # uint8
@@ -407,7 +433,7 @@ type StrategyApprovalChanged @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type StrategyParamsChanged @entity(immutable: true) {
+type StrategyParamsUpdated @entity(immutable: true) {
   id: Bytes!
   _strategyId: Bytes! # bytes4
   _lockAddr: Bytes! # address
@@ -418,7 +444,7 @@ type StrategyParamsChanged @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type TokenAcceptanceChanged @entity(immutable: true) {
+type TokenAcceptanceUpdated @entity(immutable: true) {
   id: Bytes!
   _tokenAddr: Bytes! # address
   _isAccepted: Boolean! # bool
@@ -426,20 +452,30 @@ type TokenAcceptanceChanged @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
-
-type UpdateRegistrarConfig @entity(immutable: true) {
+type AllowanceRemoved @entity(immutable: true) {
   id: Bytes!
-
+  sender: Bytes! # address
+  spender: Bytes! # address
+  tokenAddress: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
-type AllowanceStateUpdatedTo @entity(immutable: true) {
+
+type AllowanceUpdated @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   spender: Bytes! # address
   tokenAddress: Bytes! # address
   allowance: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type AccountsConfigUpdated @entity(immutable: true) {
+  id: Bytes!
+
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -456,16 +492,17 @@ type DaoContractCreated @entity(immutable: true) {
 
 type DonationDeposited @entity(immutable: true) {
   id: Bytes!
-  Accounts_id: BigInt! # uint256
+  endowId: BigInt! # uint256
+  tokenAddress: Bytes! # address
   amount: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type DonationMatchSetup @entity(immutable: true) {
+type DonationMatchCreated @entity(immutable: true) {
   id: Bytes!
-  Accounts_id: BigInt! # uint256
+  endowId: BigInt! # uint256
   donationMatchContract: Bytes! # address
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -474,8 +511,9 @@ type DonationMatchSetup @entity(immutable: true) {
 
 type DonationWithdrawn @entity(immutable: true) {
   id: Bytes!
-  Accounts_id: BigInt! # uint256
+  endowId: BigInt! # uint256
   recipient: Bytes! # address
+  tokenAddress: Bytes! # address
   amount: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -484,7 +522,7 @@ type DonationWithdrawn @entity(immutable: true) {
 
 type EndowmentCreated @entity(immutable: true) {
   id: Bytes!
-  Accounts_id: BigInt! # uint256
+  endowId: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -492,1303 +530,37 @@ type EndowmentCreated @entity(immutable: true) {
 
 type EndowmentSettingUpdated @entity(immutable: true) {
   id: Bytes!
-  Accounts_id: BigInt! # uint256
+  endowId: BigInt! # uint256
   setting: String! # string
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type RemoveAllowance @entity(immutable: true) {
+type EndowmentUpdated @entity(immutable: true) {
   id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
+  endowId: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type SwapToken @entity(immutable: true) {
+type OwnerUpdated @entity(immutable: true) {
   id: Bytes!
-  Accounts_id: BigInt! # uint256
+  owner: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type TokenSwapped @entity(immutable: true) {
+  id: Bytes!
+  endowId: BigInt! # uint256
   accountType: Int! # uint8
   tokenIn: Bytes! # address
   amountIn: BigInt! # uint256
   tokenOut: Bytes! # address
   amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceStateUpdatedTo1 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated1 @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited1 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchSetup1 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn1 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  recipient: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated1 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated1 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RemoveAllowance1 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwapToken1 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  accountType: Int! # uint8
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig1 @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment1 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceStateUpdatedTo2 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated2 @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited2 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchSetup2 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn2 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  recipient: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated2 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated2 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RemoveAllowance2 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwapToken2 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  accountType: Int! # uint8
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig2 @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment2 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceStateUpdatedTo3 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated3 @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited3 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchSetup3 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn3 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  recipient: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated3 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated3 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RemoveAllowance3 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwapToken3 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  accountType: Int! # uint8
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig3 @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment3 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceStateUpdatedTo4 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated4 @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited4 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchSetup4 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn4 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  recipient: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated4 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated4 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RemoveAllowance4 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwapToken4 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  accountType: Int! # uint8
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwappedToken @entity(immutable: true) {
-  id: Bytes!
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig4 @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment4 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceStateUpdatedTo5 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated5 @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited5 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchSetup5 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn5 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  recipient: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated5 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated5 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RemoveAllowance5 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwapToken5 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  accountType: Int! # uint8
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig5 @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment5 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceStateUpdatedTo6 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated6 @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited6 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchSetup6 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn6 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  recipient: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated6 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated6 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RemoveAllowance6 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwapToken6 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  accountType: Int! # uint8
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig6 @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment6 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceStateUpdatedTo7 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated7 @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited7 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchSetup7 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn7 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  recipient: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated7 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated7 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RemoveAllowance7 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwapToken7 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  accountType: Int! # uint8
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig7 @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment7 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceStateUpdatedTo8 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated8 @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited8 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchSetup8 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn8 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  recipient: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated8 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated8 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RemoveAllowance8 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwapToken8 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  accountType: Int! # uint8
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig8 @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment8 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceStateUpdatedTo9 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated9 @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited9 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchSetup9 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn9 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  recipient: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated9 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated9 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RemoveAllowance9 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwapToken9 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  accountType: Int! # uint8
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig9 @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment9 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceStateUpdatedTo10 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated10 @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited10 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchSetup10 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn10 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  recipient: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated10 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated10 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RemoveAllowance10 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwapToken10 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  accountType: Int! # uint8
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig10 @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment10 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceStateUpdatedTo11 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated11 @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited11 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchSetup11 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn11 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  recipient: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated11 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated11 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RemoveAllowance11 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwapToken11 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  accountType: Int! # uint8
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig11 @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment11 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceStateUpdatedTo12 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated12 @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited12 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchSetup12 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn12 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  recipient: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated12 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated12 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RemoveAllowance12 @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SwapToken12 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
-  accountType: Int! # uint8
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateConfig12 @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateEndowment12 @entity(immutable: true) {
-  id: Bytes!
-  Accounts_id: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -1820,10 +592,18 @@ type CharityRejected @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
+type CharityApplicationConfigUpdated @entity(immutable: true) {
+  id: Bytes!
+
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
 type CharityApplicationDeposit @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
-  value: BigInt! # uint256
+  amount: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -1839,7 +619,7 @@ type GasSent @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type InitilizedCharityApplication @entity(immutable: true) {
+type CharityApplicationInitialized @entity(immutable: true) {
   id: Bytes!
 
   blockNumber: BigInt!
@@ -1847,7 +627,7 @@ type InitilizedCharityApplication @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type SeedAssetSent @entity(immutable: true) {
+type SeedAssetTransfer @entity(immutable: true) {
   id: Bytes!
   endowmentId: BigInt! # uint256
   asset: Bytes! # address
@@ -1856,7 +636,15 @@ type SeedAssetSent @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
-type ConfigUpdated @entity(immutable: true) {
+type ActiveFundUpdated @entity(immutable: true) {
+  id: Bytes!
+  fundId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type IndexFundConfigUpdated @entity(immutable: true) {
   id: Bytes!
 
   blockNumber: BigInt!
@@ -1866,7 +654,7 @@ type ConfigUpdated @entity(immutable: true) {
 
 type DonationMessagesUpdated @entity(immutable: true) {
   id: Bytes!
-
+  fundId: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -1896,15 +684,6 @@ type IndexFundInitialized @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type MemberAdded @entity(immutable: true) {
-  id: Bytes!
-  fundId: BigInt! # uint256
-  memberId: BigInt! # uint32
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
 type MemberRemoved @entity(immutable: true) {
   id: Bytes!
   fundId: BigInt! # uint256
@@ -1914,7 +693,16 @@ type MemberRemoved @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type OwnerUpdated @entity(immutable: true) {
+type MembersUpdated @entity(immutable: true) {
+  id: Bytes!
+  fundId: BigInt! # uint256
+  members: [BigInt!]! # uint32[]
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type IndexFundOwnerUpdated @entity(immutable: true) {
   id: Bytes!
   newOwner: Bytes! # address
   blockNumber: BigInt!
@@ -1930,22 +718,22 @@ type RegistrarUpdated @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type UpdateActiveFund @entity(immutable: true) {
-  id: Bytes!
-  fundId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type UpdateIndexFundState @entity(immutable: true) {
+type StateUpdated @entity(immutable: true) {
   id: Bytes!
 
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
-type ApplicationsMultiSigConfirmation @entity(immutable: true) {
+type ApplicationsMultiSigApprovalsRequiredChanged @entity(immutable: true) {
+  id: Bytes!
+  approvalsRequired: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ApplicationsMultiSigConfirmationRevoked @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   transactionId: BigInt! # uint256
@@ -1957,31 +745,7 @@ type ApplicationsMultiSigConfirmation @entity(immutable: true) {
 type ApplicationsMultiSigDeposit @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
-  value: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ApplicationsMultiSigExecution @entity(immutable: true) {
-  id: Bytes!
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ApplicationsMultiSigExecutionFailure @entity(immutable: true) {
-  id: Bytes!
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ApplicationsMultiSigExecutionRequiredChange @entity(immutable: true) {
-  id: Bytes!
-  requireExecution: Boolean! # bool
+  amount: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -1995,7 +759,7 @@ type ApplicationsMultiSigInitialized @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type ApplicationsMultiSigOwnerAddition @entity(immutable: true) {
+type ApplicationsMultiSigOwnerAdded @entity(immutable: true) {
   id: Bytes!
   owner: Bytes! # address
   blockNumber: BigInt!
@@ -2003,7 +767,7 @@ type ApplicationsMultiSigOwnerAddition @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type ApplicationsMultiSigOwnerRemoval @entity(immutable: true) {
+type ApplicationsMultiSigOwnerRemoved @entity(immutable: true) {
   id: Bytes!
   owner: Bytes! # address
   blockNumber: BigInt!
@@ -2011,15 +775,15 @@ type ApplicationsMultiSigOwnerRemoval @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type ApplicationsMultiSigRequirementChange @entity(immutable: true) {
+type ApplicationsMultiSigRequireExecutionChanged @entity(immutable: true) {
   id: Bytes!
-  required: BigInt! # uint256
+  requireExecution: Boolean! # bool
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type ApplicationsMultiSigRevocation @entity(immutable: true) {
+type ApplicationsMultiSigTransactionConfirmed @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
   transactionId: BigInt! # uint256
@@ -2028,8 +792,25 @@ type ApplicationsMultiSigRevocation @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type ApplicationsMultiSigSubmission @entity(immutable: true) {
+type ApplicationsMultiSigTransactionExecuted @entity(immutable: true) {
   id: Bytes!
+  transactionId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ApplicationsMultiSigTransactionExpiryChanged @entity(immutable: true) {
+  id: Bytes!
+  transactionExpiry: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ApplicationsMultiSigTransactionSubmitted @entity(immutable: true) {
+  id: Bytes!
+  sender: Bytes! # address
   transactionId: BigInt! # uint256
   blockNumber: BigInt!
   blockTimestamp: BigInt!

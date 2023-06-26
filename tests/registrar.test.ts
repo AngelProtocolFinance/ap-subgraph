@@ -7,10 +7,10 @@ import {
   afterAll
 } from "matchstick-as/assembly/index"
 import { BigInt, Address, Bytes } from "@graphprotocol/graph-ts"
-import { AccountsContractStorageChanged } from "../generated/schema"
-import { AccountsContractStorageChanged as AccountsContractStorageChangedEvent } from "../generated/Registrar/Registrar"
-import { handleAccountsContractStorageChanged } from "../src/registrar"
-import { createAccountsContractStorageChangedEvent } from "./registrar-utils"
+import { AccountsContractStorageUpdated } from "../generated/schema"
+import { AccountsContractStorageUpdated as AccountsContractStorageUpdatedEvent } from "../generated/Registrar/Registrar"
+import { handleAccountsContractStorageUpdated } from "../src/registrar"
+import { createAccountsContractStorageUpdatedEvent } from "./registrar-utils"
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0
@@ -19,11 +19,11 @@ describe("Describe entity assertions", () => {
   beforeAll(() => {
     let _chainName = "Example string value"
     let _accountsContractAddress = "Example string value"
-    let newAccountsContractStorageChangedEvent = createAccountsContractStorageChangedEvent(
+    let newAccountsContractStorageUpdatedEvent = createAccountsContractStorageUpdatedEvent(
       _chainName,
       _accountsContractAddress
     )
-    handleAccountsContractStorageChanged(newAccountsContractStorageChangedEvent)
+    handleAccountsContractStorageUpdated(newAccountsContractStorageUpdatedEvent)
   })
 
   afterAll(() => {
@@ -33,18 +33,18 @@ describe("Describe entity assertions", () => {
   // For more test scenarios, see:
   // https://thegraph.com/docs/en/developer/matchstick/#write-a-unit-test
 
-  test("AccountsContractStorageChanged created and stored", () => {
-    assert.entityCount("AccountsContractStorageChanged", 1)
+  test("AccountsContractStorageUpdated created and stored", () => {
+    assert.entityCount("AccountsContractStorageUpdated", 1)
 
     // 0xa16081f360e3847006db660bae1c6d1b2e17ec2a is the default address used in newMockEvent() function
     assert.fieldEquals(
-      "AccountsContractStorageChanged",
+      "AccountsContractStorageUpdated",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
       "_chainName",
       "Example string value"
     )
     assert.fieldEquals(
-      "AccountsContractStorageChanged",
+      "AccountsContractStorageUpdated",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
       "_accountsContractAddress",
       "Example string value"

@@ -1,36 +1,32 @@
 {
   "mumbai": {
     "Router": {
-      "address": "0xdf05B770A292480e50172217Ec9b80B1C150103B",
-      "startBlock": 35000000
+      "address": "0x316E6F804D5Dd748E8dC225643Fc277A55AdFe92",
+      "startBlock": 37000000
     },
     "APTeamMultiSig": {
-      "address": "0xD812901336D4f1c910a2Ac51921E0105BD980887",
-      "startBlock": 35000000
+      "address": "0x5ffD7a356AaF24c47C230077c851ec25DcD2eaD9"
     },
     "EndowmentMultiSigFactory": {
-      "address": "0xBCB725c55e729d39BFD16eB4eC735A39BC0550DD",
-      "startBlock": 35000000
+      "address": "0x415749DaF6b3cC6E54439333dbf1c6780F3a2a77"
+    },
+    "EndowmentMultiSig": {
+      "address": "0xE39fc37a96Df1E80A90c5F2fcb39F63733A87E02"
     },
     "Registrar": {
-      "address": "0x74f62eE5330EE95B72c6CDFA301Be106bDe5D454",
-      "startBlock": 35000000
+      "address": "0xa93b02DAD1bC3Ab4177FB3F2bFCbD2d2CA27Fda9"
     },
     "Accounts": {
-      "address": "0x8657f7a1512905FCabF6053c187881Fd4264117b",
-      "startBlock": 35000000
+      "address": "0x04227A153068bA4d19Ed3fA16b9f6Feede52fFf4"
     },
     "CharityApplication": {
-      "address": "0x6c2336467Ba4056313F8c8a3399531D4b652d042",
-      "startBlock": 35000000
+      "address": "0x5239ca9E0EC972Bb7D69E1fB65a253A38b0b51CA"
     },
     "IndexFund": {
-      "address": "0xE036D1034640fa16280682fd8CC00Ccf3D42e8E4",
-      "startBlock": 35000000
+      "address": "0xcf0cA88b8BF985032b27aE4c7488F7A6ad90D643"
     },
     "ApplicationsMultiSig": {
-      "address": "0xaDC97799AAC1430e297edb86136579710B081e0A",
-      "startBlock": 35000000
+      "address": "0x798850e0C5a49fC0d88252af3DCBeb7955Ff8d7C"
     }
   }
 }

@@ -2,19 +2,21 @@ import {
   CharityApproved as CharityApprovedEvent,
   CharityProposed as CharityProposedEvent,
   CharityRejected as CharityRejectedEvent,
+  ConfigUpdated as ConfigUpdatedEvent,
   Deposit as DepositEvent,
   GasSent as GasSentEvent,
-  InitilizedCharityApplication as InitilizedCharityApplicationEvent,
-  SeedAssetSent as SeedAssetSentEvent
+  Initialized as InitializedEvent,
+  SeedAssetTransfer as SeedAssetTransferEvent
 } from "../generated/CharityApplication/CharityApplication"
 import {
+  CharityApplicationDeposit,
   CharityApproved,
   CharityProposed,
   CharityRejected,
-  CharityApplicationDeposit,
+  ConfigUpdated,
   GasSent,
-  InitilizedCharityApplication,
-  SeedAssetSent
+  Initialized,
+  SeedAssetTransfer
 } from "../generated/schema"
 
 export function handleCharityApproved(event: CharityApprovedEvent): void {
@@ -59,12 +61,24 @@ export function handleCharityRejected(event: CharityRejectedEvent): void {
   entity.save()
 }
 
+export function handleConfigUpdated(event: ConfigUpdatedEvent): void {
+  let entity = new ConfigUpdated(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
 export function handleDeposit(event: DepositEvent): void {
   let entity = new CharityApplicationDeposit(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.sender = event.params.sender
-  entity.value = event.params.value
+  entity.amount = event.params.amount
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -88,10 +102,8 @@ export function handleGasSent(event: GasSentEvent): void {
   entity.save()
 }
 
-export function handleInitilizedCharityApplication(
-  event: InitilizedCharityApplicationEvent
-): void {
-  let entity = new InitilizedCharityApplication(
+export function handleInitialized(event: InitializedEvent): void {
+  let entity = new Initialized(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
 
@@ -102,8 +114,8 @@ export function handleInitilizedCharityApplication(
   entity.save()
 }
 
-export function handleSeedAssetSent(event: SeedAssetSentEvent): void {
-  let entity = new SeedAssetSent(
+export function handleSeedAssetTransfer(event: SeedAssetTransferEvent): void {
+  let entity = new SeedAssetTransfer(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.endowmentId = event.params.endowmentId

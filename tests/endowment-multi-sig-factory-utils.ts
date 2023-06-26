@@ -1,31 +1,52 @@
 import { newMockEvent } from "matchstick-as"
 import { ethereum, Address } from "@graphprotocol/graph-ts"
 import {
-  ContractInstantiation,
-  OwnershipTransferred
+  ContractInstantiated,
+  ImplementationUpdated,
+  OwnershipTransferred,
+  ProxyAdminUpdated
 } from "../generated/EndowmentMultiSigFactory/EndowmentMultiSigFactory"
 
-export function createContractInstantiationEvent(
+export function createContractInstantiatedEvent(
   sender: Address,
   instantiation: Address
-): ContractInstantiation {
-  let contractInstantiationEvent = changetype<ContractInstantiation>(
+): ContractInstantiated {
+  let contractInstantiatedEvent = changetype<ContractInstantiated>(
     newMockEvent()
   )
 
-  contractInstantiationEvent.parameters = new Array()
+  contractInstantiatedEvent.parameters = new Array()
 
-  contractInstantiationEvent.parameters.push(
+  contractInstantiatedEvent.parameters.push(
     new ethereum.EventParam("sender", ethereum.Value.fromAddress(sender))
   )
-  contractInstantiationEvent.parameters.push(
+  contractInstantiatedEvent.parameters.push(
     new ethereum.EventParam(
       "instantiation",
       ethereum.Value.fromAddress(instantiation)
     )
   )
 
-  return contractInstantiationEvent
+  return contractInstantiatedEvent
+}
+
+export function createImplementationUpdatedEvent(
+  implementationAddress: Address
+): ImplementationUpdated {
+  let implementationUpdatedEvent = changetype<ImplementationUpdated>(
+    newMockEvent()
+  )
+
+  implementationUpdatedEvent.parameters = new Array()
+
+  implementationUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "implementationAddress",
+      ethereum.Value.fromAddress(implementationAddress)
+    )
+  )
+
+  return implementationUpdatedEvent
 }
 
 export function createOwnershipTransferredEvent(
@@ -49,4 +70,18 @@ export function createOwnershipTransferredEvent(
   )
 
   return ownershipTransferredEvent
+}
+
+export function createProxyAdminUpdatedEvent(
+  admin: Address
+): ProxyAdminUpdated {
+  let proxyAdminUpdatedEvent = changetype<ProxyAdminUpdated>(newMockEvent())
+
+  proxyAdminUpdatedEvent.parameters = new Array()
+
+  proxyAdminUpdatedEvent.parameters.push(
+    new ethereum.EventParam("admin", ethereum.Value.fromAddress(admin))
+  )
+
+  return proxyAdminUpdatedEvent
 }

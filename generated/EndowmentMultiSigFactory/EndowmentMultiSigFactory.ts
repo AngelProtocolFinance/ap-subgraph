@@ -10,16 +10,16 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class ContractInstantiation extends ethereum.Event {
-  get params(): ContractInstantiation__Params {
-    return new ContractInstantiation__Params(this);
+export class ContractInstantiated extends ethereum.Event {
+  get params(): ContractInstantiated__Params {
+    return new ContractInstantiated__Params(this);
   }
 }
 
-export class ContractInstantiation__Params {
-  _event: ContractInstantiation;
+export class ContractInstantiated__Params {
+  _event: ContractInstantiated;
 
-  constructor(event: ContractInstantiation) {
+  constructor(event: ContractInstantiated) {
     this._event = event;
   }
 
@@ -29,6 +29,24 @@ export class ContractInstantiation__Params {
 
   get instantiation(): Address {
     return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class ImplementationUpdated extends ethereum.Event {
+  get params(): ImplementationUpdated__Params {
+    return new ImplementationUpdated__Params(this);
+  }
+}
+
+export class ImplementationUpdated__Params {
+  _event: ImplementationUpdated;
+
+  constructor(event: ImplementationUpdated) {
+    this._event = event;
+  }
+
+  get implementationAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
   }
 }
 
@@ -54,6 +72,24 @@ export class OwnershipTransferred__Params {
   }
 }
 
+export class ProxyAdminUpdated extends ethereum.Event {
+  get params(): ProxyAdminUpdated__Params {
+    return new ProxyAdminUpdated__Params(this);
+  }
+}
+
+export class ProxyAdminUpdated__Params {
+  _event: ProxyAdminUpdated;
+
+  constructor(event: ProxyAdminUpdated) {
+    this._event = event;
+  }
+
+  get admin(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
 export class EndowmentMultiSigFactory extends ethereum.SmartContract {
   static bind(address: Address): EndowmentMultiSigFactory {
     return new EndowmentMultiSigFactory("EndowmentMultiSigFactory", address);
@@ -63,16 +99,18 @@ export class EndowmentMultiSigFactory extends ethereum.SmartContract {
     endowmentId: BigInt,
     emitterAddress: Address,
     owners: Array<Address>,
-    required: BigInt
+    required: BigInt,
+    transactionExpiry: BigInt
   ): Address {
     let result = super.call(
       "create",
-      "create(uint256,address,address[],uint256):(address)",
+      "create(uint256,address,address[],uint256,uint256):(address)",
       [
         ethereum.Value.fromUnsignedBigInt(endowmentId),
         ethereum.Value.fromAddress(emitterAddress),
         ethereum.Value.fromAddressArray(owners),
-        ethereum.Value.fromUnsignedBigInt(required)
+        ethereum.Value.fromUnsignedBigInt(required),
+        ethereum.Value.fromUnsignedBigInt(transactionExpiry)
       ]
     );
 
@@ -83,16 +121,18 @@ export class EndowmentMultiSigFactory extends ethereum.SmartContract {
     endowmentId: BigInt,
     emitterAddress: Address,
     owners: Array<Address>,
-    required: BigInt
+    required: BigInt,
+    transactionExpiry: BigInt
   ): ethereum.CallResult<Address> {
     let result = super.tryCall(
       "create",
-      "create(uint256,address,address[],uint256):(address)",
+      "create(uint256,address,address[],uint256,uint256):(address)",
       [
         ethereum.Value.fromUnsignedBigInt(endowmentId),
         ethereum.Value.fromAddress(emitterAddress),
         ethereum.Value.fromAddressArray(owners),
-        ethereum.Value.fromUnsignedBigInt(required)
+        ethereum.Value.fromUnsignedBigInt(required),
+        ethereum.Value.fromUnsignedBigInt(transactionExpiry)
       ]
     );
     if (result.reverted) {
@@ -284,6 +324,10 @@ export class CreateCall__Inputs {
 
   get required(): BigInt {
     return this._call.inputValues[3].value.toBigInt();
+  }
+
+  get transactionExpiry(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
   }
 }
 

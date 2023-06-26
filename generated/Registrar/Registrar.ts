@@ -10,82 +10,78 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class AccountsContractStorageChanged extends ethereum.Event {
-  get params(): AccountsContractStorageChanged__Params {
-    return new AccountsContractStorageChanged__Params(this);
+export class AccountsContractStorageUpdated extends ethereum.Event {
+  get params(): AccountsContractStorageUpdated__Params {
+    return new AccountsContractStorageUpdated__Params(this);
   }
 }
 
-export class AccountsContractStorageChanged__Params {
-  _event: AccountsContractStorageChanged;
+export class AccountsContractStorageUpdated__Params {
+  _event: AccountsContractStorageUpdated;
 
-  constructor(event: AccountsContractStorageChanged) {
+  constructor(event: AccountsContractStorageUpdated) {
     this._event = event;
   }
 
-  get _chainName(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get _chainName(): string {
+    return this._event.parameters[0].value.toString();
   }
 
-  get _accountsContractAddress(): Bytes {
-    return this._event.parameters[1].value.toBytes();
-  }
-}
-
-export class AngelProtocolParamsChanged extends ethereum.Event {
-  get params(): AngelProtocolParamsChanged__Params {
-    return new AngelProtocolParamsChanged__Params(this);
+  get _accountsContractAddress(): string {
+    return this._event.parameters[1].value.toString();
   }
 }
 
-export class AngelProtocolParamsChanged__Params {
-  _event: AngelProtocolParamsChanged;
+export class AngelProtocolParamsUpdated extends ethereum.Event {
+  get params(): AngelProtocolParamsUpdated__Params {
+    return new AngelProtocolParamsUpdated__Params(this);
+  }
+}
 
-  constructor(event: AngelProtocolParamsChanged) {
+export class AngelProtocolParamsUpdated__Params {
+  _event: AngelProtocolParamsUpdated;
+
+  constructor(event: AngelProtocolParamsUpdated) {
     this._event = event;
   }
 }
 
-export class DeleteNetworkConnection extends ethereum.Event {
-  get params(): DeleteNetworkConnection__Params {
-    return new DeleteNetworkConnection__Params(this);
+export class ConfigUpdated extends ethereum.Event {
+  get params(): ConfigUpdated__Params {
+    return new ConfigUpdated__Params(this);
   }
 }
 
-export class DeleteNetworkConnection__Params {
-  _event: DeleteNetworkConnection;
+export class ConfigUpdated__Params {
+  _event: ConfigUpdated;
 
-  constructor(event: DeleteNetworkConnection) {
+  constructor(event: ConfigUpdated) {
+    this._event = event;
+  }
+}
+
+export class FeeSettingsUpdated extends ethereum.Event {
+  get params(): FeeSettingsUpdated__Params {
+    return new FeeSettingsUpdated__Params(this);
+  }
+}
+
+export class FeeSettingsUpdated__Params {
+  _event: FeeSettingsUpdated;
+
+  constructor(event: FeeSettingsUpdated) {
     this._event = event;
   }
 
-  get chainId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class FeeUpdated extends ethereum.Event {
-  get params(): FeeUpdated__Params {
-    return new FeeUpdated__Params(this);
-  }
-}
-
-export class FeeUpdated__Params {
-  _event: FeeUpdated;
-
-  constructor(event: FeeUpdated) {
-    this._event = event;
-  }
-
-  get _fee(): i32 {
+  get _feeType(): i32 {
     return this._event.parameters[0].value.toI32();
   }
 
-  get _rate(): BigInt {
+  get _bpsRate(): BigInt {
     return this._event.parameters[1].value.toBigInt();
   }
 
-  get _payout(): Address {
+  get _payoutAddress(): Address {
     return this._event.parameters[2].value.toAddress();
   }
 }
@@ -130,6 +126,42 @@ export class Initialized__Params {
   }
 }
 
+export class NetworkConnectionPosted extends ethereum.Event {
+  get params(): NetworkConnectionPosted__Params {
+    return new NetworkConnectionPosted__Params(this);
+  }
+}
+
+export class NetworkConnectionPosted__Params {
+  _event: NetworkConnectionPosted;
+
+  constructor(event: NetworkConnectionPosted) {
+    this._event = event;
+  }
+
+  get chainId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
+export class NetworkConnectionRemoved extends ethereum.Event {
+  get params(): NetworkConnectionRemoved__Params {
+    return new NetworkConnectionRemoved__Params(this);
+  }
+}
+
+export class NetworkConnectionRemoved__Params {
+  _event: NetworkConnectionRemoved;
+
+  constructor(event: NetworkConnectionRemoved) {
+    this._event = event;
+  }
+
+  get chainId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
 export class OwnershipTransferred extends ethereum.Event {
   get params(): OwnershipTransferred__Params {
     return new OwnershipTransferred__Params(this);
@@ -152,48 +184,30 @@ export class OwnershipTransferred__Params {
   }
 }
 
-export class PostNetworkConnection extends ethereum.Event {
-  get params(): PostNetworkConnection__Params {
-    return new PostNetworkConnection__Params(this);
+export class RebalanceParamsUpdated extends ethereum.Event {
+  get params(): RebalanceParamsUpdated__Params {
+    return new RebalanceParamsUpdated__Params(this);
   }
 }
 
-export class PostNetworkConnection__Params {
-  _event: PostNetworkConnection;
+export class RebalanceParamsUpdated__Params {
+  _event: RebalanceParamsUpdated;
 
-  constructor(event: PostNetworkConnection) {
-    this._event = event;
-  }
-
-  get chainId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class RebalanceParamsChanged extends ethereum.Event {
-  get params(): RebalanceParamsChanged__Params {
-    return new RebalanceParamsChanged__Params(this);
-  }
-}
-
-export class RebalanceParamsChanged__Params {
-  _event: RebalanceParamsChanged;
-
-  constructor(event: RebalanceParamsChanged) {
+  constructor(event: RebalanceParamsUpdated) {
     this._event = event;
   }
 }
 
-export class StrategyApprovalChanged extends ethereum.Event {
-  get params(): StrategyApprovalChanged__Params {
-    return new StrategyApprovalChanged__Params(this);
+export class StrategyApprovalUpdated extends ethereum.Event {
+  get params(): StrategyApprovalUpdated__Params {
+    return new StrategyApprovalUpdated__Params(this);
   }
 }
 
-export class StrategyApprovalChanged__Params {
-  _event: StrategyApprovalChanged;
+export class StrategyApprovalUpdated__Params {
+  _event: StrategyApprovalUpdated;
 
-  constructor(event: StrategyApprovalChanged) {
+  constructor(event: StrategyApprovalUpdated) {
     this._event = event;
   }
 
@@ -206,16 +220,16 @@ export class StrategyApprovalChanged__Params {
   }
 }
 
-export class StrategyParamsChanged extends ethereum.Event {
-  get params(): StrategyParamsChanged__Params {
-    return new StrategyParamsChanged__Params(this);
+export class StrategyParamsUpdated extends ethereum.Event {
+  get params(): StrategyParamsUpdated__Params {
+    return new StrategyParamsUpdated__Params(this);
   }
 }
 
-export class StrategyParamsChanged__Params {
-  _event: StrategyParamsChanged;
+export class StrategyParamsUpdated__Params {
+  _event: StrategyParamsUpdated;
 
-  constructor(event: StrategyParamsChanged) {
+  constructor(event: StrategyParamsUpdated) {
     this._event = event;
   }
 
@@ -236,16 +250,16 @@ export class StrategyParamsChanged__Params {
   }
 }
 
-export class TokenAcceptanceChanged extends ethereum.Event {
-  get params(): TokenAcceptanceChanged__Params {
-    return new TokenAcceptanceChanged__Params(this);
+export class TokenAcceptanceUpdated extends ethereum.Event {
+  get params(): TokenAcceptanceUpdated__Params {
+    return new TokenAcceptanceUpdated__Params(this);
   }
 }
 
-export class TokenAcceptanceChanged__Params {
-  _event: TokenAcceptanceChanged;
+export class TokenAcceptanceUpdated__Params {
+  _event: TokenAcceptanceUpdated;
 
-  constructor(event: TokenAcceptanceChanged) {
+  constructor(event: TokenAcceptanceUpdated) {
     this._event = event;
   }
 
@@ -255,20 +269,6 @@ export class TokenAcceptanceChanged__Params {
 
   get _isAccepted(): boolean {
     return this._event.parameters[1].value.toBoolean();
-  }
-}
-
-export class UpdateRegistrarConfig extends ethereum.Event {
-  get params(): UpdateRegistrarConfig__Params {
-    return new UpdateRegistrarConfig__Params(this);
-  }
-}
-
-export class UpdateRegistrarConfig__Params {
-  _event: UpdateRegistrarConfig;
-
-  constructor(event: UpdateRegistrarConfig) {
-    this._event = event;
   }
 }
 

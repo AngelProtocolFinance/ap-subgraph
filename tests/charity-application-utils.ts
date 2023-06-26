@@ -4,11 +4,11 @@ import {
   CharityApproved,
   CharityProposed,
   CharityRejected,
-  charityApplicationDeposit,
+  Deposit,
   GasSent,
-  SeedAssetSent,
-  initilizedCharityApplication
-} from "../generated/charityApplication/charityApplication"
+  InitilizedCharityApplication,
+  SeedAssetSent
+} from "../generated/CharityApplication/CharityApplication"
 
 export function createCharityApprovedEvent(
   proposalId: BigInt,
@@ -37,7 +37,6 @@ export function createCharityApprovedEvent(
 export function createCharityProposedEvent(
   proposer: Address,
   proposalId: BigInt,
-  charityApplication: ethereum.Tuple,
   meta: string
 ): CharityProposed {
   let charityProposedEvent = changetype<CharityProposed>(newMockEvent())
@@ -51,12 +50,6 @@ export function createCharityProposedEvent(
     new ethereum.EventParam(
       "proposalId",
       ethereum.Value.fromUnsignedBigInt(proposalId)
-    )
-  )
-  charityProposedEvent.parameters.push(
-    new ethereum.EventParam(
-      "charityApplication",
-      ethereum.Value.fromTuple(charityApplication)
     )
   )
   charityProposedEvent.parameters.push(
@@ -83,24 +76,19 @@ export function createCharityRejectedEvent(
   return charityRejectedEvent
 }
 
-export function createcharityApplicationDepositEvent(
-  sender: Address,
-  value: BigInt
-): charityApplicationDeposit {
-  let charityApplicationDepositEvent = changetype<charityApplicationDeposit>(
-    newMockEvent()
-  )
+export function createDepositEvent(sender: Address, value: BigInt): Deposit {
+  let depositEvent = changetype<Deposit>(newMockEvent())
 
-  charityApplicationDepositEvent.parameters = new Array()
+  depositEvent.parameters = new Array()
 
-  charityApplicationDepositEvent.parameters.push(
+  depositEvent.parameters.push(
     new ethereum.EventParam("sender", ethereum.Value.fromAddress(sender))
   )
-  charityApplicationDepositEvent.parameters.push(
+  depositEvent.parameters.push(
     new ethereum.EventParam("value", ethereum.Value.fromUnsignedBigInt(value))
   )
 
-  return charityApplicationDepositEvent
+  return depositEvent
 }
 
 export function createGasSentEvent(
@@ -128,6 +116,16 @@ export function createGasSentEvent(
   return gasSentEvent
 }
 
+export function createInitilizedCharityApplicationEvent(): InitilizedCharityApplication {
+  let initilizedCharityApplicationEvent = changetype<
+    InitilizedCharityApplication
+  >(newMockEvent())
+
+  initilizedCharityApplicationEvent.parameters = new Array()
+
+  return initilizedCharityApplicationEvent
+}
+
 export function createSeedAssetSentEvent(
   endowmentId: BigInt,
   asset: Address,
@@ -151,23 +149,4 @@ export function createSeedAssetSentEvent(
   )
 
   return seedAssetSentEvent
-}
-
-export function createinitilizedCharityApplicationEvent(
-  updatedConfig: ethereum.Tuple
-): initilizedCharityApplication {
-  let initilizedCharityApplicationEvent = changetype<
-    initilizedCharityApplication
-  >(newMockEvent())
-
-  initilizedCharityApplicationEvent.parameters = new Array()
-
-  initilizedCharityApplicationEvent.parameters.push(
-    new ethereum.EventParam(
-      "updatedConfig",
-      ethereum.Value.fromTuple(updatedConfig)
-    )
-  )
-
-  return initilizedCharityApplicationEvent
 }

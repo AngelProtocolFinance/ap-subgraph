@@ -5,28 +5,36 @@
       "startBlock": 37000000
     },
     "APTeamMultiSig": {
-      "address": "0x5ffD7a356AaF24c47C230077c851ec25DcD2eaD9"
+      "address": "0x5ffD7a356AaF24c47C230077c851ec25DcD2eaD9",
+      "startBlock": 37000000
     },
     "EndowmentMultiSigFactory": {
-      "address": "0x415749DaF6b3cC6E54439333dbf1c6780F3a2a77"
+      "address": "0x415749DaF6b3cC6E54439333dbf1c6780F3a2a77",
+      "startBlock": 37000000
     },
     "EndowmentMultiSig": {
-      "address": "0xE39fc37a96Df1E80A90c5F2fcb39F63733A87E02"
+      "address": "0xE39fc37a96Df1E80A90c5F2fcb39F63733A87E02",
+      "startBlock": 37000000
     },
     "Registrar": {
-      "address": "0xa93b02DAD1bC3Ab4177FB3F2bFCbD2d2CA27Fda9"
+      "address": "0xa93b02DAD1bC3Ab4177FB3F2bFCbD2d2CA27Fda9",
+      "startBlock": 37000000
     },
     "Accounts": {
-      "address": "0x04227A153068bA4d19Ed3fA16b9f6Feede52fFf4"
+      "address": "0x04227A153068bA4d19Ed3fA16b9f6Feede52fFf4",
+      "startBlock": 37000000
     },
     "CharityApplication": {
-      "address": "0x5239ca9E0EC972Bb7D69E1fB65a253A38b0b51CA"
+      "address": "0x5239ca9E0EC972Bb7D69E1fB65a253A38b0b51CA",
+      "startBlock": 37000000
     },
     "IndexFund": {
-      "address": "0xcf0cA88b8BF985032b27aE4c7488F7A6ad90D643"
+      "address": "0xcf0cA88b8BF985032b27aE4c7488F7A6ad90D643",
+      "startBlock": 37000000
     },
     "ApplicationsMultiSig": {
-      "address": "0x798850e0C5a49fC0d88252af3DCBeb7955Ff8d7C"
+      "address": "0x798850e0C5a49fC0d88252af3DCBeb7955Ff8d7C",
+      "startBlock": 37000000
     }
   }
 }

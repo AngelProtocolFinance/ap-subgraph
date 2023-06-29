@@ -10,16 +10,42 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class AllowanceStateUpdatedTo extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo__Params {
-    return new AllowanceStateUpdatedTo__Params(this);
+export class AllowanceRemoved extends ethereum.Event {
+  get params(): AllowanceRemoved__Params {
+    return new AllowanceRemoved__Params(this);
   }
 }
 
-export class AllowanceStateUpdatedTo__Params {
-  _event: AllowanceStateUpdatedTo;
+export class AllowanceRemoved__Params {
+  _event: AllowanceRemoved;
 
-  constructor(event: AllowanceStateUpdatedTo) {
+  constructor(event: AllowanceRemoved) {
+    this._event = event;
+  }
+
+  get sender(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get spender(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get tokenAddress(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+}
+
+export class AllowanceUpdated extends ethereum.Event {
+  get params(): AllowanceUpdated__Params {
+    return new AllowanceUpdated__Params(this);
+  }
+}
+
+export class AllowanceUpdated__Params {
+  _event: AllowanceUpdated;
+
+  constructor(event: AllowanceUpdated) {
     this._event = event;
   }
 
@@ -37,6 +63,20 @@ export class AllowanceStateUpdatedTo__Params {
 
   get allowance(): BigInt {
     return this._event.parameters[3].value.toBigInt();
+  }
+}
+
+export class ConfigUpdated extends ethereum.Event {
+  get params(): ConfigUpdated__Params {
+    return new ConfigUpdated__Params(this);
+  }
+}
+
+export class ConfigUpdated__Params {
+  _event: ConfigUpdated;
+
+  constructor(event: ConfigUpdated) {
+    this._event = event;
   }
 }
 
@@ -75,29 +115,33 @@ export class DonationDeposited__Params {
     this._event = event;
   }
 
-  get id(): BigInt {
+  get endowId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
 
+  get tokenAddress(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
   get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
-export class DonationMatchSetup extends ethereum.Event {
-  get params(): DonationMatchSetup__Params {
-    return new DonationMatchSetup__Params(this);
+export class DonationMatchCreated extends ethereum.Event {
+  get params(): DonationMatchCreated__Params {
+    return new DonationMatchCreated__Params(this);
   }
 }
 
-export class DonationMatchSetup__Params {
-  _event: DonationMatchSetup;
+export class DonationMatchCreated__Params {
+  _event: DonationMatchCreated;
 
-  constructor(event: DonationMatchSetup) {
+  constructor(event: DonationMatchCreated) {
     this._event = event;
   }
 
-  get id(): BigInt {
+  get endowId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
 
@@ -119,7 +163,7 @@ export class DonationWithdrawn__Params {
     this._event = event;
   }
 
-  get id(): BigInt {
+  get endowId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
 
@@ -127,8 +171,12 @@ export class DonationWithdrawn__Params {
     return this._event.parameters[1].value.toAddress();
   }
 
+  get tokenAddress(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+
   get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
@@ -145,7 +193,7 @@ export class EndowmentCreated__Params {
     this._event = event;
   }
 
-  get id(): BigInt {
+  get endowId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
 }
@@ -163,7 +211,7 @@ export class EndowmentSettingUpdated__Params {
     this._event = event;
   }
 
-  get id(): BigInt {
+  get endowId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
 
@@ -172,142 +220,52 @@ export class EndowmentSettingUpdated__Params {
   }
 }
 
-export class RemoveAllowance extends ethereum.Event {
-  get params(): RemoveAllowance__Params {
-    return new RemoveAllowance__Params(this);
+export class EndowmentUpdated extends ethereum.Event {
+  get params(): EndowmentUpdated__Params {
+    return new EndowmentUpdated__Params(this);
   }
 }
 
-export class RemoveAllowance__Params {
-  _event: RemoveAllowance;
+export class EndowmentUpdated__Params {
+  _event: EndowmentUpdated;
 
-  constructor(event: RemoveAllowance) {
+  constructor(event: EndowmentUpdated) {
     this._event = event;
   }
 
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class SwapToken extends ethereum.Event {
-  get params(): SwapToken__Params {
-    return new SwapToken__Params(this);
-  }
-}
-
-export class SwapToken__Params {
-  _event: SwapToken;
-
-  constructor(event: SwapToken) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get accountType(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tokenIn(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amountIn(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get tokenOut(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class UpdateConfig extends ethereum.Event {
-  get params(): UpdateConfig__Params {
-    return new UpdateConfig__Params(this);
-  }
-}
-
-export class UpdateConfig__Params {
-  _event: UpdateConfig;
-
-  constructor(event: UpdateConfig) {
-    this._event = event;
-  }
-}
-
-export class UpdateEndowment extends ethereum.Event {
-  get params(): UpdateEndowment__Params {
-    return new UpdateEndowment__Params(this);
-  }
-}
-
-export class UpdateEndowment__Params {
-  _event: UpdateEndowment;
-
-  constructor(event: UpdateEndowment) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
+  get endowId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
 }
 
-export class AllowanceStateUpdatedTo1 extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo1__Params {
-    return new AllowanceStateUpdatedTo1__Params(this);
+export class OwnerUpdated extends ethereum.Event {
+  get params(): OwnerUpdated__Params {
+    return new OwnerUpdated__Params(this);
   }
 }
 
-export class AllowanceStateUpdatedTo1__Params {
-  _event: AllowanceStateUpdatedTo1;
+export class OwnerUpdated__Params {
+  _event: OwnerUpdated;
 
-  constructor(event: AllowanceStateUpdatedTo1) {
+  constructor(event: OwnerUpdated) {
     this._event = event;
   }
 
-  get sender(): Address {
+  get owner(): Address {
     return this._event.parameters[0].value.toAddress();
   }
+}
 
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get allowance(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+export class TokenSwapped extends ethereum.Event {
+  get params(): TokenSwapped__Params {
+    return new TokenSwapped__Params(this);
   }
 }
 
-export class DaoContractCreated1 extends ethereum.Event {
-  get params(): DaoContractCreated1__Params {
-    return new DaoContractCreated1__Params(this);
-  }
-}
+export class TokenSwapped__Params {
+  _event: TokenSwapped;
 
-export class DaoContractCreated1__Params {
-  _event: DaoContractCreated1;
-
-  constructor(event: DaoContractCreated1) {
+  constructor(event: TokenSwapped) {
     this._event = event;
   }
 
@@ -315,164 +273,6 @@ export class DaoContractCreated1__Params {
     return this._event.parameters[0].value.toBigInt();
   }
 
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited1 extends ethereum.Event {
-  get params(): DonationDeposited1__Params {
-    return new DonationDeposited1__Params(this);
-  }
-}
-
-export class DonationDeposited1__Params {
-  _event: DonationDeposited1;
-
-  constructor(event: DonationDeposited1) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class DonationMatchSetup1 extends ethereum.Event {
-  get params(): DonationMatchSetup1__Params {
-    return new DonationMatchSetup1__Params(this);
-  }
-}
-
-export class DonationMatchSetup1__Params {
-  _event: DonationMatchSetup1;
-
-  constructor(event: DonationMatchSetup1) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn1 extends ethereum.Event {
-  get params(): DonationWithdrawn1__Params {
-    return new DonationWithdrawn1__Params(this);
-  }
-}
-
-export class DonationWithdrawn1__Params {
-  _event: DonationWithdrawn1;
-
-  constructor(event: DonationWithdrawn1) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class EndowmentCreated1 extends ethereum.Event {
-  get params(): EndowmentCreated1__Params {
-    return new EndowmentCreated1__Params(this);
-  }
-}
-
-export class EndowmentCreated1__Params {
-  _event: EndowmentCreated1;
-
-  constructor(event: EndowmentCreated1) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class EndowmentSettingUpdated1 extends ethereum.Event {
-  get params(): EndowmentSettingUpdated1__Params {
-    return new EndowmentSettingUpdated1__Params(this);
-  }
-}
-
-export class EndowmentSettingUpdated1__Params {
-  _event: EndowmentSettingUpdated1;
-
-  constructor(event: EndowmentSettingUpdated1) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
-export class RemoveAllowance1 extends ethereum.Event {
-  get params(): RemoveAllowance1__Params {
-    return new RemoveAllowance1__Params(this);
-  }
-}
-
-export class RemoveAllowance1__Params {
-  _event: RemoveAllowance1;
-
-  constructor(event: RemoveAllowance1) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class SwapToken1 extends ethereum.Event {
-  get params(): SwapToken1__Params {
-    return new SwapToken1__Params(this);
-  }
-}
-
-export class SwapToken1__Params {
-  _event: SwapToken1;
-
-  constructor(event: SwapToken1) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
   get accountType(): i32 {
     return this._event.parameters[1].value.toI32();
   }
@@ -494,2891 +294,149 @@ export class SwapToken1__Params {
   }
 }
 
-export class UpdateConfig1 extends ethereum.Event {
-  get params(): UpdateConfig1__Params {
-    return new UpdateConfig1__Params(this);
-  }
-}
-
-export class UpdateConfig1__Params {
-  _event: UpdateConfig1;
-
-  constructor(event: UpdateConfig1) {
-    this._event = event;
-  }
-}
-
-export class UpdateEndowment1 extends ethereum.Event {
-  get params(): UpdateEndowment1__Params {
-    return new UpdateEndowment1__Params(this);
-  }
-}
-
-export class UpdateEndowment1__Params {
-  _event: UpdateEndowment1;
-
-  constructor(event: UpdateEndowment1) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class AllowanceStateUpdatedTo2 extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo2__Params {
-    return new AllowanceStateUpdatedTo2__Params(this);
-  }
-}
-
-export class AllowanceStateUpdatedTo2__Params {
-  _event: AllowanceStateUpdatedTo2;
-
-  constructor(event: AllowanceStateUpdatedTo2) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get allowance(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-}
-
-export class DaoContractCreated2 extends ethereum.Event {
-  get params(): DaoContractCreated2__Params {
-    return new DaoContractCreated2__Params(this);
-  }
-}
-
-export class DaoContractCreated2__Params {
-  _event: DaoContractCreated2;
-
-  constructor(event: DaoContractCreated2) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited2 extends ethereum.Event {
-  get params(): DonationDeposited2__Params {
-    return new DonationDeposited2__Params(this);
-  }
-}
-
-export class DonationDeposited2__Params {
-  _event: DonationDeposited2;
-
-  constructor(event: DonationDeposited2) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class DonationMatchSetup2 extends ethereum.Event {
-  get params(): DonationMatchSetup2__Params {
-    return new DonationMatchSetup2__Params(this);
-  }
-}
-
-export class DonationMatchSetup2__Params {
-  _event: DonationMatchSetup2;
-
-  constructor(event: DonationMatchSetup2) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn2 extends ethereum.Event {
-  get params(): DonationWithdrawn2__Params {
-    return new DonationWithdrawn2__Params(this);
-  }
-}
-
-export class DonationWithdrawn2__Params {
-  _event: DonationWithdrawn2;
-
-  constructor(event: DonationWithdrawn2) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class EndowmentCreated2 extends ethereum.Event {
-  get params(): EndowmentCreated2__Params {
-    return new EndowmentCreated2__Params(this);
-  }
-}
-
-export class EndowmentCreated2__Params {
-  _event: EndowmentCreated2;
-
-  constructor(event: EndowmentCreated2) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class EndowmentSettingUpdated2 extends ethereum.Event {
-  get params(): EndowmentSettingUpdated2__Params {
-    return new EndowmentSettingUpdated2__Params(this);
-  }
-}
-
-export class EndowmentSettingUpdated2__Params {
-  _event: EndowmentSettingUpdated2;
-
-  constructor(event: EndowmentSettingUpdated2) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
-export class RemoveAllowance2 extends ethereum.Event {
-  get params(): RemoveAllowance2__Params {
-    return new RemoveAllowance2__Params(this);
-  }
-}
-
-export class RemoveAllowance2__Params {
-  _event: RemoveAllowance2;
-
-  constructor(event: RemoveAllowance2) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class SwapToken2 extends ethereum.Event {
-  get params(): SwapToken2__Params {
-    return new SwapToken2__Params(this);
-  }
-}
-
-export class SwapToken2__Params {
-  _event: SwapToken2;
-
-  constructor(event: SwapToken2) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get accountType(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tokenIn(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amountIn(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get tokenOut(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class UpdateConfig2 extends ethereum.Event {
-  get params(): UpdateConfig2__Params {
-    return new UpdateConfig2__Params(this);
-  }
-}
-
-export class UpdateConfig2__Params {
-  _event: UpdateConfig2;
-
-  constructor(event: UpdateConfig2) {
-    this._event = event;
-  }
-}
-
-export class UpdateEndowment2 extends ethereum.Event {
-  get params(): UpdateEndowment2__Params {
-    return new UpdateEndowment2__Params(this);
-  }
-}
-
-export class UpdateEndowment2__Params {
-  _event: UpdateEndowment2;
-
-  constructor(event: UpdateEndowment2) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class AllowanceStateUpdatedTo3 extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo3__Params {
-    return new AllowanceStateUpdatedTo3__Params(this);
-  }
-}
-
-export class AllowanceStateUpdatedTo3__Params {
-  _event: AllowanceStateUpdatedTo3;
-
-  constructor(event: AllowanceStateUpdatedTo3) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get allowance(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-}
-
-export class DaoContractCreated3 extends ethereum.Event {
-  get params(): DaoContractCreated3__Params {
-    return new DaoContractCreated3__Params(this);
-  }
-}
-
-export class DaoContractCreated3__Params {
-  _event: DaoContractCreated3;
-
-  constructor(event: DaoContractCreated3) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited3 extends ethereum.Event {
-  get params(): DonationDeposited3__Params {
-    return new DonationDeposited3__Params(this);
-  }
-}
-
-export class DonationDeposited3__Params {
-  _event: DonationDeposited3;
-
-  constructor(event: DonationDeposited3) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class DonationMatchSetup3 extends ethereum.Event {
-  get params(): DonationMatchSetup3__Params {
-    return new DonationMatchSetup3__Params(this);
-  }
-}
-
-export class DonationMatchSetup3__Params {
-  _event: DonationMatchSetup3;
-
-  constructor(event: DonationMatchSetup3) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn3 extends ethereum.Event {
-  get params(): DonationWithdrawn3__Params {
-    return new DonationWithdrawn3__Params(this);
-  }
-}
-
-export class DonationWithdrawn3__Params {
-  _event: DonationWithdrawn3;
-
-  constructor(event: DonationWithdrawn3) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class EndowmentCreated3 extends ethereum.Event {
-  get params(): EndowmentCreated3__Params {
-    return new EndowmentCreated3__Params(this);
-  }
-}
-
-export class EndowmentCreated3__Params {
-  _event: EndowmentCreated3;
-
-  constructor(event: EndowmentCreated3) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class EndowmentSettingUpdated3 extends ethereum.Event {
-  get params(): EndowmentSettingUpdated3__Params {
-    return new EndowmentSettingUpdated3__Params(this);
-  }
-}
-
-export class EndowmentSettingUpdated3__Params {
-  _event: EndowmentSettingUpdated3;
-
-  constructor(event: EndowmentSettingUpdated3) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
-export class RemoveAllowance3 extends ethereum.Event {
-  get params(): RemoveAllowance3__Params {
-    return new RemoveAllowance3__Params(this);
-  }
-}
-
-export class RemoveAllowance3__Params {
-  _event: RemoveAllowance3;
-
-  constructor(event: RemoveAllowance3) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class SwapToken3 extends ethereum.Event {
-  get params(): SwapToken3__Params {
-    return new SwapToken3__Params(this);
-  }
-}
-
-export class SwapToken3__Params {
-  _event: SwapToken3;
-
-  constructor(event: SwapToken3) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get accountType(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tokenIn(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amountIn(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get tokenOut(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class UpdateConfig3 extends ethereum.Event {
-  get params(): UpdateConfig3__Params {
-    return new UpdateConfig3__Params(this);
-  }
-}
-
-export class UpdateConfig3__Params {
-  _event: UpdateConfig3;
-
-  constructor(event: UpdateConfig3) {
-    this._event = event;
-  }
-}
-
-export class UpdateEndowment3 extends ethereum.Event {
-  get params(): UpdateEndowment3__Params {
-    return new UpdateEndowment3__Params(this);
-  }
-}
-
-export class UpdateEndowment3__Params {
-  _event: UpdateEndowment3;
-
-  constructor(event: UpdateEndowment3) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class AllowanceStateUpdatedTo4 extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo4__Params {
-    return new AllowanceStateUpdatedTo4__Params(this);
-  }
-}
-
-export class AllowanceStateUpdatedTo4__Params {
-  _event: AllowanceStateUpdatedTo4;
-
-  constructor(event: AllowanceStateUpdatedTo4) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get allowance(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-}
-
-export class DaoContractCreated4 extends ethereum.Event {
-  get params(): DaoContractCreated4__Params {
-    return new DaoContractCreated4__Params(this);
-  }
-}
-
-export class DaoContractCreated4__Params {
-  _event: DaoContractCreated4;
-
-  constructor(event: DaoContractCreated4) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited4 extends ethereum.Event {
-  get params(): DonationDeposited4__Params {
-    return new DonationDeposited4__Params(this);
-  }
-}
-
-export class DonationDeposited4__Params {
-  _event: DonationDeposited4;
-
-  constructor(event: DonationDeposited4) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class DonationMatchSetup4 extends ethereum.Event {
-  get params(): DonationMatchSetup4__Params {
-    return new DonationMatchSetup4__Params(this);
-  }
-}
-
-export class DonationMatchSetup4__Params {
-  _event: DonationMatchSetup4;
-
-  constructor(event: DonationMatchSetup4) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn4 extends ethereum.Event {
-  get params(): DonationWithdrawn4__Params {
-    return new DonationWithdrawn4__Params(this);
-  }
-}
-
-export class DonationWithdrawn4__Params {
-  _event: DonationWithdrawn4;
-
-  constructor(event: DonationWithdrawn4) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class EndowmentCreated4 extends ethereum.Event {
-  get params(): EndowmentCreated4__Params {
-    return new EndowmentCreated4__Params(this);
-  }
-}
-
-export class EndowmentCreated4__Params {
-  _event: EndowmentCreated4;
-
-  constructor(event: EndowmentCreated4) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class EndowmentSettingUpdated4 extends ethereum.Event {
-  get params(): EndowmentSettingUpdated4__Params {
-    return new EndowmentSettingUpdated4__Params(this);
-  }
-}
-
-export class EndowmentSettingUpdated4__Params {
-  _event: EndowmentSettingUpdated4;
-
-  constructor(event: EndowmentSettingUpdated4) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
-export class RemoveAllowance4 extends ethereum.Event {
-  get params(): RemoveAllowance4__Params {
-    return new RemoveAllowance4__Params(this);
-  }
-}
-
-export class RemoveAllowance4__Params {
-  _event: RemoveAllowance4;
-
-  constructor(event: RemoveAllowance4) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class SwapToken4 extends ethereum.Event {
-  get params(): SwapToken4__Params {
-    return new SwapToken4__Params(this);
-  }
-}
-
-export class SwapToken4__Params {
-  _event: SwapToken4;
-
-  constructor(event: SwapToken4) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get accountType(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tokenIn(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amountIn(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get tokenOut(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class SwappedToken extends ethereum.Event {
-  get params(): SwappedToken__Params {
-    return new SwappedToken__Params(this);
-  }
-}
-
-export class SwappedToken__Params {
-  _event: SwappedToken;
-
-  constructor(event: SwappedToken) {
-    this._event = event;
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class UpdateConfig4 extends ethereum.Event {
-  get params(): UpdateConfig4__Params {
-    return new UpdateConfig4__Params(this);
-  }
-}
-
-export class UpdateConfig4__Params {
-  _event: UpdateConfig4;
-
-  constructor(event: UpdateConfig4) {
-    this._event = event;
-  }
-}
-
-export class UpdateEndowment4 extends ethereum.Event {
-  get params(): UpdateEndowment4__Params {
-    return new UpdateEndowment4__Params(this);
-  }
-}
-
-export class UpdateEndowment4__Params {
-  _event: UpdateEndowment4;
-
-  constructor(event: UpdateEndowment4) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class AllowanceStateUpdatedTo5 extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo5__Params {
-    return new AllowanceStateUpdatedTo5__Params(this);
-  }
-}
-
-export class AllowanceStateUpdatedTo5__Params {
-  _event: AllowanceStateUpdatedTo5;
-
-  constructor(event: AllowanceStateUpdatedTo5) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get allowance(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-}
-
-export class DaoContractCreated5 extends ethereum.Event {
-  get params(): DaoContractCreated5__Params {
-    return new DaoContractCreated5__Params(this);
-  }
-}
-
-export class DaoContractCreated5__Params {
-  _event: DaoContractCreated5;
-
-  constructor(event: DaoContractCreated5) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited5 extends ethereum.Event {
-  get params(): DonationDeposited5__Params {
-    return new DonationDeposited5__Params(this);
-  }
-}
-
-export class DonationDeposited5__Params {
-  _event: DonationDeposited5;
-
-  constructor(event: DonationDeposited5) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class DonationMatchSetup5 extends ethereum.Event {
-  get params(): DonationMatchSetup5__Params {
-    return new DonationMatchSetup5__Params(this);
-  }
-}
-
-export class DonationMatchSetup5__Params {
-  _event: DonationMatchSetup5;
-
-  constructor(event: DonationMatchSetup5) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn5 extends ethereum.Event {
-  get params(): DonationWithdrawn5__Params {
-    return new DonationWithdrawn5__Params(this);
-  }
-}
-
-export class DonationWithdrawn5__Params {
-  _event: DonationWithdrawn5;
-
-  constructor(event: DonationWithdrawn5) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class EndowmentCreated5 extends ethereum.Event {
-  get params(): EndowmentCreated5__Params {
-    return new EndowmentCreated5__Params(this);
-  }
-}
-
-export class EndowmentCreated5__Params {
-  _event: EndowmentCreated5;
-
-  constructor(event: EndowmentCreated5) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class EndowmentSettingUpdated5 extends ethereum.Event {
-  get params(): EndowmentSettingUpdated5__Params {
-    return new EndowmentSettingUpdated5__Params(this);
-  }
-}
-
-export class EndowmentSettingUpdated5__Params {
-  _event: EndowmentSettingUpdated5;
-
-  constructor(event: EndowmentSettingUpdated5) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
-export class RemoveAllowance5 extends ethereum.Event {
-  get params(): RemoveAllowance5__Params {
-    return new RemoveAllowance5__Params(this);
-  }
-}
-
-export class RemoveAllowance5__Params {
-  _event: RemoveAllowance5;
-
-  constructor(event: RemoveAllowance5) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class SwapToken5 extends ethereum.Event {
-  get params(): SwapToken5__Params {
-    return new SwapToken5__Params(this);
-  }
-}
-
-export class SwapToken5__Params {
-  _event: SwapToken5;
-
-  constructor(event: SwapToken5) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get accountType(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tokenIn(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amountIn(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get tokenOut(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class UpdateConfig5 extends ethereum.Event {
-  get params(): UpdateConfig5__Params {
-    return new UpdateConfig5__Params(this);
-  }
-}
-
-export class UpdateConfig5__Params {
-  _event: UpdateConfig5;
-
-  constructor(event: UpdateConfig5) {
-    this._event = event;
-  }
-}
-
-export class UpdateEndowment5 extends ethereum.Event {
-  get params(): UpdateEndowment5__Params {
-    return new UpdateEndowment5__Params(this);
-  }
-}
-
-export class UpdateEndowment5__Params {
-  _event: UpdateEndowment5;
-
-  constructor(event: UpdateEndowment5) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class AllowanceStateUpdatedTo6 extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo6__Params {
-    return new AllowanceStateUpdatedTo6__Params(this);
-  }
-}
-
-export class AllowanceStateUpdatedTo6__Params {
-  _event: AllowanceStateUpdatedTo6;
-
-  constructor(event: AllowanceStateUpdatedTo6) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get allowance(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-}
-
-export class DaoContractCreated6 extends ethereum.Event {
-  get params(): DaoContractCreated6__Params {
-    return new DaoContractCreated6__Params(this);
-  }
-}
-
-export class DaoContractCreated6__Params {
-  _event: DaoContractCreated6;
-
-  constructor(event: DaoContractCreated6) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited6 extends ethereum.Event {
-  get params(): DonationDeposited6__Params {
-    return new DonationDeposited6__Params(this);
-  }
-}
-
-export class DonationDeposited6__Params {
-  _event: DonationDeposited6;
-
-  constructor(event: DonationDeposited6) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class DonationMatchSetup6 extends ethereum.Event {
-  get params(): DonationMatchSetup6__Params {
-    return new DonationMatchSetup6__Params(this);
-  }
-}
-
-export class DonationMatchSetup6__Params {
-  _event: DonationMatchSetup6;
-
-  constructor(event: DonationMatchSetup6) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn6 extends ethereum.Event {
-  get params(): DonationWithdrawn6__Params {
-    return new DonationWithdrawn6__Params(this);
-  }
-}
-
-export class DonationWithdrawn6__Params {
-  _event: DonationWithdrawn6;
-
-  constructor(event: DonationWithdrawn6) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class EndowmentCreated6 extends ethereum.Event {
-  get params(): EndowmentCreated6__Params {
-    return new EndowmentCreated6__Params(this);
-  }
-}
-
-export class EndowmentCreated6__Params {
-  _event: EndowmentCreated6;
-
-  constructor(event: EndowmentCreated6) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class EndowmentSettingUpdated6 extends ethereum.Event {
-  get params(): EndowmentSettingUpdated6__Params {
-    return new EndowmentSettingUpdated6__Params(this);
-  }
-}
-
-export class EndowmentSettingUpdated6__Params {
-  _event: EndowmentSettingUpdated6;
-
-  constructor(event: EndowmentSettingUpdated6) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
-export class RemoveAllowance6 extends ethereum.Event {
-  get params(): RemoveAllowance6__Params {
-    return new RemoveAllowance6__Params(this);
-  }
-}
-
-export class RemoveAllowance6__Params {
-  _event: RemoveAllowance6;
-
-  constructor(event: RemoveAllowance6) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class SwapToken6 extends ethereum.Event {
-  get params(): SwapToken6__Params {
-    return new SwapToken6__Params(this);
-  }
-}
-
-export class SwapToken6__Params {
-  _event: SwapToken6;
-
-  constructor(event: SwapToken6) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get accountType(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tokenIn(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amountIn(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get tokenOut(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class UpdateConfig6 extends ethereum.Event {
-  get params(): UpdateConfig6__Params {
-    return new UpdateConfig6__Params(this);
-  }
-}
-
-export class UpdateConfig6__Params {
-  _event: UpdateConfig6;
-
-  constructor(event: UpdateConfig6) {
-    this._event = event;
-  }
-}
-
-export class UpdateEndowment6 extends ethereum.Event {
-  get params(): UpdateEndowment6__Params {
-    return new UpdateEndowment6__Params(this);
-  }
-}
-
-export class UpdateEndowment6__Params {
-  _event: UpdateEndowment6;
-
-  constructor(event: UpdateEndowment6) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class AllowanceStateUpdatedTo7 extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo7__Params {
-    return new AllowanceStateUpdatedTo7__Params(this);
-  }
-}
-
-export class AllowanceStateUpdatedTo7__Params {
-  _event: AllowanceStateUpdatedTo7;
-
-  constructor(event: AllowanceStateUpdatedTo7) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get allowance(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-}
-
-export class DaoContractCreated7 extends ethereum.Event {
-  get params(): DaoContractCreated7__Params {
-    return new DaoContractCreated7__Params(this);
-  }
-}
-
-export class DaoContractCreated7__Params {
-  _event: DaoContractCreated7;
-
-  constructor(event: DaoContractCreated7) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited7 extends ethereum.Event {
-  get params(): DonationDeposited7__Params {
-    return new DonationDeposited7__Params(this);
-  }
-}
-
-export class DonationDeposited7__Params {
-  _event: DonationDeposited7;
-
-  constructor(event: DonationDeposited7) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class DonationMatchSetup7 extends ethereum.Event {
-  get params(): DonationMatchSetup7__Params {
-    return new DonationMatchSetup7__Params(this);
-  }
-}
-
-export class DonationMatchSetup7__Params {
-  _event: DonationMatchSetup7;
-
-  constructor(event: DonationMatchSetup7) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn7 extends ethereum.Event {
-  get params(): DonationWithdrawn7__Params {
-    return new DonationWithdrawn7__Params(this);
-  }
-}
-
-export class DonationWithdrawn7__Params {
-  _event: DonationWithdrawn7;
-
-  constructor(event: DonationWithdrawn7) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class EndowmentCreated7 extends ethereum.Event {
-  get params(): EndowmentCreated7__Params {
-    return new EndowmentCreated7__Params(this);
-  }
-}
-
-export class EndowmentCreated7__Params {
-  _event: EndowmentCreated7;
-
-  constructor(event: EndowmentCreated7) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class EndowmentSettingUpdated7 extends ethereum.Event {
-  get params(): EndowmentSettingUpdated7__Params {
-    return new EndowmentSettingUpdated7__Params(this);
-  }
-}
-
-export class EndowmentSettingUpdated7__Params {
-  _event: EndowmentSettingUpdated7;
-
-  constructor(event: EndowmentSettingUpdated7) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
-export class RemoveAllowance7 extends ethereum.Event {
-  get params(): RemoveAllowance7__Params {
-    return new RemoveAllowance7__Params(this);
-  }
-}
-
-export class RemoveAllowance7__Params {
-  _event: RemoveAllowance7;
-
-  constructor(event: RemoveAllowance7) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class SwapToken7 extends ethereum.Event {
-  get params(): SwapToken7__Params {
-    return new SwapToken7__Params(this);
-  }
-}
-
-export class SwapToken7__Params {
-  _event: SwapToken7;
-
-  constructor(event: SwapToken7) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get accountType(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tokenIn(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amountIn(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get tokenOut(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class UpdateConfig7 extends ethereum.Event {
-  get params(): UpdateConfig7__Params {
-    return new UpdateConfig7__Params(this);
-  }
-}
-
-export class UpdateConfig7__Params {
-  _event: UpdateConfig7;
-
-  constructor(event: UpdateConfig7) {
-    this._event = event;
-  }
-}
-
-export class UpdateEndowment7 extends ethereum.Event {
-  get params(): UpdateEndowment7__Params {
-    return new UpdateEndowment7__Params(this);
-  }
-}
-
-export class UpdateEndowment7__Params {
-  _event: UpdateEndowment7;
-
-  constructor(event: UpdateEndowment7) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class AllowanceStateUpdatedTo8 extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo8__Params {
-    return new AllowanceStateUpdatedTo8__Params(this);
-  }
-}
-
-export class AllowanceStateUpdatedTo8__Params {
-  _event: AllowanceStateUpdatedTo8;
-
-  constructor(event: AllowanceStateUpdatedTo8) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get allowance(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-}
-
-export class DaoContractCreated8 extends ethereum.Event {
-  get params(): DaoContractCreated8__Params {
-    return new DaoContractCreated8__Params(this);
-  }
-}
-
-export class DaoContractCreated8__Params {
-  _event: DaoContractCreated8;
-
-  constructor(event: DaoContractCreated8) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited8 extends ethereum.Event {
-  get params(): DonationDeposited8__Params {
-    return new DonationDeposited8__Params(this);
-  }
-}
-
-export class DonationDeposited8__Params {
-  _event: DonationDeposited8;
-
-  constructor(event: DonationDeposited8) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class DonationMatchSetup8 extends ethereum.Event {
-  get params(): DonationMatchSetup8__Params {
-    return new DonationMatchSetup8__Params(this);
-  }
-}
-
-export class DonationMatchSetup8__Params {
-  _event: DonationMatchSetup8;
-
-  constructor(event: DonationMatchSetup8) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn8 extends ethereum.Event {
-  get params(): DonationWithdrawn8__Params {
-    return new DonationWithdrawn8__Params(this);
-  }
-}
-
-export class DonationWithdrawn8__Params {
-  _event: DonationWithdrawn8;
-
-  constructor(event: DonationWithdrawn8) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class EndowmentCreated8 extends ethereum.Event {
-  get params(): EndowmentCreated8__Params {
-    return new EndowmentCreated8__Params(this);
-  }
-}
-
-export class EndowmentCreated8__Params {
-  _event: EndowmentCreated8;
-
-  constructor(event: EndowmentCreated8) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class EndowmentSettingUpdated8 extends ethereum.Event {
-  get params(): EndowmentSettingUpdated8__Params {
-    return new EndowmentSettingUpdated8__Params(this);
-  }
-}
-
-export class EndowmentSettingUpdated8__Params {
-  _event: EndowmentSettingUpdated8;
-
-  constructor(event: EndowmentSettingUpdated8) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
-export class RemoveAllowance8 extends ethereum.Event {
-  get params(): RemoveAllowance8__Params {
-    return new RemoveAllowance8__Params(this);
-  }
-}
-
-export class RemoveAllowance8__Params {
-  _event: RemoveAllowance8;
-
-  constructor(event: RemoveAllowance8) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class SwapToken8 extends ethereum.Event {
-  get params(): SwapToken8__Params {
-    return new SwapToken8__Params(this);
-  }
-}
-
-export class SwapToken8__Params {
-  _event: SwapToken8;
-
-  constructor(event: SwapToken8) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get accountType(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tokenIn(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amountIn(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get tokenOut(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class UpdateConfig8 extends ethereum.Event {
-  get params(): UpdateConfig8__Params {
-    return new UpdateConfig8__Params(this);
-  }
-}
-
-export class UpdateConfig8__Params {
-  _event: UpdateConfig8;
-
-  constructor(event: UpdateConfig8) {
-    this._event = event;
-  }
-}
-
-export class UpdateEndowment8 extends ethereum.Event {
-  get params(): UpdateEndowment8__Params {
-    return new UpdateEndowment8__Params(this);
-  }
-}
-
-export class UpdateEndowment8__Params {
-  _event: UpdateEndowment8;
-
-  constructor(event: UpdateEndowment8) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class AllowanceStateUpdatedTo9 extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo9__Params {
-    return new AllowanceStateUpdatedTo9__Params(this);
-  }
-}
-
-export class AllowanceStateUpdatedTo9__Params {
-  _event: AllowanceStateUpdatedTo9;
-
-  constructor(event: AllowanceStateUpdatedTo9) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get allowance(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-}
-
-export class DaoContractCreated9 extends ethereum.Event {
-  get params(): DaoContractCreated9__Params {
-    return new DaoContractCreated9__Params(this);
-  }
-}
-
-export class DaoContractCreated9__Params {
-  _event: DaoContractCreated9;
-
-  constructor(event: DaoContractCreated9) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited9 extends ethereum.Event {
-  get params(): DonationDeposited9__Params {
-    return new DonationDeposited9__Params(this);
-  }
-}
-
-export class DonationDeposited9__Params {
-  _event: DonationDeposited9;
-
-  constructor(event: DonationDeposited9) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class DonationMatchSetup9 extends ethereum.Event {
-  get params(): DonationMatchSetup9__Params {
-    return new DonationMatchSetup9__Params(this);
-  }
-}
-
-export class DonationMatchSetup9__Params {
-  _event: DonationMatchSetup9;
-
-  constructor(event: DonationMatchSetup9) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn9 extends ethereum.Event {
-  get params(): DonationWithdrawn9__Params {
-    return new DonationWithdrawn9__Params(this);
-  }
-}
-
-export class DonationWithdrawn9__Params {
-  _event: DonationWithdrawn9;
-
-  constructor(event: DonationWithdrawn9) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class EndowmentCreated9 extends ethereum.Event {
-  get params(): EndowmentCreated9__Params {
-    return new EndowmentCreated9__Params(this);
-  }
-}
-
-export class EndowmentCreated9__Params {
-  _event: EndowmentCreated9;
-
-  constructor(event: EndowmentCreated9) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class EndowmentSettingUpdated9 extends ethereum.Event {
-  get params(): EndowmentSettingUpdated9__Params {
-    return new EndowmentSettingUpdated9__Params(this);
-  }
-}
-
-export class EndowmentSettingUpdated9__Params {
-  _event: EndowmentSettingUpdated9;
-
-  constructor(event: EndowmentSettingUpdated9) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
-export class RemoveAllowance9 extends ethereum.Event {
-  get params(): RemoveAllowance9__Params {
-    return new RemoveAllowance9__Params(this);
-  }
-}
-
-export class RemoveAllowance9__Params {
-  _event: RemoveAllowance9;
-
-  constructor(event: RemoveAllowance9) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class SwapToken9 extends ethereum.Event {
-  get params(): SwapToken9__Params {
-    return new SwapToken9__Params(this);
-  }
-}
-
-export class SwapToken9__Params {
-  _event: SwapToken9;
-
-  constructor(event: SwapToken9) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get accountType(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tokenIn(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amountIn(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get tokenOut(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class UpdateConfig9 extends ethereum.Event {
-  get params(): UpdateConfig9__Params {
-    return new UpdateConfig9__Params(this);
-  }
-}
-
-export class UpdateConfig9__Params {
-  _event: UpdateConfig9;
-
-  constructor(event: UpdateConfig9) {
-    this._event = event;
-  }
-}
-
-export class UpdateEndowment9 extends ethereum.Event {
-  get params(): UpdateEndowment9__Params {
-    return new UpdateEndowment9__Params(this);
-  }
-}
-
-export class UpdateEndowment9__Params {
-  _event: UpdateEndowment9;
-
-  constructor(event: UpdateEndowment9) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class AllowanceStateUpdatedTo10 extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo10__Params {
-    return new AllowanceStateUpdatedTo10__Params(this);
-  }
-}
-
-export class AllowanceStateUpdatedTo10__Params {
-  _event: AllowanceStateUpdatedTo10;
-
-  constructor(event: AllowanceStateUpdatedTo10) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get allowance(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-}
-
-export class DaoContractCreated10 extends ethereum.Event {
-  get params(): DaoContractCreated10__Params {
-    return new DaoContractCreated10__Params(this);
-  }
-}
-
-export class DaoContractCreated10__Params {
-  _event: DaoContractCreated10;
-
-  constructor(event: DaoContractCreated10) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited10 extends ethereum.Event {
-  get params(): DonationDeposited10__Params {
-    return new DonationDeposited10__Params(this);
-  }
-}
-
-export class DonationDeposited10__Params {
-  _event: DonationDeposited10;
-
-  constructor(event: DonationDeposited10) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class DonationMatchSetup10 extends ethereum.Event {
-  get params(): DonationMatchSetup10__Params {
-    return new DonationMatchSetup10__Params(this);
-  }
-}
-
-export class DonationMatchSetup10__Params {
-  _event: DonationMatchSetup10;
-
-  constructor(event: DonationMatchSetup10) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn10 extends ethereum.Event {
-  get params(): DonationWithdrawn10__Params {
-    return new DonationWithdrawn10__Params(this);
-  }
-}
-
-export class DonationWithdrawn10__Params {
-  _event: DonationWithdrawn10;
-
-  constructor(event: DonationWithdrawn10) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class EndowmentCreated10 extends ethereum.Event {
-  get params(): EndowmentCreated10__Params {
-    return new EndowmentCreated10__Params(this);
-  }
-}
-
-export class EndowmentCreated10__Params {
-  _event: EndowmentCreated10;
-
-  constructor(event: EndowmentCreated10) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class EndowmentSettingUpdated10 extends ethereum.Event {
-  get params(): EndowmentSettingUpdated10__Params {
-    return new EndowmentSettingUpdated10__Params(this);
-  }
-}
-
-export class EndowmentSettingUpdated10__Params {
-  _event: EndowmentSettingUpdated10;
-
-  constructor(event: EndowmentSettingUpdated10) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
-export class RemoveAllowance10 extends ethereum.Event {
-  get params(): RemoveAllowance10__Params {
-    return new RemoveAllowance10__Params(this);
-  }
-}
-
-export class RemoveAllowance10__Params {
-  _event: RemoveAllowance10;
-
-  constructor(event: RemoveAllowance10) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class SwapToken10 extends ethereum.Event {
-  get params(): SwapToken10__Params {
-    return new SwapToken10__Params(this);
-  }
-}
-
-export class SwapToken10__Params {
-  _event: SwapToken10;
-
-  constructor(event: SwapToken10) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get accountType(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tokenIn(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amountIn(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get tokenOut(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class UpdateConfig10 extends ethereum.Event {
-  get params(): UpdateConfig10__Params {
-    return new UpdateConfig10__Params(this);
-  }
-}
-
-export class UpdateConfig10__Params {
-  _event: UpdateConfig10;
-
-  constructor(event: UpdateConfig10) {
-    this._event = event;
-  }
-}
-
-export class UpdateEndowment10 extends ethereum.Event {
-  get params(): UpdateEndowment10__Params {
-    return new UpdateEndowment10__Params(this);
-  }
-}
-
-export class UpdateEndowment10__Params {
-  _event: UpdateEndowment10;
-
-  constructor(event: UpdateEndowment10) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class AllowanceStateUpdatedTo11 extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo11__Params {
-    return new AllowanceStateUpdatedTo11__Params(this);
-  }
-}
-
-export class AllowanceStateUpdatedTo11__Params {
-  _event: AllowanceStateUpdatedTo11;
-
-  constructor(event: AllowanceStateUpdatedTo11) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get allowance(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-}
-
-export class DaoContractCreated11 extends ethereum.Event {
-  get params(): DaoContractCreated11__Params {
-    return new DaoContractCreated11__Params(this);
-  }
-}
-
-export class DaoContractCreated11__Params {
-  _event: DaoContractCreated11;
-
-  constructor(event: DaoContractCreated11) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited11 extends ethereum.Event {
-  get params(): DonationDeposited11__Params {
-    return new DonationDeposited11__Params(this);
-  }
-}
-
-export class DonationDeposited11__Params {
-  _event: DonationDeposited11;
-
-  constructor(event: DonationDeposited11) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class DonationMatchSetup11 extends ethereum.Event {
-  get params(): DonationMatchSetup11__Params {
-    return new DonationMatchSetup11__Params(this);
-  }
-}
-
-export class DonationMatchSetup11__Params {
-  _event: DonationMatchSetup11;
-
-  constructor(event: DonationMatchSetup11) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn11 extends ethereum.Event {
-  get params(): DonationWithdrawn11__Params {
-    return new DonationWithdrawn11__Params(this);
-  }
-}
-
-export class DonationWithdrawn11__Params {
-  _event: DonationWithdrawn11;
-
-  constructor(event: DonationWithdrawn11) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class EndowmentCreated11 extends ethereum.Event {
-  get params(): EndowmentCreated11__Params {
-    return new EndowmentCreated11__Params(this);
-  }
-}
-
-export class EndowmentCreated11__Params {
-  _event: EndowmentCreated11;
-
-  constructor(event: EndowmentCreated11) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class EndowmentSettingUpdated11 extends ethereum.Event {
-  get params(): EndowmentSettingUpdated11__Params {
-    return new EndowmentSettingUpdated11__Params(this);
-  }
-}
-
-export class EndowmentSettingUpdated11__Params {
-  _event: EndowmentSettingUpdated11;
-
-  constructor(event: EndowmentSettingUpdated11) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
-export class RemoveAllowance11 extends ethereum.Event {
-  get params(): RemoveAllowance11__Params {
-    return new RemoveAllowance11__Params(this);
-  }
-}
-
-export class RemoveAllowance11__Params {
-  _event: RemoveAllowance11;
-
-  constructor(event: RemoveAllowance11) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class SwapToken11 extends ethereum.Event {
-  get params(): SwapToken11__Params {
-    return new SwapToken11__Params(this);
-  }
-}
-
-export class SwapToken11__Params {
-  _event: SwapToken11;
-
-  constructor(event: SwapToken11) {
-    this._event = event;
-  }
-
+export class Accounts__createDaoContractInputCreatedaomessageStruct extends ethereum.Tuple {
   get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get accountType(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tokenIn(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amountIn(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get tokenOut(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-}
-
-export class UpdateConfig11 extends ethereum.Event {
-  get params(): UpdateConfig11__Params {
-    return new UpdateConfig11__Params(this);
-  }
-}
-
-export class UpdateConfig11__Params {
-  _event: UpdateConfig11;
-
-  constructor(event: UpdateConfig11) {
-    this._event = event;
-  }
-}
-
-export class UpdateEndowment11 extends ethereum.Event {
-  get params(): UpdateEndowment11__Params {
-    return new UpdateEndowment11__Params(this);
-  }
-}
-
-export class UpdateEndowment11__Params {
-  _event: UpdateEndowment11;
-
-  constructor(event: UpdateEndowment11) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class AllowanceStateUpdatedTo12 extends ethereum.Event {
-  get params(): AllowanceStateUpdatedTo12__Params {
-    return new AllowanceStateUpdatedTo12__Params(this);
-  }
-}
-
-export class AllowanceStateUpdatedTo12__Params {
-  _event: AllowanceStateUpdatedTo12;
-
-  constructor(event: AllowanceStateUpdatedTo12) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
+    return this[0].toBigInt();
   }
 
-  get allowance(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+  get owner(): Address {
+    return this[1].toAddress();
   }
-}
-
-export class DaoContractCreated12 extends ethereum.Event {
-  get params(): DaoContractCreated12__Params {
-    return new DaoContractCreated12__Params(this);
-  }
-}
 
-export class DaoContractCreated12__Params {
-  _event: DaoContractCreated12;
-
-  constructor(event: DaoContractCreated12) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+  get quorum(): BigInt {
+    return this[2].toBigInt();
   }
 
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
+  get threshold(): BigInt {
+    return this[3].toBigInt();
   }
-}
 
-export class DonationDeposited12 extends ethereum.Event {
-  get params(): DonationDeposited12__Params {
-    return new DonationDeposited12__Params(this);
+  get votingPeriod(): BigInt {
+    return this[4].toBigInt();
   }
-}
-
-export class DonationDeposited12__Params {
-  _event: DonationDeposited12;
 
-  constructor(event: DonationDeposited12) {
-    this._event = event;
+  get timelockPeriod(): BigInt {
+    return this[5].toBigInt();
   }
 
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+  get expirationPeriod(): BigInt {
+    return this[6].toBigInt();
   }
 
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+  get proposalDeposit(): BigInt {
+    return this[7].toBigInt();
   }
-}
 
-export class DonationMatchSetup12 extends ethereum.Event {
-  get params(): DonationMatchSetup12__Params {
-    return new DonationMatchSetup12__Params(this);
+  get snapshotPeriod(): BigInt {
+    return this[8].toBigInt();
   }
-}
-
-export class DonationMatchSetup12__Params {
-  _event: DonationMatchSetup12;
 
-  constructor(event: DonationMatchSetup12) {
-    this._event = event;
+  get token(): Accounts__createDaoContractInputCreatedaomessageTokenStruct {
+    return changetype<
+      Accounts__createDaoContractInputCreatedaomessageTokenStruct
+    >(this[9].toTuple());
   }
 
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+  get endowType(): i32 {
+    return this[10].toI32();
   }
 
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
+  get endowOwner(): Address {
+    return this[11].toAddress();
   }
-}
 
-export class DonationWithdrawn12 extends ethereum.Event {
-  get params(): DonationWithdrawn12__Params {
-    return new DonationWithdrawn12__Params(this);
+  get registrarContract(): Address {
+    return this[12].toAddress();
   }
 }
-
-export class DonationWithdrawn12__Params {
-  _event: DonationWithdrawn12;
-
-  constructor(event: DonationWithdrawn12) {
-    this._event = event;
-  }
-
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
 
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+export class Accounts__createDaoContractInputCreatedaomessageTokenStruct extends ethereum.Tuple {
+  get token(): i32 {
+    return this[0].toI32();
   }
-}
 
-export class EndowmentCreated12 extends ethereum.Event {
-  get params(): EndowmentCreated12__Params {
-    return new EndowmentCreated12__Params(this);
+  get data(): Accounts__createDaoContractInputCreatedaomessageTokenDataStruct {
+    return changetype<
+      Accounts__createDaoContractInputCreatedaomessageTokenDataStruct
+    >(this[1].toTuple());
   }
 }
-
-export class EndowmentCreated12__Params {
-  _event: EndowmentCreated12;
-
-  constructor(event: EndowmentCreated12) {
-    this._event = event;
-  }
 
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+export class Accounts__createDaoContractInputCreatedaomessageTokenDataStruct extends ethereum.Tuple {
+  get existingData(): Address {
+    return this[0].toAddress();
   }
-}
 
-export class EndowmentSettingUpdated12 extends ethereum.Event {
-  get params(): EndowmentSettingUpdated12__Params {
-    return new EndowmentSettingUpdated12__Params(this);
+  get newInitialSupply(): BigInt {
+    return this[1].toBigInt();
   }
-}
-
-export class EndowmentSettingUpdated12__Params {
-  _event: EndowmentSettingUpdated12;
 
-  constructor(event: EndowmentSettingUpdated12) {
-    this._event = event;
+  get newName(): string {
+    return this[2].toString();
   }
 
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+  get newSymbol(): string {
+    return this[3].toString();
   }
 
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
+  get veBondingType(): Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeStruct {
+    return changetype<
+      Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeStruct
+    >(this[4].toTuple());
   }
-}
 
-export class RemoveAllowance12 extends ethereum.Event {
-  get params(): RemoveAllowance12__Params {
-    return new RemoveAllowance12__Params(this);
+  get veBondingName(): string {
+    return this[5].toString();
   }
-}
-
-export class RemoveAllowance12__Params {
-  _event: RemoveAllowance12;
 
-  constructor(event: RemoveAllowance12) {
-    this._event = event;
+  get veBondingSymbol(): string {
+    return this[6].toString();
   }
 
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
+  get veBondingDecimals(): BigInt {
+    return this[7].toBigInt();
   }
 
-  get spender(): Address {
-    return this._event.parameters[1].value.toAddress();
+  get veBondingReserveDenom(): Address {
+    return this[8].toAddress();
   }
 
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
+  get veBondingReserveDecimals(): BigInt {
+    return this[9].toBigInt();
   }
-}
 
-export class SwapToken12 extends ethereum.Event {
-  get params(): SwapToken12__Params {
-    return new SwapToken12__Params(this);
+  get veBondingPeriod(): BigInt {
+    return this[10].toBigInt();
   }
 }
-
-export class SwapToken12__Params {
-  _event: SwapToken12;
-
-  constructor(event: SwapToken12) {
-    this._event = event;
-  }
 
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get accountType(): i32 {
-    return this._event.parameters[1].value.toI32();
-  }
-
-  get tokenIn(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amountIn(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-
-  get tokenOut(): Address {
-    return this._event.parameters[4].value.toAddress();
-  }
-
-  get amountOut(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
+export class Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeStruct extends ethereum.Tuple {
+  get ve_type(): i32 {
+    return this[0].toI32();
   }
-}
 
-export class UpdateConfig12 extends ethereum.Event {
-  get params(): UpdateConfig12__Params {
-    return new UpdateConfig12__Params(this);
+  get data(): Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeDataStruct {
+    return changetype<
+      Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeDataStruct
+    >(this[1].toTuple());
   }
 }
 
-export class UpdateConfig12__Params {
-  _event: UpdateConfig12;
-
-  constructor(event: UpdateConfig12) {
-    this._event = event;
+export class Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeDataStruct extends ethereum.Tuple {
+  get value(): BigInt {
+    return this[0].toBigInt();
   }
-}
 
-export class UpdateEndowment12 extends ethereum.Event {
-  get params(): UpdateEndowment12__Params {
-    return new UpdateEndowment12__Params(this);
+  get scale(): BigInt {
+    return this[1].toBigInt();
   }
-}
 
-export class UpdateEndowment12__Params {
-  _event: UpdateEndowment12;
-
-  constructor(event: UpdateEndowment12) {
-    this._event = event;
+  get slope(): BigInt {
+    return this[2].toBigInt();
   }
 
-  get id(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+  get power(): BigInt {
+    return this[3].toBigInt();
   }
 }
 
@@ -3423,68 +481,72 @@ export class Accounts__createEndowmentInputDetailsStruct extends ethereum.Tuple 
     return this[9].toBigInt();
   }
 
+  get duration(): BigInt {
+    return this[10].toBigInt();
+  }
+
   get allowlistedBeneficiaries(): Array<Address> {
-    return this[10].toAddressArray();
+    return this[11].toAddressArray();
   }
 
   get allowlistedContributors(): Array<Address> {
-    return this[11].toAddressArray();
+    return this[12].toAddressArray();
   }
 
   get earlyLockedWithdrawFee(): Accounts__createEndowmentInputDetailsEarlyLockedWithdrawFeeStruct {
     return changetype<
       Accounts__createEndowmentInputDetailsEarlyLockedWithdrawFeeStruct
-    >(this[12].toTuple());
+    >(this[13].toTuple());
   }
 
   get withdrawFee(): Accounts__createEndowmentInputDetailsWithdrawFeeStruct {
     return changetype<Accounts__createEndowmentInputDetailsWithdrawFeeStruct>(
-      this[13].toTuple()
+      this[14].toTuple()
     );
   }
 
   get depositFee(): Accounts__createEndowmentInputDetailsDepositFeeStruct {
     return changetype<Accounts__createEndowmentInputDetailsDepositFeeStruct>(
-      this[14].toTuple()
+      this[15].toTuple()
     );
   }
 
   get balanceFee(): Accounts__createEndowmentInputDetailsBalanceFeeStruct {
     return changetype<Accounts__createEndowmentInputDetailsBalanceFeeStruct>(
-      this[15].toTuple()
+      this[16].toTuple()
     );
   }
 
   get proposalLink(): BigInt {
-    return this[16].toBigInt();
+    return this[17].toBigInt();
   }
 
   get settingsController(): Accounts__createEndowmentInputDetailsSettingsControllerStruct {
     return changetype<
       Accounts__createEndowmentInputDetailsSettingsControllerStruct
-    >(this[17].toTuple());
+    >(this[18].toTuple());
   }
 
   get parent(): BigInt {
-    return this[18].toBigInt();
+    return this[19].toBigInt();
   }
 
   get maturityAllowlist(): Array<Address> {
-    return this[19].toAddressArray();
+    return this[20].toAddressArray();
   }
 
   get ignoreUserSplits(): boolean {
-    return this[20].toBoolean();
+    return this[21].toBoolean();
   }
 
   get splitToLiquid(): Accounts__createEndowmentInputDetailsSplitToLiquidStruct {
     return changetype<Accounts__createEndowmentInputDetailsSplitToLiquidStruct>(
-      this[21].toTuple()
+      this[22].toTuple()
     );
   }
 
   get referralId(): BigInt {
-    return this[22].toBigInt();
+    return this[23].toBigInt();
   }
 }
 
@@ -4017,152 +1079,6 @@ export class Accounts__createEndowmentInputDetailsSplitToLiquidStruct extends et
 
   get defaultSplit(): BigInt {
     return this[2].toBigInt();
-  }
-}
-
-export class Accounts__createDaoContractInputCreateDaoMessageStruct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get owner(): Address {
-    return this[1].toAddress();
-  }
-
-  get quorum(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get threshold(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get votingPeriod(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get timelockPeriod(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get expirationPeriod(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get proposalDeposit(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get snapshotPeriod(): BigInt {
-    return this[8].toBigInt();
-  }
-
-  get token(): Accounts__createDaoContractInputCreateDaoMessageTokenStruct {
-    return changetype<
-      Accounts__createDaoContractInputCreateDaoMessageTokenStruct
-    >(this[9].toTuple());
-  }
-
-  get endowType(): i32 {
-    return this[10].toI32();
-  }
-
-  get endowOwner(): Address {
-    return this[11].toAddress();
-  }
-
-  get registrarContract(): Address {
-    return this[12].toAddress();
-  }
-}
-
-export class Accounts__createDaoContractInputCreateDaoMessageTokenStruct extends ethereum.Tuple {
-  get token(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): Accounts__createDaoContractInputCreateDaoMessageTokenDataStruct {
-    return changetype<
-      Accounts__createDaoContractInputCreateDaoMessageTokenDataStruct
-    >(this[1].toTuple());
-  }
-}
-
-export class Accounts__createDaoContractInputCreateDaoMessageTokenDataStruct extends ethereum.Tuple {
-  get existingData(): Address {
-    return this[0].toAddress();
-  }
-
-  get newInitialSupply(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get newName(): string {
-    return this[2].toString();
-  }
-
-  get newSymbol(): string {
-    return this[3].toString();
-  }
-
-  get veBondingType(): Accounts__createDaoContractInputCreateDaoMessageTokenDataVeBondingTypeStruct {
-    return changetype<
-      Accounts__createDaoContractInputCreateDaoMessageTokenDataVeBondingTypeStruct
-    >(this[4].toTuple());
-  }
-
-  get veBondingName(): string {
-    return this[5].toString();
-  }
-
-  get veBondingSymbol(): string {
-    return this[6].toString();
-  }
-
-  get veBondingDecimals(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get veBondingReserveDenom(): Address {
-    return this[8].toAddress();
-  }
-
-  get veBondingReserveDecimals(): BigInt {
-    return this[9].toBigInt();
-  }
-
-  get veBondingPeriod(): BigInt {
-    return this[10].toBigInt();
-  }
-}
-
-export class Accounts__createDaoContractInputCreateDaoMessageTokenDataVeBondingTypeStruct extends ethereum.Tuple {
-  get ve_type(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): Accounts__createDaoContractInputCreateDaoMessageTokenDataVeBondingTypeDataStruct {
-    return changetype<
-      Accounts__createDaoContractInputCreateDaoMessageTokenDataVeBondingTypeDataStruct
-    >(this[1].toTuple());
-  }
-}
-
-export class Accounts__createDaoContractInputCreateDaoMessageTokenDataVeBondingTypeDataStruct extends ethereum.Tuple {
-  get value(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get scale(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get slope(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get power(): BigInt {
-    return this[3].toBigInt();
   }
 }
 
@@ -4940,48 +1856,36 @@ export class Accounts__queryStateResultStateResponseClosingBeneficiaryDataStruct
   }
 }
 
-export class Accounts__checkSplitsResult {
-  value0: BigInt;
-  value1: BigInt;
-
-  constructor(value0: BigInt, value1: BigInt) {
-    this.value0 = value0;
-    this.value1 = value1;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
-    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
-    return map;
-  }
-
-  getValue0(): BigInt {
-    return this.value0;
-  }
-
-  getValue1(): BigInt {
-    return this.value1;
-  }
-}
-
-export class Accounts__checkSplitsInputSplitsStruct extends ethereum.Tuple {
-  get max(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get min(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get defaultSplit(): BigInt {
-    return this[2].toBigInt();
-  }
-}
-
 export class Accounts extends ethereum.SmartContract {
   static bind(address: Address): Accounts {
     return new Accounts("Accounts", address);
+  }
+
+  createDaoContract(
+    createdaomessage: Accounts__createDaoContractInputCreatedaomessageStruct
+  ): Address {
+    let result = super.call(
+      "createDaoContract",
+      "createDaoContract((uint32,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,(uint8,(address,uint256,string,string,(uint8,(uint128,uint256,uint128,uint128)),string,string,uint256,address,uint256,uint256)),uint8,address,address)):(address)",
+      [ethereum.Value.fromTuple(createdaomessage)]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_createDaoContract(
+    createdaomessage: Accounts__createDaoContractInputCreatedaomessageStruct
+  ): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "createDaoContract",
+      "createDaoContract((uint32,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,(uint8,(address,uint256,string,string,(uint8,(uint128,uint256,uint128,uint128)),string,string,uint256,address,uint256,uint256)),uint8,address,address)):(address)",
+      [ethereum.Value.fromTuple(createdaomessage)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   createEndowment(
@@ -4989,7 +1893,7 @@ export class Accounts extends ethereum.SmartContract {
   ): BigInt {
     let result = super.call(
       "createEndowment",
-      "createEndowment((bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256)):(uint32)",
+      "createEndowment((bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256)):(uint32)",
       [ethereum.Value.fromTuple(details)]
     );
 
@@ -5001,7 +1905,7 @@ export class Accounts extends ethereum.SmartContract {
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "createEndowment",
-      "createEndowment((bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256)):(uint32)",
+      "createEndowment((bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256)):(uint32)",
       [ethereum.Value.fromTuple(details)]
     );
     if (result.reverted) {
@@ -5009,33 +1913,6 @@ export class Accounts extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  createDaoContract(
-    createDaoMessage: Accounts__createDaoContractInputCreateDaoMessageStruct
-  ): Address {
-    let result = super.call(
-      "createDaoContract",
-      "createDaoContract((uint32,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,(uint8,(address,uint256,string,string,(uint8,(uint128,uint256,uint128,uint128)),string,string,uint256,address,uint256,uint256)),uint8,address,address)):(address)",
-      [ethereum.Value.fromTuple(createDaoMessage)]
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_createDaoContract(
-    createDaoMessage: Accounts__createDaoContractInputCreateDaoMessageStruct
-  ): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "createDaoContract",
-      "createDaoContract((uint32,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,(uint8,(address,uint256,string,string,(uint8,(uint128,uint256,uint128,uint128)),string,string,uint256,address,uint256,uint256)),uint8,address,address)):(address)",
-      [ethereum.Value.fromTuple(createDaoMessage)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   queryConfig(): Accounts__queryConfigResultConfigStruct {
@@ -5134,7 +2011,7 @@ export class Accounts extends ethereum.SmartContract {
   queryTokenAmount(
     id: BigInt,
     accountType: i32,
-    tokenAddress: Address
+    tokenaddress: Address
   ): BigInt {
     let result = super.call(
       "queryTokenAmount",
@@ -5142,7 +2019,7 @@ export class Accounts extends ethereum.SmartContract {
       [
         ethereum.Value.fromUnsignedBigInt(id),
         ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(accountType)),
-        ethereum.Value.fromAddress(tokenAddress)
+        ethereum.Value.fromAddress(tokenaddress)
       ]
     );
 
@@ -5152,7 +2029,7 @@ export class Accounts extends ethereum.SmartContract {
   try_queryTokenAmount(
     id: BigInt,
     accountType: i32,
-    tokenAddress: Address
+    tokenaddress: Address
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "queryTokenAmount",
@@ -5160,7 +2037,7 @@ export class Accounts extends ethereum.SmartContract {
       [
         ethereum.Value.fromUnsignedBigInt(id),
         ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(accountType)),
-        ethereum.Value.fromAddress(tokenAddress)
+        ethereum.Value.fromAddress(tokenaddress)
       ]
     );
     if (result.reverted) {
@@ -5169,141 +2046,249 @@ export class Accounts extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
+}
 
-  checkSplits(
-    splits: Accounts__checkSplitsInputSplitsStruct,
-    userLocked: BigInt,
-    userLiquid: BigInt,
-    userOverride: boolean
-  ): Accounts__checkSplitsResult {
-    let result = super.call(
-      "checkSplits",
-      "checkSplits((uint256,uint256,uint256),uint256,uint256,bool):(uint256,uint256)",
-      [
-        ethereum.Value.fromTuple(splits),
-        ethereum.Value.fromUnsignedBigInt(userLocked),
-        ethereum.Value.fromUnsignedBigInt(userLiquid),
-        ethereum.Value.fromBoolean(userOverride)
-      ]
-    );
-
-    return new Accounts__checkSplitsResult(
-      result[0].toBigInt(),
-      result[1].toBigInt()
-    );
+export class CloseEndowmentCall extends ethereum.Call {
+  get inputs(): CloseEndowmentCall__Inputs {
+    return new CloseEndowmentCall__Inputs(this);
   }
 
-  try_checkSplits(
-    splits: Accounts__checkSplitsInputSplitsStruct,
-    userLocked: BigInt,
-    userLiquid: BigInt,
-    userOverride: boolean
-  ): ethereum.CallResult<Accounts__checkSplitsResult> {
-    let result = super.tryCall(
-      "checkSplits",
-      "checkSplits((uint256,uint256,uint256),uint256,uint256,bool):(uint256,uint256)",
-      [
-        ethereum.Value.fromTuple(splits),
-        ethereum.Value.fromUnsignedBigInt(userLocked),
-        ethereum.Value.fromUnsignedBigInt(userLiquid),
-        ethereum.Value.fromBoolean(userOverride)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new Accounts__checkSplitsResult(value[0].toBigInt(), value[1].toBigInt())
-    );
+  get outputs(): CloseEndowmentCall__Outputs {
+    return new CloseEndowmentCall__Outputs(this);
   }
 }
 
-export class ManageAllowancesCall extends ethereum.Call {
-  get inputs(): ManageAllowancesCall__Inputs {
-    return new ManageAllowancesCall__Inputs(this);
-  }
+export class CloseEndowmentCall__Inputs {
+  _call: CloseEndowmentCall;
 
-  get outputs(): ManageAllowancesCall__Outputs {
-    return new ManageAllowancesCall__Outputs(this);
-  }
-}
-
-export class ManageAllowancesCall__Inputs {
-  _call: ManageAllowancesCall;
-
-  constructor(call: ManageAllowancesCall) {
+  constructor(call: CloseEndowmentCall) {
     this._call = call;
   }
 
-  get endowId(): BigInt {
+  get id(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
   }
 
-  get action(): i32 {
-    return this._call.inputValues[1].value.toI32();
-  }
-
-  get spender(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
-  get token(): Address {
-    return this._call.inputValues[3].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
+  get beneficiary(): CloseEndowmentCallBeneficiaryStruct {
+    return changetype<CloseEndowmentCallBeneficiaryStruct>(
+      this._call.inputValues[1].value.toTuple()
+    );
   }
 }
 
-export class ManageAllowancesCall__Outputs {
-  _call: ManageAllowancesCall;
+export class CloseEndowmentCall__Outputs {
+  _call: CloseEndowmentCall;
 
-  constructor(call: ManageAllowancesCall) {
+  constructor(call: CloseEndowmentCall) {
     this._call = call;
   }
 }
 
-export class SpendAllowanceCall extends ethereum.Call {
-  get inputs(): SpendAllowanceCall__Inputs {
-    return new SpendAllowanceCall__Inputs(this);
+export class CloseEndowmentCallBeneficiaryStruct extends ethereum.Tuple {
+  get data(): CloseEndowmentCallBeneficiaryDataStruct {
+    return changetype<CloseEndowmentCallBeneficiaryDataStruct>(
+      this[0].toTuple()
+    );
   }
 
-  get outputs(): SpendAllowanceCall__Outputs {
-    return new SpendAllowanceCall__Outputs(this);
+  get enumData(): i32 {
+    return this[1].toI32();
   }
 }
 
-export class SpendAllowanceCall__Inputs {
-  _call: SpendAllowanceCall;
-
-  constructor(call: SpendAllowanceCall) {
-    this._call = call;
-  }
-
+export class CloseEndowmentCallBeneficiaryDataStruct extends ethereum.Tuple {
   get endowId(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
+    return this[0].toBigInt();
   }
 
-  get token(): Address {
-    return this._call.inputValues[1].value.toAddress();
+  get fundId(): BigInt {
+    return this[1].toBigInt();
   }
 
-  get amount(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._call.inputValues[3].value.toAddress();
+  get addr(): Address {
+    return this[2].toAddress();
   }
 }
 
-export class SpendAllowanceCall__Outputs {
-  _call: SpendAllowanceCall;
+export class CreateDaoContractCall extends ethereum.Call {
+  get inputs(): CreateDaoContractCall__Inputs {
+    return new CreateDaoContractCall__Inputs(this);
+  }
 
-  constructor(call: SpendAllowanceCall) {
+  get outputs(): CreateDaoContractCall__Outputs {
+    return new CreateDaoContractCall__Outputs(this);
+  }
+}
+
+export class CreateDaoContractCall__Inputs {
+  _call: CreateDaoContractCall;
+
+  constructor(call: CreateDaoContractCall) {
     this._call = call;
+  }
+
+  get createdaomessage(): CreateDaoContractCallCreatedaomessageStruct {
+    return changetype<CreateDaoContractCallCreatedaomessageStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
+  }
+}
+
+export class CreateDaoContractCall__Outputs {
+  _call: CreateDaoContractCall;
+
+  constructor(call: CreateDaoContractCall) {
+    this._call = call;
+  }
+
+  get daoAddress(): Address {
+    return this._call.outputValues[0].value.toAddress();
+  }
+}
+
+export class CreateDaoContractCallCreatedaomessageStruct extends ethereum.Tuple {
+  get id(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get owner(): Address {
+    return this[1].toAddress();
+  }
+
+  get quorum(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get threshold(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get votingPeriod(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get timelockPeriod(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get expirationPeriod(): BigInt {
+    return this[6].toBigInt();
+  }
+
+  get proposalDeposit(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get snapshotPeriod(): BigInt {
+    return this[8].toBigInt();
+  }
+
+  get token(): CreateDaoContractCallCreatedaomessageTokenStruct {
+    return changetype<CreateDaoContractCallCreatedaomessageTokenStruct>(
+      this[9].toTuple()
+    );
+  }
+
+  get endowType(): i32 {
+    return this[10].toI32();
+  }
+
+  get endowOwner(): Address {
+    return this[11].toAddress();
+  }
+
+  get registrarContract(): Address {
+    return this[12].toAddress();
+  }
+}
+
+export class CreateDaoContractCallCreatedaomessageTokenStruct extends ethereum.Tuple {
+  get token(): i32 {
+    return this[0].toI32();
+  }
+
+  get data(): CreateDaoContractCallCreatedaomessageTokenDataStruct {
+    return changetype<CreateDaoContractCallCreatedaomessageTokenDataStruct>(
+      this[1].toTuple()
+    );
+  }
+}
+
+export class CreateDaoContractCallCreatedaomessageTokenDataStruct extends ethereum.Tuple {
+  get existingData(): Address {
+    return this[0].toAddress();
+  }
+
+  get newInitialSupply(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get newName(): string {
+    return this[2].toString();
+  }
+
+  get newSymbol(): string {
+    return this[3].toString();
+  }
+
+  get veBondingType(): CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeStruct {
+    return changetype<
+      CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeStruct
+    >(this[4].toTuple());
+  }
+
+  get veBondingName(): string {
+    return this[5].toString();
+  }
+
+  get veBondingSymbol(): string {
+    return this[6].toString();
+  }
+
+  get veBondingDecimals(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get veBondingReserveDenom(): Address {
+    return this[8].toAddress();
+  }
+
+  get veBondingReserveDecimals(): BigInt {
+    return this[9].toBigInt();
+  }
+
+  get veBondingPeriod(): BigInt {
+    return this[10].toBigInt();
+  }
+}
+
+export class CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeStruct extends ethereum.Tuple {
+  get ve_type(): i32 {
+    return this[0].toI32();
+  }
+
+  get data(): CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeDataStruct {
+    return changetype<
+      CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeDataStruct
+    >(this[1].toTuple());
+  }
+}
+
+export class CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeDataStruct extends ethereum.Tuple {
+  get value(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get scale(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get slope(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get power(): BigInt {
+    return this[3].toBigInt();
   }
 }
 
@@ -5338,7 +2323,7 @@ export class CreateEndowmentCall__Outputs {
     this._call = call;
   }
 
-  get newEndowId(): BigInt {
+  get value0(): BigInt {
     return this._call.outputValues[0].value.toBigInt();
   }
 }
@@ -5384,68 +2369,72 @@ export class CreateEndowmentCallDetailsStruct extends ethereum.Tuple {
     return this[9].toBigInt();
   }
 
+  get duration(): BigInt {
+    return this[10].toBigInt();
+  }
+
   get allowlistedBeneficiaries(): Array<Address> {
-    return this[10].toAddressArray();
+    return this[11].toAddressArray();
   }
 
   get allowlistedContributors(): Array<Address> {
-    return this[11].toAddressArray();
+    return this[12].toAddressArray();
   }
 
   get earlyLockedWithdrawFee(): CreateEndowmentCallDetailsEarlyLockedWithdrawFeeStruct {
     return changetype<CreateEndowmentCallDetailsEarlyLockedWithdrawFeeStruct>(
-      this[12].toTuple()
+      this[13].toTuple()
     );
   }
 
   get withdrawFee(): CreateEndowmentCallDetailsWithdrawFeeStruct {
     return changetype<CreateEndowmentCallDetailsWithdrawFeeStruct>(
-      this[13].toTuple()
+      this[14].toTuple()
     );
   }
 
   get depositFee(): CreateEndowmentCallDetailsDepositFeeStruct {
     return changetype<CreateEndowmentCallDetailsDepositFeeStruct>(
-      this[14].toTuple()
+      this[15].toTuple()
     );
   }
 
   get balanceFee(): CreateEndowmentCallDetailsBalanceFeeStruct {
     return changetype<CreateEndowmentCallDetailsBalanceFeeStruct>(
-      this[15].toTuple()
+      this[16].toTuple()
     );
   }
 
   get proposalLink(): BigInt {
-    return this[16].toBigInt();
+    return this[17].toBigInt();
   }
 
   get settingsController(): CreateEndowmentCallDetailsSettingsControllerStruct {
     return changetype<CreateEndowmentCallDetailsSettingsControllerStruct>(
-      this[17].toTuple()
+      this[18].toTuple()
     );
   }
 
   get parent(): BigInt {
-    return this[18].toBigInt();
+    return this[19].toBigInt();
   }
 
   get maturityAllowlist(): Array<Address> {
-    return this[19].toAddressArray();
+    return this[20].toAddressArray();
   }
 
   get ignoreUserSplits(): boolean {
-    return this[20].toBoolean();
+    return this[21].toBoolean();
   }
 
   get splitToLiquid(): CreateEndowmentCallDetailsSplitToLiquidStruct {
     return changetype<CreateEndowmentCallDetailsSplitToLiquidStruct>(
-      this[21].toTuple()
+      this[22].toTuple()
     );
   }
 
   get referralId(): BigInt {
-    return this[22].toBigInt();
+    return this[23].toBigInt();
   }
 }
 
@@ -5981,6 +2970,190 @@ export class CreateEndowmentCallDetailsSplitToLiquidStruct extends ethereum.Tupl
   }
 }
 
+export class DepositDonationMatchErC20Call extends ethereum.Call {
+  get inputs(): DepositDonationMatchErC20Call__Inputs {
+    return new DepositDonationMatchErC20Call__Inputs(this);
+  }
+
+  get outputs(): DepositDonationMatchErC20Call__Outputs {
+    return new DepositDonationMatchErC20Call__Outputs(this);
+  }
+}
+
+export class DepositDonationMatchErC20Call__Inputs {
+  _call: DepositDonationMatchErC20Call;
+
+  constructor(call: DepositDonationMatchErC20Call) {
+    this._call = call;
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get token(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+}
+
+export class DepositDonationMatchErC20Call__Outputs {
+  _call: DepositDonationMatchErC20Call;
+
+  constructor(call: DepositDonationMatchErC20Call) {
+    this._call = call;
+  }
+}
+
+export class DepositERC20Call extends ethereum.Call {
+  get inputs(): DepositERC20Call__Inputs {
+    return new DepositERC20Call__Inputs(this);
+  }
+
+  get outputs(): DepositERC20Call__Outputs {
+    return new DepositERC20Call__Outputs(this);
+  }
+}
+
+export class DepositERC20Call__Inputs {
+  _call: DepositERC20Call;
+
+  constructor(call: DepositERC20Call) {
+    this._call = call;
+  }
+
+  get details(): DepositERC20CallDetailsStruct {
+    return changetype<DepositERC20CallDetailsStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
+  }
+
+  get tokenAddress(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+}
+
+export class DepositERC20Call__Outputs {
+  _call: DepositERC20Call;
+
+  constructor(call: DepositERC20Call) {
+    this._call = call;
+  }
+}
+
+export class DepositERC20CallDetailsStruct extends ethereum.Tuple {
+  get id(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get lockedPercentage(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get liquidPercentage(): BigInt {
+    return this[2].toBigInt();
+  }
+}
+
+export class DepositMaticCall extends ethereum.Call {
+  get inputs(): DepositMaticCall__Inputs {
+    return new DepositMaticCall__Inputs(this);
+  }
+
+  get outputs(): DepositMaticCall__Outputs {
+    return new DepositMaticCall__Outputs(this);
+  }
+}
+
+export class DepositMaticCall__Inputs {
+  _call: DepositMaticCall;
+
+  constructor(call: DepositMaticCall) {
+    this._call = call;
+  }
+
+  get details(): DepositMaticCallDetailsStruct {
+    return changetype<DepositMaticCallDetailsStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
+  }
+}
+
+export class DepositMaticCall__Outputs {
+  _call: DepositMaticCall;
+
+  constructor(call: DepositMaticCall) {
+    this._call = call;
+  }
+}
+
+export class DepositMaticCallDetailsStruct extends ethereum.Tuple {
+  get id(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get lockedPercentage(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get liquidPercentage(): BigInt {
+    return this[2].toBigInt();
+  }
+}
+
+export class ManageAllowancesCall extends ethereum.Call {
+  get inputs(): ManageAllowancesCall__Inputs {
+    return new ManageAllowancesCall__Inputs(this);
+  }
+
+  get outputs(): ManageAllowancesCall__Outputs {
+    return new ManageAllowancesCall__Outputs(this);
+  }
+}
+
+export class ManageAllowancesCall__Inputs {
+  _call: ManageAllowancesCall;
+
+  constructor(call: ManageAllowancesCall) {
+    this._call = call;
+  }
+
+  get endowId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get action(): i32 {
+    return this._call.inputValues[1].value.toI32();
+  }
+
+  get spender(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get token(): Address {
+    return this._call.inputValues[3].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
+  }
+}
+
+export class ManageAllowancesCall__Outputs {
+  _call: ManageAllowancesCall;
+
+  constructor(call: ManageAllowancesCall) {
+    this._call = call;
+  }
+}
+
 export class SetupDaoCall extends ethereum.Call {
   get inputs(): SetupDaoCall__Inputs {
     return new SetupDaoCall__Inputs(this);
@@ -6139,364 +3312,24 @@ export class SetupDaoCallDetailsTokenDataVeBondingTypeDataStruct extends ethereu
   }
 }
 
-export class CreateDaoContractCall extends ethereum.Call {
-  get inputs(): CreateDaoContractCall__Inputs {
-    return new CreateDaoContractCall__Inputs(this);
+export class SpendAllowanceCall extends ethereum.Call {
+  get inputs(): SpendAllowanceCall__Inputs {
+    return new SpendAllowanceCall__Inputs(this);
   }
 
-  get outputs(): CreateDaoContractCall__Outputs {
-    return new CreateDaoContractCall__Outputs(this);
+  get outputs(): SpendAllowanceCall__Outputs {
+    return new SpendAllowanceCall__Outputs(this);
   }
 }
 
-export class CreateDaoContractCall__Inputs {
-  _call: CreateDaoContractCall;
+export class SpendAllowanceCall__Inputs {
+  _call: SpendAllowanceCall;
 
-  constructor(call: CreateDaoContractCall) {
+  constructor(call: SpendAllowanceCall) {
     this._call = call;
   }
 
-  get createDaoMessage(): CreateDaoContractCallCreateDaoMessageStruct {
-    return changetype<CreateDaoContractCallCreateDaoMessageStruct>(
-      this._call.inputValues[0].value.toTuple()
-    );
-  }
-}
-
-export class CreateDaoContractCall__Outputs {
-  _call: CreateDaoContractCall;
-
-  constructor(call: CreateDaoContractCall) {
-    this._call = call;
-  }
-
-  get daoAddress(): Address {
-    return this._call.outputValues[0].value.toAddress();
-  }
-}
-
-export class CreateDaoContractCallCreateDaoMessageStruct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get owner(): Address {
-    return this[1].toAddress();
-  }
-
-  get quorum(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get threshold(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get votingPeriod(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get timelockPeriod(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get expirationPeriod(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get proposalDeposit(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get snapshotPeriod(): BigInt {
-    return this[8].toBigInt();
-  }
-
-  get token(): CreateDaoContractCallCreateDaoMessageTokenStruct {
-    return changetype<CreateDaoContractCallCreateDaoMessageTokenStruct>(
-      this[9].toTuple()
-    );
-  }
-
-  get endowType(): i32 {
-    return this[10].toI32();
-  }
-
-  get endowOwner(): Address {
-    return this[11].toAddress();
-  }
-
-  get registrarContract(): Address {
-    return this[12].toAddress();
-  }
-}
-
-export class CreateDaoContractCallCreateDaoMessageTokenStruct extends ethereum.Tuple {
-  get token(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): CreateDaoContractCallCreateDaoMessageTokenDataStruct {
-    return changetype<CreateDaoContractCallCreateDaoMessageTokenDataStruct>(
-      this[1].toTuple()
-    );
-  }
-}
-
-export class CreateDaoContractCallCreateDaoMessageTokenDataStruct extends ethereum.Tuple {
-  get existingData(): Address {
-    return this[0].toAddress();
-  }
-
-  get newInitialSupply(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get newName(): string {
-    return this[2].toString();
-  }
-
-  get newSymbol(): string {
-    return this[3].toString();
-  }
-
-  get veBondingType(): CreateDaoContractCallCreateDaoMessageTokenDataVeBondingTypeStruct {
-    return changetype<
-      CreateDaoContractCallCreateDaoMessageTokenDataVeBondingTypeStruct
-    >(this[4].toTuple());
-  }
-
-  get veBondingName(): string {
-    return this[5].toString();
-  }
-
-  get veBondingSymbol(): string {
-    return this[6].toString();
-  }
-
-  get veBondingDecimals(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get veBondingReserveDenom(): Address {
-    return this[8].toAddress();
-  }
-
-  get veBondingReserveDecimals(): BigInt {
-    return this[9].toBigInt();
-  }
-
-  get veBondingPeriod(): BigInt {
-    return this[10].toBigInt();
-  }
-}
-
-export class CreateDaoContractCallCreateDaoMessageTokenDataVeBondingTypeStruct extends ethereum.Tuple {
-  get ve_type(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): CreateDaoContractCallCreateDaoMessageTokenDataVeBondingTypeDataStruct {
-    return changetype<
-      CreateDaoContractCallCreateDaoMessageTokenDataVeBondingTypeDataStruct
-    >(this[1].toTuple());
-  }
-}
-
-export class CreateDaoContractCallCreateDaoMessageTokenDataVeBondingTypeDataStruct extends ethereum.Tuple {
-  get value(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get scale(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get slope(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get power(): BigInt {
-    return this[3].toBigInt();
-  }
-}
-
-export class DepositERC20Call extends ethereum.Call {
-  get inputs(): DepositERC20Call__Inputs {
-    return new DepositERC20Call__Inputs(this);
-  }
-
-  get outputs(): DepositERC20Call__Outputs {
-    return new DepositERC20Call__Outputs(this);
-  }
-}
-
-export class DepositERC20Call__Inputs {
-  _call: DepositERC20Call;
-
-  constructor(call: DepositERC20Call) {
-    this._call = call;
-  }
-
-  get details(): DepositERC20CallDetailsStruct {
-    return changetype<DepositERC20CallDetailsStruct>(
-      this._call.inputValues[0].value.toTuple()
-    );
-  }
-
-  get tokenAddress(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-}
-
-export class DepositERC20Call__Outputs {
-  _call: DepositERC20Call;
-
-  constructor(call: DepositERC20Call) {
-    this._call = call;
-  }
-}
-
-export class DepositERC20CallDetailsStruct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get lockedPercentage(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get liquidPercentage(): BigInt {
-    return this[2].toBigInt();
-  }
-}
-
-export class DepositMaticCall extends ethereum.Call {
-  get inputs(): DepositMaticCall__Inputs {
-    return new DepositMaticCall__Inputs(this);
-  }
-
-  get outputs(): DepositMaticCall__Outputs {
-    return new DepositMaticCall__Outputs(this);
-  }
-}
-
-export class DepositMaticCall__Inputs {
-  _call: DepositMaticCall;
-
-  constructor(call: DepositMaticCall) {
-    this._call = call;
-  }
-
-  get details(): DepositMaticCallDetailsStruct {
-    return changetype<DepositMaticCallDetailsStruct>(
-      this._call.inputValues[0].value.toTuple()
-    );
-  }
-}
-
-export class DepositMaticCall__Outputs {
-  _call: DepositMaticCall;
-
-  constructor(call: DepositMaticCall) {
-    this._call = call;
-  }
-}
-
-export class DepositMaticCallDetailsStruct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get lockedPercentage(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get liquidPercentage(): BigInt {
-    return this[2].toBigInt();
-  }
-}
-
-export class WithdrawCall extends ethereum.Call {
-  get inputs(): WithdrawCall__Inputs {
-    return new WithdrawCall__Inputs(this);
-  }
-
-  get outputs(): WithdrawCall__Outputs {
-    return new WithdrawCall__Outputs(this);
-  }
-}
-
-export class WithdrawCall__Inputs {
-  _call: WithdrawCall;
-
-  constructor(call: WithdrawCall) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get acctType(): i32 {
-    return this._call.inputValues[1].value.toI32();
-  }
-
-  get beneficiaryAddress(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
-  get beneficiaryEndowId(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-
-  get tokens(): Array<WithdrawCallTokensStruct> {
-    return this._call.inputValues[4].value.toTupleArray<
-      WithdrawCallTokensStruct
-    >();
-  }
-}
-
-export class WithdrawCall__Outputs {
-  _call: WithdrawCall;
-
-  constructor(call: WithdrawCall) {
-    this._call = call;
-  }
-}
-
-export class WithdrawCallTokensStruct extends ethereum.Tuple {
-  get addr(): Address {
-    return this[0].toAddress();
-  }
-
-  get amnt(): BigInt {
-    return this[1].toBigInt();
-  }
-}
-
-export class DepositDonationMatchErC20Call extends ethereum.Call {
-  get inputs(): DepositDonationMatchErC20Call__Inputs {
-    return new DepositDonationMatchErC20Call__Inputs(this);
-  }
-
-  get outputs(): DepositDonationMatchErC20Call__Outputs {
-    return new DepositDonationMatchErC20Call__Outputs(this);
-  }
-}
-
-export class DepositDonationMatchErC20Call__Inputs {
-  _call: DepositDonationMatchErC20Call;
-
-  constructor(call: DepositDonationMatchErC20Call) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
+  get endowId(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
   }
 
@@ -6507,112 +3340,146 @@ export class DepositDonationMatchErC20Call__Inputs {
   get amount(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
   }
-}
-
-export class DepositDonationMatchErC20Call__Outputs {
-  _call: DepositDonationMatchErC20Call;
-
-  constructor(call: DepositDonationMatchErC20Call) {
-    this._call = call;
-  }
-}
-
-export class SetupDonationMatchCall extends ethereum.Call {
-  get inputs(): SetupDonationMatchCall__Inputs {
-    return new SetupDonationMatchCall__Inputs(this);
-  }
-
-  get outputs(): SetupDonationMatchCall__Outputs {
-    return new SetupDonationMatchCall__Outputs(this);
-  }
-}
-
-export class SetupDonationMatchCall__Inputs {
-  _call: SetupDonationMatchCall;
-
-  constructor(call: SetupDonationMatchCall) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get details(): SetupDonationMatchCallDetailsStruct {
-    return changetype<SetupDonationMatchCallDetailsStruct>(
-      this._call.inputValues[1].value.toTuple()
-    );
-  }
-}
-
-export class SetupDonationMatchCall__Outputs {
-  _call: SetupDonationMatchCall;
-
-  constructor(call: SetupDonationMatchCall) {
-    this._call = call;
-  }
-}
-
-export class SetupDonationMatchCallDetailsStruct extends ethereum.Tuple {
-  get enumData(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): SetupDonationMatchCallDetailsDataStruct {
-    return changetype<SetupDonationMatchCallDetailsDataStruct>(
-      this[1].toTuple()
-    );
-  }
-}
-
-export class SetupDonationMatchCallDetailsDataStruct extends ethereum.Tuple {
-  get reserveToken(): Address {
-    return this[0].toAddress();
-  }
-
-  get uniswapFactory(): Address {
-    return this[1].toAddress();
-  }
-
-  get poolFee(): i32 {
-    return this[2].toI32();
-  }
-}
-
-export class WithdrawDonationMatchErC20Call extends ethereum.Call {
-  get inputs(): WithdrawDonationMatchErC20Call__Inputs {
-    return new WithdrawDonationMatchErC20Call__Inputs(this);
-  }
-
-  get outputs(): WithdrawDonationMatchErC20Call__Outputs {
-    return new WithdrawDonationMatchErC20Call__Outputs(this);
-  }
-}
-
-export class WithdrawDonationMatchErC20Call__Inputs {
-  _call: WithdrawDonationMatchErC20Call;
-
-  constructor(call: WithdrawDonationMatchErC20Call) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
 
   get recipient(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
+    return this._call.inputValues[3].value.toAddress();
   }
 }
 
-export class WithdrawDonationMatchErC20Call__Outputs {
-  _call: WithdrawDonationMatchErC20Call;
+export class SpendAllowanceCall__Outputs {
+  _call: SpendAllowanceCall;
 
-  constructor(call: WithdrawDonationMatchErC20Call) {
+  constructor(call: SpendAllowanceCall) {
+    this._call = call;
+  }
+}
+
+export class StrategyInvestCall extends ethereum.Call {
+  get inputs(): StrategyInvestCall__Inputs {
+    return new StrategyInvestCall__Inputs(this);
+  }
+
+  get outputs(): StrategyInvestCall__Outputs {
+    return new StrategyInvestCall__Outputs(this);
+  }
+}
+
+export class StrategyInvestCall__Inputs {
+  _call: StrategyInvestCall;
+
+  constructor(call: StrategyInvestCall) {
+    this._call = call;
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get strategy(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
+  }
+
+  get token(): string {
+    return this._call.inputValues[2].value.toString();
+  }
+
+  get lockAmt(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
+  }
+
+  get liquidAmt(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
+  }
+}
+
+export class StrategyInvestCall__Outputs {
+  _call: StrategyInvestCall;
+
+  constructor(call: StrategyInvestCall) {
+    this._call = call;
+  }
+}
+
+export class StrategyRedeemCall extends ethereum.Call {
+  get inputs(): StrategyRedeemCall__Inputs {
+    return new StrategyRedeemCall__Inputs(this);
+  }
+
+  get outputs(): StrategyRedeemCall__Outputs {
+    return new StrategyRedeemCall__Outputs(this);
+  }
+}
+
+export class StrategyRedeemCall__Inputs {
+  _call: StrategyRedeemCall;
+
+  constructor(call: StrategyRedeemCall) {
+    this._call = call;
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get strategy(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
+  }
+
+  get token(): string {
+    return this._call.inputValues[2].value.toString();
+  }
+
+  get lockAmt(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
+  }
+
+  get liquidAmt(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
+  }
+}
+
+export class StrategyRedeemCall__Outputs {
+  _call: StrategyRedeemCall;
+
+  constructor(call: StrategyRedeemCall) {
+    this._call = call;
+  }
+}
+
+export class StrategyRedeemAllCall extends ethereum.Call {
+  get inputs(): StrategyRedeemAllCall__Inputs {
+    return new StrategyRedeemAllCall__Inputs(this);
+  }
+
+  get outputs(): StrategyRedeemAllCall__Outputs {
+    return new StrategyRedeemAllCall__Outputs(this);
+  }
+}
+
+export class StrategyRedeemAllCall__Inputs {
+  _call: StrategyRedeemAllCall;
+
+  constructor(call: StrategyRedeemAllCall) {
+    this._call = call;
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get strategy(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
+  }
+
+  get token(): string {
+    return this._call.inputValues[2].value.toString();
+  }
+}
+
+export class StrategyRedeemAllCall__Outputs {
+  _call: StrategyRedeemAllCall;
+
+  constructor(call: StrategyRedeemAllCall) {
     this._call = call;
   }
 }
@@ -6667,6 +3534,48 @@ export class SwapTokenCall__Outputs {
   }
 }
 
+export class UpdateAcceptedTokenCall extends ethereum.Call {
+  get inputs(): UpdateAcceptedTokenCall__Inputs {
+    return new UpdateAcceptedTokenCall__Inputs(this);
+  }
+
+  get outputs(): UpdateAcceptedTokenCall__Outputs {
+    return new UpdateAcceptedTokenCall__Outputs(this);
+  }
+}
+
+export class UpdateAcceptedTokenCall__Inputs {
+  _call: UpdateAcceptedTokenCall;
+
+  constructor(call: UpdateAcceptedTokenCall) {
+    this._call = call;
+  }
+
+  get endowId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get tokenAddr(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get priceFeedAddr(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get tokenStatus(): boolean {
+    return this._call.inputValues[3].value.toBoolean();
+  }
+}
+
+export class UpdateAcceptedTokenCall__Outputs {
+  _call: UpdateAcceptedTokenCall;
+
+  constructor(call: UpdateAcceptedTokenCall) {
+    this._call = call;
+  }
+}
+
 export class UpdateConfigCall extends ethereum.Call {
   get inputs(): UpdateConfigCall__Inputs {
     return new UpdateConfigCall__Inputs(this);
@@ -6717,32 +3626,48 @@ export class UpdateConfigCallEarlyLockedWithdrawFeeStruct extends ethereum.Tuple
   }
 }
 
-export class UpdateOwnerCall extends ethereum.Call {
-  get inputs(): UpdateOwnerCall__Inputs {
-    return new UpdateOwnerCall__Inputs(this);
+export class UpdateDelegateCall extends ethereum.Call {
+  get inputs(): UpdateDelegateCall__Inputs {
+    return new UpdateDelegateCall__Inputs(this);
   }
 
-  get outputs(): UpdateOwnerCall__Outputs {
-    return new UpdateOwnerCall__Outputs(this);
+  get outputs(): UpdateDelegateCall__Outputs {
+    return new UpdateDelegateCall__Outputs(this);
   }
 }
 
-export class UpdateOwnerCall__Inputs {
-  _call: UpdateOwnerCall;
+export class UpdateDelegateCall__Inputs {
+  _call: UpdateDelegateCall;
 
-  constructor(call: UpdateOwnerCall) {
+  constructor(call: UpdateDelegateCall) {
     this._call = call;
   }
 
-  get newOwner(): Address {
-    return this._call.inputValues[0].value.toAddress();
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get setting(): i32 {
+    return this._call.inputValues[1].value.toI32();
+  }
+
+  get action(): i32 {
+    return this._call.inputValues[2].value.toI32();
+  }
+
+  get delegateAddress(): Address {
+    return this._call.inputValues[3].value.toAddress();
+  }
+
+  get delegateExpiry(): BigInt {
+    return this._call.inputValues[4].value.toBigInt();
   }
 }
 
-export class UpdateOwnerCall__Outputs {
-  _call: UpdateOwnerCall;
+export class UpdateDelegateCall__Outputs {
+  _call: UpdateDelegateCall;
 
-  constructor(call: UpdateOwnerCall) {
+  constructor(call: UpdateDelegateCall) {
     this._call = call;
   }
 }
@@ -7269,6 +4194,96 @@ export class UpdateEndowmentControllerCallDetailsSettingsControllerIgnoreUserSpl
   }
 }
 
+export class UpdateEndowmentDetailsCall extends ethereum.Call {
+  get inputs(): UpdateEndowmentDetailsCall__Inputs {
+    return new UpdateEndowmentDetailsCall__Inputs(this);
+  }
+
+  get outputs(): UpdateEndowmentDetailsCall__Outputs {
+    return new UpdateEndowmentDetailsCall__Outputs(this);
+  }
+}
+
+export class UpdateEndowmentDetailsCall__Inputs {
+  _call: UpdateEndowmentDetailsCall;
+
+  constructor(call: UpdateEndowmentDetailsCall) {
+    this._call = call;
+  }
+
+  get details(): UpdateEndowmentDetailsCallDetailsStruct {
+    return changetype<UpdateEndowmentDetailsCallDetailsStruct>(
+      this._call.inputValues[0].value.toTuple()
+    );
+  }
+}
+
+export class UpdateEndowmentDetailsCall__Outputs {
+  _call: UpdateEndowmentDetailsCall;
+
+  constructor(call: UpdateEndowmentDetailsCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateEndowmentDetailsCallDetailsStruct extends ethereum.Tuple {
+  get id(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get owner(): Address {
+    return this[1].toAddress();
+  }
+
+  get name(): string {
+    return this[2].toString();
+  }
+
+  get sdgs(): Array<BigInt> {
+    return this[3].toBigIntArray();
+  }
+
+  get logo(): string {
+    return this[4].toString();
+  }
+
+  get image(): string {
+    return this[5].toString();
+  }
+
+  get rebalance(): UpdateEndowmentDetailsCallDetailsRebalanceStruct {
+    return changetype<UpdateEndowmentDetailsCallDetailsRebalanceStruct>(
+      this[6].toTuple()
+    );
+  }
+}
+
+export class UpdateEndowmentDetailsCallDetailsRebalanceStruct extends ethereum.Tuple {
+  get rebalanceLiquidProfits(): boolean {
+    return this[0].toBoolean();
+  }
+
+  get lockedRebalanceToLiquid(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get interestDistribution(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get lockedPrincipleToLiquid(): boolean {
+    return this[3].toBoolean();
+  }
+
+  get principleDistribution(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get basis(): BigInt {
+    return this[5].toBigInt();
+  }
+}
+
 export class UpdateEndowmentSettingsCall extends ethereum.Call {
   get inputs(): UpdateEndowmentSettingsCall__Inputs {
     return new UpdateEndowmentSettingsCall__Inputs(this);
@@ -7457,62 +4472,50 @@ export class UpdateFeeSettingsCallDetailsBalanceFeeStruct extends ethereum.Tuple
   }
 }
 
-export class UpdateAcceptedTokenCall extends ethereum.Call {
-  get inputs(): UpdateAcceptedTokenCall__Inputs {
-    return new UpdateAcceptedTokenCall__Inputs(this);
+export class UpdateOwnerCall extends ethereum.Call {
+  get inputs(): UpdateOwnerCall__Inputs {
+    return new UpdateOwnerCall__Inputs(this);
   }
 
-  get outputs(): UpdateAcceptedTokenCall__Outputs {
-    return new UpdateAcceptedTokenCall__Outputs(this);
+  get outputs(): UpdateOwnerCall__Outputs {
+    return new UpdateOwnerCall__Outputs(this);
   }
 }
 
-export class UpdateAcceptedTokenCall__Inputs {
-  _call: UpdateAcceptedTokenCall;
+export class UpdateOwnerCall__Inputs {
+  _call: UpdateOwnerCall;
 
-  constructor(call: UpdateAcceptedTokenCall) {
+  constructor(call: UpdateOwnerCall) {
     this._call = call;
   }
 
-  get endowId(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get tokenAddr(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get priceFeedAddr(): Address {
-    return this._call.inputValues[2].value.toAddress();
-  }
-
-  get tokenStatus(): boolean {
-    return this._call.inputValues[3].value.toBoolean();
+  get newOwner(): Address {
+    return this._call.inputValues[0].value.toAddress();
   }
 }
 
-export class UpdateAcceptedTokenCall__Outputs {
-  _call: UpdateAcceptedTokenCall;
+export class UpdateOwnerCall__Outputs {
+  _call: UpdateOwnerCall;
 
-  constructor(call: UpdateAcceptedTokenCall) {
+  constructor(call: UpdateOwnerCall) {
     this._call = call;
   }
 }
 
-export class UpdateDelegateCall extends ethereum.Call {
-  get inputs(): UpdateDelegateCall__Inputs {
-    return new UpdateDelegateCall__Inputs(this);
+export class WithdrawCall extends ethereum.Call {
+  get inputs(): WithdrawCall__Inputs {
+    return new WithdrawCall__Inputs(this);
   }
 
-  get outputs(): UpdateDelegateCall__Outputs {
-    return new UpdateDelegateCall__Outputs(this);
+  get outputs(): WithdrawCall__Outputs {
+    return new WithdrawCall__Outputs(this);
   }
 }
 
-export class UpdateDelegateCall__Inputs {
-  _call: UpdateDelegateCall;
+export class WithdrawCall__Inputs {
+  _call: WithdrawCall;
 
-  constructor(call: UpdateDelegateCall) {
+  constructor(call: WithdrawCall) {
     this._call = call;
   }
 
@@ -7520,309 +4523,39 @@ export class UpdateDelegateCall__Inputs {
     return this._call.inputValues[0].value.toBigInt();
   }
 
-  get setting(): i32 {
+  get acctType(): i32 {
     return this._call.inputValues[1].value.toI32();
   }
 
-  get action(): i32 {
-    return this._call.inputValues[2].value.toI32();
+  get beneficiaryAddress(): Address {
+    return this._call.inputValues[2].value.toAddress();
   }
 
-  get delegateAddress(): Address {
-    return this._call.inputValues[3].value.toAddress();
+  get beneficiaryEndowId(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
   }
 
-  get delegateExpiry(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
+  get tokens(): Array<WithdrawCallTokensStruct> {
+    return this._call.inputValues[4].value.toTupleArray<
+      WithdrawCallTokensStruct
+    >();
   }
 }
 
-export class UpdateDelegateCall__Outputs {
-  _call: UpdateDelegateCall;
+export class WithdrawCall__Outputs {
+  _call: WithdrawCall;
 
-  constructor(call: UpdateDelegateCall) {
+  constructor(call: WithdrawCall) {
     this._call = call;
   }
 }
 
-export class UpdateEndowmentDetailsCall extends ethereum.Call {
-  get inputs(): UpdateEndowmentDetailsCall__Inputs {
-    return new UpdateEndowmentDetailsCall__Inputs(this);
-  }
-
-  get outputs(): UpdateEndowmentDetailsCall__Outputs {
-    return new UpdateEndowmentDetailsCall__Outputs(this);
-  }
-}
-
-export class UpdateEndowmentDetailsCall__Inputs {
-  _call: UpdateEndowmentDetailsCall;
-
-  constructor(call: UpdateEndowmentDetailsCall) {
-    this._call = call;
-  }
-
-  get details(): UpdateEndowmentDetailsCallDetailsStruct {
-    return changetype<UpdateEndowmentDetailsCallDetailsStruct>(
-      this._call.inputValues[0].value.toTuple()
-    );
-  }
-}
-
-export class UpdateEndowmentDetailsCall__Outputs {
-  _call: UpdateEndowmentDetailsCall;
-
-  constructor(call: UpdateEndowmentDetailsCall) {
-    this._call = call;
-  }
-}
-
-export class UpdateEndowmentDetailsCallDetailsStruct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get owner(): Address {
-    return this[1].toAddress();
-  }
-
-  get name(): string {
-    return this[2].toString();
-  }
-
-  get sdgs(): Array<BigInt> {
-    return this[3].toBigIntArray();
-  }
-
-  get logo(): string {
-    return this[4].toString();
-  }
-
-  get image(): string {
-    return this[5].toString();
-  }
-
-  get rebalance(): UpdateEndowmentDetailsCallDetailsRebalanceStruct {
-    return changetype<UpdateEndowmentDetailsCallDetailsRebalanceStruct>(
-      this[6].toTuple()
-    );
-  }
-}
-
-export class UpdateEndowmentDetailsCallDetailsRebalanceStruct extends ethereum.Tuple {
-  get rebalanceLiquidProfits(): boolean {
-    return this[0].toBoolean();
-  }
-
-  get lockedRebalanceToLiquid(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get interestDistribution(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get lockedPrincipleToLiquid(): boolean {
-    return this[3].toBoolean();
-  }
-
-  get principleDistribution(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get basis(): BigInt {
-    return this[5].toBigInt();
-  }
-}
-
-export class CloseEndowmentCall extends ethereum.Call {
-  get inputs(): CloseEndowmentCall__Inputs {
-    return new CloseEndowmentCall__Inputs(this);
-  }
-
-  get outputs(): CloseEndowmentCall__Outputs {
-    return new CloseEndowmentCall__Outputs(this);
-  }
-}
-
-export class CloseEndowmentCall__Inputs {
-  _call: CloseEndowmentCall;
-
-  constructor(call: CloseEndowmentCall) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get beneficiary(): CloseEndowmentCallBeneficiaryStruct {
-    return changetype<CloseEndowmentCallBeneficiaryStruct>(
-      this._call.inputValues[1].value.toTuple()
-    );
-  }
-}
-
-export class CloseEndowmentCall__Outputs {
-  _call: CloseEndowmentCall;
-
-  constructor(call: CloseEndowmentCall) {
-    this._call = call;
-  }
-}
-
-export class CloseEndowmentCallBeneficiaryStruct extends ethereum.Tuple {
-  get data(): CloseEndowmentCallBeneficiaryDataStruct {
-    return changetype<CloseEndowmentCallBeneficiaryDataStruct>(
-      this[0].toTuple()
-    );
-  }
-
-  get enumData(): i32 {
-    return this[1].toI32();
-  }
-}
-
-export class CloseEndowmentCallBeneficiaryDataStruct extends ethereum.Tuple {
-  get endowId(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get fundId(): BigInt {
-    return this[1].toBigInt();
-  }
-
+export class WithdrawCallTokensStruct extends ethereum.Tuple {
   get addr(): Address {
-    return this[2].toAddress();
-  }
-}
-
-export class StrategyInvestCall extends ethereum.Call {
-  get inputs(): StrategyInvestCall__Inputs {
-    return new StrategyInvestCall__Inputs(this);
+    return this[0].toAddress();
   }
 
-  get outputs(): StrategyInvestCall__Outputs {
-    return new StrategyInvestCall__Outputs(this);
-  }
-}
-
-export class StrategyInvestCall__Inputs {
-  _call: StrategyInvestCall;
-
-  constructor(call: StrategyInvestCall) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get strategy(): Bytes {
-    return this._call.inputValues[1].value.toBytes();
-  }
-
-  get token(): string {
-    return this._call.inputValues[2].value.toString();
-  }
-
-  get lockAmt(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-
-  get liquidAmt(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
-  }
-}
-
-export class StrategyInvestCall__Outputs {
-  _call: StrategyInvestCall;
-
-  constructor(call: StrategyInvestCall) {
-    this._call = call;
-  }
-}
-
-export class StrategyRedeemCall extends ethereum.Call {
-  get inputs(): StrategyRedeemCall__Inputs {
-    return new StrategyRedeemCall__Inputs(this);
-  }
-
-  get outputs(): StrategyRedeemCall__Outputs {
-    return new StrategyRedeemCall__Outputs(this);
-  }
-}
-
-export class StrategyRedeemCall__Inputs {
-  _call: StrategyRedeemCall;
-
-  constructor(call: StrategyRedeemCall) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get strategy(): Bytes {
-    return this._call.inputValues[1].value.toBytes();
-  }
-
-  get token(): string {
-    return this._call.inputValues[2].value.toString();
-  }
-
-  get lockAmt(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-
-  get liquidAmt(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
-  }
-}
-
-export class StrategyRedeemCall__Outputs {
-  _call: StrategyRedeemCall;
-
-  constructor(call: StrategyRedeemCall) {
-    this._call = call;
-  }
-}
-
-export class StrategyRedeemAllCall extends ethereum.Call {
-  get inputs(): StrategyRedeemAllCall__Inputs {
-    return new StrategyRedeemAllCall__Inputs(this);
-  }
-
-  get outputs(): StrategyRedeemAllCall__Outputs {
-    return new StrategyRedeemAllCall__Outputs(this);
-  }
-}
-
-export class StrategyRedeemAllCall__Inputs {
-  _call: StrategyRedeemAllCall;
-
-  constructor(call: StrategyRedeemAllCall) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get strategy(): Bytes {
-    return this._call.inputValues[1].value.toBytes();
-  }
-
-  get token(): string {
-    return this._call.inputValues[2].value.toString();
-  }
-}
-
-export class StrategyRedeemAllCall__Outputs {
-  _call: StrategyRedeemAllCall;
-
-  constructor(call: StrategyRedeemAllCall) {
-    this._call = call;
+  get amnt(): BigInt {
+    return this[1].toBigInt();
   }
 }

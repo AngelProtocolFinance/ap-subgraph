@@ -6,7 +6,7 @@ import {
   beforeAll,
   afterAll
 } from "matchstick-as/assembly/index"
-import { BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
+import { Bytes, Address, BigInt } from "@graphprotocol/graph-ts"
 import { Deposit } from "../generated/schema"
 import { Deposit as DepositEvent } from "../generated/Router/Router"
 import { handleDeposit } from "../src/router"

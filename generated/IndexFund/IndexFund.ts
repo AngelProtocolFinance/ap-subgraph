@@ -10,6 +10,24 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class ActiveFundUpdated extends ethereum.Event {
+  get params(): ActiveFundUpdated__Params {
+    return new ActiveFundUpdated__Params(this);
+  }
+}
+
+export class ActiveFundUpdated__Params {
+  _event: ActiveFundUpdated;
+
+  constructor(event: ActiveFundUpdated) {
+    this._event = event;
+  }
+
+  get fundId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
 export class ConfigUpdated extends ethereum.Event {
   get params(): ConfigUpdated__Params {
     return new ConfigUpdated__Params(this);
@@ -35,6 +53,10 @@ export class DonationMessagesUpdated__Params {
 
   constructor(event: DonationMessagesUpdated) {
     this._event = event;
+  }
+
+  get fundId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 }
 
@@ -92,28 +114,6 @@ export class Initialized__Params {
   }
 }
 
-export class MemberAdded extends ethereum.Event {
-  get params(): MemberAdded__Params {
-    return new MemberAdded__Params(this);
-  }
-}
-
-export class MemberAdded__Params {
-  _event: MemberAdded;
-
-  constructor(event: MemberAdded) {
-    this._event = event;
-  }
-
-  get fundId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get memberId(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
 export class MemberRemoved extends ethereum.Event {
   get params(): MemberRemoved__Params {
     return new MemberRemoved__Params(this);
@@ -133,6 +133,28 @@ export class MemberRemoved__Params {
 
   get memberId(): BigInt {
     return this._event.parameters[1].value.toBigInt();
+  }
+}
+
+export class MembersUpdated extends ethereum.Event {
+  get params(): MembersUpdated__Params {
+    return new MembersUpdated__Params(this);
+  }
+}
+
+export class MembersUpdated__Params {
+  _event: MembersUpdated;
+
+  constructor(event: MembersUpdated) {
+    this._event = event;
+  }
+
+  get fundId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get members(): Array<BigInt> {
+    return this._event.parameters[1].value.toBigIntArray();
   }
 }
 
@@ -172,34 +194,16 @@ export class RegistrarUpdated__Params {
   }
 }
 
-export class UpdateActiveFund extends ethereum.Event {
-  get params(): UpdateActiveFund__Params {
-    return new UpdateActiveFund__Params(this);
+export class StateUpdated extends ethereum.Event {
+  get params(): StateUpdated__Params {
+    return new StateUpdated__Params(this);
   }
 }
 
-export class UpdateActiveFund__Params {
-  _event: UpdateActiveFund;
+export class StateUpdated__Params {
+  _event: StateUpdated;
 
-  constructor(event: UpdateActiveFund) {
-    this._event = event;
-  }
-
-  get fundId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class UpdateIndexFundState extends ethereum.Event {
-  get params(): UpdateIndexFundState__Params {
-    return new UpdateIndexFundState__Params(this);
-  }
-}
-
-export class UpdateIndexFundState__Params {
-  _event: UpdateIndexFundState;
-
-  constructor(event: UpdateIndexFundState) {
+  constructor(event: StateUpdated) {
     this._event = event;
   }
 }

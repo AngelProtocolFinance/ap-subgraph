@@ -1,96 +1,91 @@
 import { newMockEvent } from "matchstick-as"
 import { ethereum, BigInt, Address, Bytes } from "@graphprotocol/graph-ts"
 import {
-  AccountsContractStorageChanged,
-  AngelProtocolParamsChanged,
-  DeleteNetworkConnection,
-  FeeUpdated,
+  AccountsContractStorageUpdated,
+  AngelProtocolParamsUpdated,
+  ConfigUpdated,
+  FeeSettingsUpdated,
   GasFeeUpdated,
   Initialized,
+  NetworkConnectionPosted,
+  NetworkConnectionRemoved,
   OwnershipTransferred,
-  PostNetworkConnection,
-  RebalanceParamsChanged,
-  StrategyApprovalChanged,
-  StrategyParamsChanged,
-  TokenAcceptanceChanged,
-  UpdateRegistrarConfig
+  RebalanceParamsUpdated,
+  StrategyApprovalUpdated,
+  StrategyParamsUpdated,
+  TokenAcceptanceUpdated
 } from "../generated/Registrar/Registrar"
 
-export function createAccountsContractStorageChangedEvent(
+export function createAccountsContractStorageUpdatedEvent(
   _chainName: string,
   _accountsContractAddress: string
-): AccountsContractStorageChanged {
-  let accountsContractStorageChangedEvent = changetype<
-    AccountsContractStorageChanged
+): AccountsContractStorageUpdated {
+  let accountsContractStorageUpdatedEvent = changetype<
+    AccountsContractStorageUpdated
   >(newMockEvent())
 
-  accountsContractStorageChangedEvent.parameters = new Array()
+  accountsContractStorageUpdatedEvent.parameters = new Array()
 
-  accountsContractStorageChangedEvent.parameters.push(
+  accountsContractStorageUpdatedEvent.parameters.push(
     new ethereum.EventParam("_chainName", ethereum.Value.fromString(_chainName))
   )
-  accountsContractStorageChangedEvent.parameters.push(
+  accountsContractStorageUpdatedEvent.parameters.push(
     new ethereum.EventParam(
       "_accountsContractAddress",
       ethereum.Value.fromString(_accountsContractAddress)
     )
   )
 
-  return accountsContractStorageChangedEvent
+  return accountsContractStorageUpdatedEvent
 }
 
-export function createAngelProtocolParamsChangedEvent(): AngelProtocolParamsChanged {
-  let angelProtocolParamsChangedEvent = changetype<AngelProtocolParamsChanged>(
+export function createAngelProtocolParamsUpdatedEvent(): AngelProtocolParamsUpdated {
+  let angelProtocolParamsUpdatedEvent = changetype<AngelProtocolParamsUpdated>(
     newMockEvent()
   )
 
-  angelProtocolParamsChangedEvent.parameters = new Array()
+  angelProtocolParamsUpdatedEvent.parameters = new Array()
 
-  return angelProtocolParamsChangedEvent
+  return angelProtocolParamsUpdatedEvent
 }
 
-export function createDeleteNetworkConnectionEvent(
-  chainId: BigInt
-): DeleteNetworkConnection {
-  let deleteNetworkConnectionEvent = changetype<DeleteNetworkConnection>(
-    newMockEvent()
-  )
+export function createConfigUpdatedEvent(): ConfigUpdated {
+  let configUpdatedEvent = changetype<ConfigUpdated>(newMockEvent())
 
-  deleteNetworkConnectionEvent.parameters = new Array()
+  configUpdatedEvent.parameters = new Array()
 
-  deleteNetworkConnectionEvent.parameters.push(
+  return configUpdatedEvent
+}
+
+export function createFeeSettingsUpdatedEvent(
+  _feeType: i32,
+  _bpsRate: BigInt,
+  _payoutAddress: Address
+): FeeSettingsUpdated {
+  let feeSettingsUpdatedEvent = changetype<FeeSettingsUpdated>(newMockEvent())
+
+  feeSettingsUpdatedEvent.parameters = new Array()
+
+  feeSettingsUpdatedEvent.parameters.push(
     new ethereum.EventParam(
-      "chainId",
-      ethereum.Value.fromUnsignedBigInt(chainId)
+      "_feeType",
+      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_feeType))
+    )
+  )
+  feeSettingsUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "_bpsRate",
+      ethereum.Value.fromUnsignedBigInt(_bpsRate)
+    )
+  )
+  feeSettingsUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "_payoutAddress",
+      ethereum.Value.fromAddress(_payoutAddress)
     )
   )
 
-  return deleteNetworkConnectionEvent
-}
-
-export function createFeeUpdatedEvent(
-  _fee: i32,
-  _rate: BigInt,
-  _payout: Address
-): FeeUpdated {
-  let feeUpdatedEvent = changetype<FeeUpdated>(newMockEvent())
-
-  feeUpdatedEvent.parameters = new Array()
-
-  feeUpdatedEvent.parameters.push(
-    new ethereum.EventParam(
-      "_fee",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_fee))
-    )
-  )
-  feeUpdatedEvent.parameters.push(
-    new ethereum.EventParam("_rate", ethereum.Value.fromUnsignedBigInt(_rate))
-  )
-  feeUpdatedEvent.parameters.push(
-    new ethereum.EventParam("_payout", ethereum.Value.fromAddress(_payout))
-  )
-
-  return feeUpdatedEvent
+  return feeSettingsUpdatedEvent
 }
 
 export function createGasFeeUpdatedEvent(
@@ -132,6 +127,44 @@ export function createInitializedEvent(version: i32): Initialized {
   return initializedEvent
 }
 
+export function createNetworkConnectionPostedEvent(
+  chainId: BigInt
+): NetworkConnectionPosted {
+  let networkConnectionPostedEvent = changetype<NetworkConnectionPosted>(
+    newMockEvent()
+  )
+
+  networkConnectionPostedEvent.parameters = new Array()
+
+  networkConnectionPostedEvent.parameters.push(
+    new ethereum.EventParam(
+      "chainId",
+      ethereum.Value.fromUnsignedBigInt(chainId)
+    )
+  )
+
+  return networkConnectionPostedEvent
+}
+
+export function createNetworkConnectionRemovedEvent(
+  chainId: BigInt
+): NetworkConnectionRemoved {
+  let networkConnectionRemovedEvent = changetype<NetworkConnectionRemoved>(
+    newMockEvent()
+  )
+
+  networkConnectionRemovedEvent.parameters = new Array()
+
+  networkConnectionRemovedEvent.parameters.push(
+    new ethereum.EventParam(
+      "chainId",
+      ethereum.Value.fromUnsignedBigInt(chainId)
+    )
+  )
+
+  return networkConnectionRemovedEvent
+}
+
 export function createOwnershipTransferredEvent(
   previousOwner: Address,
   newOwner: Address
@@ -155,127 +188,98 @@ export function createOwnershipTransferredEvent(
   return ownershipTransferredEvent
 }
 
-export function createPostNetworkConnectionEvent(
-  chainId: BigInt
-): PostNetworkConnection {
-  let postNetworkConnectionEvent = changetype<PostNetworkConnection>(
+export function createRebalanceParamsUpdatedEvent(): RebalanceParamsUpdated {
+  let rebalanceParamsUpdatedEvent = changetype<RebalanceParamsUpdated>(
     newMockEvent()
   )
 
-  postNetworkConnectionEvent.parameters = new Array()
+  rebalanceParamsUpdatedEvent.parameters = new Array()
 
-  postNetworkConnectionEvent.parameters.push(
-    new ethereum.EventParam(
-      "chainId",
-      ethereum.Value.fromUnsignedBigInt(chainId)
-    )
-  )
-
-  return postNetworkConnectionEvent
+  return rebalanceParamsUpdatedEvent
 }
 
-export function createRebalanceParamsChangedEvent(): RebalanceParamsChanged {
-  let rebalanceParamsChangedEvent = changetype<RebalanceParamsChanged>(
-    newMockEvent()
-  )
-
-  rebalanceParamsChangedEvent.parameters = new Array()
-
-  return rebalanceParamsChangedEvent
-}
-
-export function createStrategyApprovalChangedEvent(
+export function createStrategyApprovalUpdatedEvent(
   _strategyId: Bytes,
   _approvalState: i32
-): StrategyApprovalChanged {
-  let strategyApprovalChangedEvent = changetype<StrategyApprovalChanged>(
+): StrategyApprovalUpdated {
+  let strategyApprovalUpdatedEvent = changetype<StrategyApprovalUpdated>(
     newMockEvent()
   )
 
-  strategyApprovalChangedEvent.parameters = new Array()
+  strategyApprovalUpdatedEvent.parameters = new Array()
 
-  strategyApprovalChangedEvent.parameters.push(
+  strategyApprovalUpdatedEvent.parameters.push(
     new ethereum.EventParam(
       "_strategyId",
       ethereum.Value.fromFixedBytes(_strategyId)
     )
   )
-  strategyApprovalChangedEvent.parameters.push(
+  strategyApprovalUpdatedEvent.parameters.push(
     new ethereum.EventParam(
       "_approvalState",
       ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_approvalState))
     )
   )
 
-  return strategyApprovalChangedEvent
+  return strategyApprovalUpdatedEvent
 }
 
-export function createStrategyParamsChangedEvent(
+export function createStrategyParamsUpdatedEvent(
   _strategyId: Bytes,
   _lockAddr: Address,
   _liqAddr: Address,
   _approvalState: i32
-): StrategyParamsChanged {
-  let strategyParamsChangedEvent = changetype<StrategyParamsChanged>(
+): StrategyParamsUpdated {
+  let strategyParamsUpdatedEvent = changetype<StrategyParamsUpdated>(
     newMockEvent()
   )
 
-  strategyParamsChangedEvent.parameters = new Array()
+  strategyParamsUpdatedEvent.parameters = new Array()
 
-  strategyParamsChangedEvent.parameters.push(
+  strategyParamsUpdatedEvent.parameters.push(
     new ethereum.EventParam(
       "_strategyId",
       ethereum.Value.fromFixedBytes(_strategyId)
     )
   )
-  strategyParamsChangedEvent.parameters.push(
+  strategyParamsUpdatedEvent.parameters.push(
     new ethereum.EventParam("_lockAddr", ethereum.Value.fromAddress(_lockAddr))
   )
-  strategyParamsChangedEvent.parameters.push(
+  strategyParamsUpdatedEvent.parameters.push(
     new ethereum.EventParam("_liqAddr", ethereum.Value.fromAddress(_liqAddr))
   )
-  strategyParamsChangedEvent.parameters.push(
+  strategyParamsUpdatedEvent.parameters.push(
     new ethereum.EventParam(
       "_approvalState",
       ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_approvalState))
     )
   )
 
-  return strategyParamsChangedEvent
+  return strategyParamsUpdatedEvent
 }
 
-export function createTokenAcceptanceChangedEvent(
+export function createTokenAcceptanceUpdatedEvent(
   _tokenAddr: Address,
   _isAccepted: boolean
-): TokenAcceptanceChanged {
-  let tokenAcceptanceChangedEvent = changetype<TokenAcceptanceChanged>(
+): TokenAcceptanceUpdated {
+  let tokenAcceptanceUpdatedEvent = changetype<TokenAcceptanceUpdated>(
     newMockEvent()
   )
 
-  tokenAcceptanceChangedEvent.parameters = new Array()
+  tokenAcceptanceUpdatedEvent.parameters = new Array()
 
-  tokenAcceptanceChangedEvent.parameters.push(
+  tokenAcceptanceUpdatedEvent.parameters.push(
     new ethereum.EventParam(
       "_tokenAddr",
       ethereum.Value.fromAddress(_tokenAddr)
     )
   )
-  tokenAcceptanceChangedEvent.parameters.push(
+  tokenAcceptanceUpdatedEvent.parameters.push(
     new ethereum.EventParam(
       "_isAccepted",
       ethereum.Value.fromBoolean(_isAccepted)
     )
   )
 
-  return tokenAcceptanceChangedEvent
-}
-
-export function createUpdateRegistrarConfigEvent(): UpdateRegistrarConfig {
-  let updateRegistrarConfigEvent = changetype<UpdateRegistrarConfig>(
-    newMockEvent()
-  )
-
-  updateRegistrarConfigEvent.parameters = new Array()
-
-  return updateRegistrarConfigEvent
+  return tokenAcceptanceUpdatedEvent
 }

@@ -1,18 +1,32 @@
 import { newMockEvent } from "matchstick-as"
 import { ethereum, BigInt, Address } from "@graphprotocol/graph-ts"
 import {
+  ActiveFundUpdated,
   ConfigUpdated,
   DonationMessagesUpdated,
   IndexFundCreated,
   IndexFundRemoved,
   Initialized,
-  MemberAdded,
   MemberRemoved,
+  MembersUpdated,
   OwnerUpdated,
   RegistrarUpdated,
-  UpdateActiveFund,
-  UpdateIndexFundState
+  StateUpdated
 } from "../generated/IndexFund/IndexFund"
+
+export function createActiveFundUpdatedEvent(
+  fundId: BigInt
+): ActiveFundUpdated {
+  let activeFundUpdatedEvent = changetype<ActiveFundUpdated>(newMockEvent())
+
+  activeFundUpdatedEvent.parameters = new Array()
+
+  activeFundUpdatedEvent.parameters.push(
+    new ethereum.EventParam("fundId", ethereum.Value.fromUnsignedBigInt(fundId))
+  )
+
+  return activeFundUpdatedEvent
+}
 
 export function createConfigUpdatedEvent(): ConfigUpdated {
   let configUpdatedEvent = changetype<ConfigUpdated>(newMockEvent())
@@ -22,12 +36,18 @@ export function createConfigUpdatedEvent(): ConfigUpdated {
   return configUpdatedEvent
 }
 
-export function createDonationMessagesUpdatedEvent(): DonationMessagesUpdated {
+export function createDonationMessagesUpdatedEvent(
+  fundId: BigInt
+): DonationMessagesUpdated {
   let donationMessagesUpdatedEvent = changetype<DonationMessagesUpdated>(
     newMockEvent()
   )
 
   donationMessagesUpdatedEvent.parameters = new Array()
+
+  donationMessagesUpdatedEvent.parameters.push(
+    new ethereum.EventParam("fundId", ethereum.Value.fromUnsignedBigInt(fundId))
+  )
 
   return donationMessagesUpdatedEvent
 }
@@ -71,27 +91,6 @@ export function createInitializedEvent(version: i32): Initialized {
   return initializedEvent
 }
 
-export function createMemberAddedEvent(
-  fundId: BigInt,
-  memberId: BigInt
-): MemberAdded {
-  let memberAddedEvent = changetype<MemberAdded>(newMockEvent())
-
-  memberAddedEvent.parameters = new Array()
-
-  memberAddedEvent.parameters.push(
-    new ethereum.EventParam("fundId", ethereum.Value.fromUnsignedBigInt(fundId))
-  )
-  memberAddedEvent.parameters.push(
-    new ethereum.EventParam(
-      "memberId",
-      ethereum.Value.fromUnsignedBigInt(memberId)
-    )
-  )
-
-  return memberAddedEvent
-}
-
 export function createMemberRemovedEvent(
   fundId: BigInt,
   memberId: BigInt
@@ -111,6 +110,27 @@ export function createMemberRemovedEvent(
   )
 
   return memberRemovedEvent
+}
+
+export function createMembersUpdatedEvent(
+  fundId: BigInt,
+  members: Array<BigInt>
+): MembersUpdated {
+  let membersUpdatedEvent = changetype<MembersUpdated>(newMockEvent())
+
+  membersUpdatedEvent.parameters = new Array()
+
+  membersUpdatedEvent.parameters.push(
+    new ethereum.EventParam("fundId", ethereum.Value.fromUnsignedBigInt(fundId))
+  )
+  membersUpdatedEvent.parameters.push(
+    new ethereum.EventParam(
+      "members",
+      ethereum.Value.fromUnsignedBigIntArray(members)
+    )
+  )
+
+  return membersUpdatedEvent
 }
 
 export function createOwnerUpdatedEvent(newOwner: Address): OwnerUpdated {
@@ -142,24 +162,10 @@ export function createRegistrarUpdatedEvent(
   return registrarUpdatedEvent
 }
 
-export function createUpdateActiveFundEvent(fundId: BigInt): UpdateActiveFund {
-  let updateActiveFundEvent = changetype<UpdateActiveFund>(newMockEvent())
+export function createStateUpdatedEvent(): StateUpdated {
+  let stateUpdatedEvent = changetype<StateUpdated>(newMockEvent())
 
-  updateActiveFundEvent.parameters = new Array()
+  stateUpdatedEvent.parameters = new Array()
 
-  updateActiveFundEvent.parameters.push(
-    new ethereum.EventParam("fundId", ethereum.Value.fromUnsignedBigInt(fundId))
-  )
-
-  return updateActiveFundEvent
-}
-
-export function createUpdateIndexFundStateEvent(): UpdateIndexFundState {
-  let updateIndexFundStateEvent = changetype<UpdateIndexFundState>(
-    newMockEvent()
-  )
-
-  updateIndexFundStateEvent.parameters = new Array()
-
-  return updateIndexFundStateEvent
+  return stateUpdatedEvent
 }

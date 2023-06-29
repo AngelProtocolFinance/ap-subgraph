@@ -1,15 +1,15 @@
 import { newMockEvent } from "matchstick-as"
-import { ethereum, BigInt, Bytes, Address } from "@graphprotocol/graph-ts"
+import { ethereum, Bytes, Address, BigInt } from "@graphprotocol/graph-ts"
 import {
   Deposit,
-  FallbackRefund,
-  Harvest,
+  ErrorBytesLogged,
+  ErrorLogged,
   Initialized,
-  LogError,
-  LogErrorBytes,
   OwnershipTransferred,
-  Redemption,
-  TokensSent
+  Redeem,
+  Refund,
+  RewardsHarvested,
+  Transfer
 } from "../generated/Router/Router"
 
 export function createDepositEvent(action: ethereum.Tuple): Deposit {
@@ -24,34 +24,40 @@ export function createDepositEvent(action: ethereum.Tuple): Deposit {
   return depositEvent
 }
 
-export function createFallbackRefundEvent(
+export function createErrorBytesLoggedEvent(
   action: ethereum.Tuple,
-  amount: BigInt
-): FallbackRefund {
-  let fallbackRefundEvent = changetype<FallbackRefund>(newMockEvent())
+  data: Bytes
+): ErrorBytesLogged {
+  let errorBytesLoggedEvent = changetype<ErrorBytesLogged>(newMockEvent())
 
-  fallbackRefundEvent.parameters = new Array()
+  errorBytesLoggedEvent.parameters = new Array()
 
-  fallbackRefundEvent.parameters.push(
+  errorBytesLoggedEvent.parameters.push(
     new ethereum.EventParam("action", ethereum.Value.fromTuple(action))
   )
-  fallbackRefundEvent.parameters.push(
-    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+  errorBytesLoggedEvent.parameters.push(
+    new ethereum.EventParam("data", ethereum.Value.fromBytes(data))
   )
 
-  return fallbackRefundEvent
+  return errorBytesLoggedEvent
 }
 
-export function createHarvestEvent(action: ethereum.Tuple): Harvest {
-  let harvestEvent = changetype<Harvest>(newMockEvent())
+export function createErrorLoggedEvent(
+  action: ethereum.Tuple,
+  message: string
+): ErrorLogged {
+  let errorLoggedEvent = changetype<ErrorLogged>(newMockEvent())
 
-  harvestEvent.parameters = new Array()
+  errorLoggedEvent.parameters = new Array()
 
-  harvestEvent.parameters.push(
+  errorLoggedEvent.parameters.push(
     new ethereum.EventParam("action", ethereum.Value.fromTuple(action))
   )
+  errorLoggedEvent.parameters.push(
+    new ethereum.EventParam("message", ethereum.Value.fromString(message))
+  )
 
-  return harvestEvent
+  return errorLoggedEvent
 }
 
 export function createInitializedEvent(version: i32): Initialized {
@@ -67,42 +73,6 @@ export function createInitializedEvent(version: i32): Initialized {
   )
 
   return initializedEvent
-}
-
-export function createLogErrorEvent(
-  action: ethereum.Tuple,
-  message: string
-): LogError {
-  let logErrorEvent = changetype<LogError>(newMockEvent())
-
-  logErrorEvent.parameters = new Array()
-
-  logErrorEvent.parameters.push(
-    new ethereum.EventParam("action", ethereum.Value.fromTuple(action))
-  )
-  logErrorEvent.parameters.push(
-    new ethereum.EventParam("message", ethereum.Value.fromString(message))
-  )
-
-  return logErrorEvent
-}
-
-export function createLogErrorBytesEvent(
-  action: ethereum.Tuple,
-  data: Bytes
-): LogErrorBytes {
-  let logErrorBytesEvent = changetype<LogErrorBytes>(newMockEvent())
-
-  logErrorBytesEvent.parameters = new Array()
-
-  logErrorBytesEvent.parameters.push(
-    new ethereum.EventParam("action", ethereum.Value.fromTuple(action))
-  )
-  logErrorBytesEvent.parameters.push(
-    new ethereum.EventParam("data", ethereum.Value.fromBytes(data))
-  )
-
-  return logErrorBytesEvent
 }
 
 export function createOwnershipTransferredEvent(
@@ -128,38 +98,70 @@ export function createOwnershipTransferredEvent(
   return ownershipTransferredEvent
 }
 
-export function createRedemptionEvent(
+export function createRedeemEvent(
   action: ethereum.Tuple,
   amount: BigInt
-): Redemption {
-  let redemptionEvent = changetype<Redemption>(newMockEvent())
+): Redeem {
+  let redeemEvent = changetype<Redeem>(newMockEvent())
 
-  redemptionEvent.parameters = new Array()
+  redeemEvent.parameters = new Array()
 
-  redemptionEvent.parameters.push(
+  redeemEvent.parameters.push(
     new ethereum.EventParam("action", ethereum.Value.fromTuple(action))
   )
-  redemptionEvent.parameters.push(
+  redeemEvent.parameters.push(
     new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
   )
 
-  return redemptionEvent
+  return redeemEvent
 }
 
-export function createTokensSentEvent(
+export function createRefundEvent(
   action: ethereum.Tuple,
   amount: BigInt
-): TokensSent {
-  let tokensSentEvent = changetype<TokensSent>(newMockEvent())
+): Refund {
+  let refundEvent = changetype<Refund>(newMockEvent())
 
-  tokensSentEvent.parameters = new Array()
+  refundEvent.parameters = new Array()
 
-  tokensSentEvent.parameters.push(
+  refundEvent.parameters.push(
     new ethereum.EventParam("action", ethereum.Value.fromTuple(action))
   )
-  tokensSentEvent.parameters.push(
+  refundEvent.parameters.push(
     new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
   )
 
-  return tokensSentEvent
+  return refundEvent
+}
+
+export function createRewardsHarvestedEvent(
+  action: ethereum.Tuple
+): RewardsHarvested {
+  let rewardsHarvestedEvent = changetype<RewardsHarvested>(newMockEvent())
+
+  rewardsHarvestedEvent.parameters = new Array()
+
+  rewardsHarvestedEvent.parameters.push(
+    new ethereum.EventParam("action", ethereum.Value.fromTuple(action))
+  )
+
+  return rewardsHarvestedEvent
+}
+
+export function createTransferEvent(
+  action: ethereum.Tuple,
+  amount: BigInt
+): Transfer {
+  let transferEvent = changetype<Transfer>(newMockEvent())
+
+  transferEvent.parameters = new Array()
+
+  transferEvent.parameters.push(
+    new ethereum.EventParam("action", ethereum.Value.fromTuple(action))
+  )
+  transferEvent.parameters.push(
+    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+  )
+
+  return transferEvent
 }

@@ -1,13 +1,13 @@
 {
-  "name": "ap-subgraph",
+  "name": "angel-giving",
   "license": "UNLICENSED",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ ap-subgraph",
-    "create-local": "graph create --node http://localhost:8020/ ap-subgraph",
-    "remove-local": "graph remove --node http://localhost:8020/ ap-subgraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 ap-subgraph",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ angel-giving",
+    "create-local": "graph create --node http://localhost:8020/ angel-giving",
+    "remove-local": "graph remove --node http://localhost:8020/ angel-giving",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 angel-giving",
     "test": "graph test"
   },
   "dependencies": {

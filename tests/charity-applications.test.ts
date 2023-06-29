@@ -7,10 +7,10 @@ import {
   afterAll
 } from "matchstick-as/assembly/index"
 import { BigInt, Address } from "@graphprotocol/graph-ts"
-import { CharityApproved } from "../generated/schema"
-import { CharityApproved as CharityApprovedEvent } from "../generated/CharityApplication/CharityApplication"
-import { handleCharityApproved } from "../src/charity-application"
-import { createCharityApprovedEvent } from "./charity-application-utils"
+import { ApplicationConfirmationRevoked } from "../generated/schema"
+import { ApplicationConfirmationRevoked as ApplicationConfirmationRevokedEvent } from "../generated/CharityApplications/CharityApplications"
+import { handleApplicationConfirmationRevoked } from "../src/charity-applications"
+import { createApplicationConfirmationRevokedEvent } from "./charity-applications-utils"
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0
@@ -18,12 +18,12 @@ import { createCharityApprovedEvent } from "./charity-application-utils"
 describe("Describe entity assertions", () => {
   beforeAll(() => {
     let proposalId = BigInt.fromI32(234)
-    let endowmentId = BigInt.fromI32(234)
-    let newCharityApprovedEvent = createCharityApprovedEvent(
+    let owner = Address.fromString("0x0000000000000000000000000000000000000001")
+    let newApplicationConfirmationRevokedEvent = createApplicationConfirmationRevokedEvent(
       proposalId,
-      endowmentId
+      owner
     )
-    handleCharityApproved(newCharityApprovedEvent)
+    handleApplicationConfirmationRevoked(newApplicationConfirmationRevokedEvent)
   })
 
   afterAll(() => {
@@ -33,21 +33,21 @@ describe("Describe entity assertions", () => {
   // For more test scenarios, see:
   // https://thegraph.com/docs/en/developer/matchstick/#write-a-unit-test
 
-  test("CharityApproved created and stored", () => {
-    assert.entityCount("CharityApproved", 1)
+  test("ApplicationConfirmationRevoked created and stored", () => {
+    assert.entityCount("ApplicationConfirmationRevoked", 1)
 
     // 0xa16081f360e3847006db660bae1c6d1b2e17ec2a is the default address used in newMockEvent() function
     assert.fieldEquals(
-      "CharityApproved",
+      "ApplicationConfirmationRevoked",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
       "proposalId",
       "234"
     )
     assert.fieldEquals(
-      "CharityApproved",
+      "ApplicationConfirmationRevoked",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a-1",
-      "endowmentId",
-      "234"
+      "owner",
+      "0x0000000000000000000000000000000000000001"
     )
 
     // More assert options:

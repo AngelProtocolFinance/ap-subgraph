@@ -10,16 +10,34 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class Confirmation extends ethereum.Event {
-  get params(): Confirmation__Params {
-    return new Confirmation__Params(this);
+export class ApprovalsRequiredChanged extends ethereum.Event {
+  get params(): ApprovalsRequiredChanged__Params {
+    return new ApprovalsRequiredChanged__Params(this);
   }
 }
 
-export class Confirmation__Params {
-  _event: Confirmation;
+export class ApprovalsRequiredChanged__Params {
+  _event: ApprovalsRequiredChanged;
 
-  constructor(event: Confirmation) {
+  constructor(event: ApprovalsRequiredChanged) {
+    this._event = event;
+  }
+
+  get approvalsRequired(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
+export class ConfirmationRevoked extends ethereum.Event {
+  get params(): ConfirmationRevoked__Params {
+    return new ConfirmationRevoked__Params(this);
+  }
+}
+
+export class ConfirmationRevoked__Params {
+  _event: ConfirmationRevoked;
+
+  constructor(event: ConfirmationRevoked) {
     this._event = event;
   }
 
@@ -49,62 +67,8 @@ export class Deposit__Params {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get value(): BigInt {
+  get amount(): BigInt {
     return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class Execution extends ethereum.Event {
-  get params(): Execution__Params {
-    return new Execution__Params(this);
-  }
-}
-
-export class Execution__Params {
-  _event: Execution;
-
-  constructor(event: Execution) {
-    this._event = event;
-  }
-
-  get transactionId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class ExecutionFailure extends ethereum.Event {
-  get params(): ExecutionFailure__Params {
-    return new ExecutionFailure__Params(this);
-  }
-}
-
-export class ExecutionFailure__Params {
-  _event: ExecutionFailure;
-
-  constructor(event: ExecutionFailure) {
-    this._event = event;
-  }
-
-  get transactionId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class ExecutionRequiredChange extends ethereum.Event {
-  get params(): ExecutionRequiredChange__Params {
-    return new ExecutionRequiredChange__Params(this);
-  }
-}
-
-export class ExecutionRequiredChange__Params {
-  _event: ExecutionRequiredChange;
-
-  constructor(event: ExecutionRequiredChange) {
-    this._event = event;
-  }
-
-  get requireExecution(): boolean {
-    return this._event.parameters[0].value.toBoolean();
   }
 }
 
@@ -126,16 +90,16 @@ export class Initialized__Params {
   }
 }
 
-export class OwnerAddition extends ethereum.Event {
-  get params(): OwnerAddition__Params {
-    return new OwnerAddition__Params(this);
+export class OwnerAdded extends ethereum.Event {
+  get params(): OwnerAdded__Params {
+    return new OwnerAdded__Params(this);
   }
 }
 
-export class OwnerAddition__Params {
-  _event: OwnerAddition;
+export class OwnerAdded__Params {
+  _event: OwnerAdded;
 
-  constructor(event: OwnerAddition) {
+  constructor(event: OwnerAdded) {
     this._event = event;
   }
 
@@ -144,16 +108,16 @@ export class OwnerAddition__Params {
   }
 }
 
-export class OwnerRemoval extends ethereum.Event {
-  get params(): OwnerRemoval__Params {
-    return new OwnerRemoval__Params(this);
+export class OwnerRemoved extends ethereum.Event {
+  get params(): OwnerRemoved__Params {
+    return new OwnerRemoved__Params(this);
   }
 }
 
-export class OwnerRemoval__Params {
-  _event: OwnerRemoval;
+export class OwnerRemoved__Params {
+  _event: OwnerRemoved;
 
-  constructor(event: OwnerRemoval) {
+  constructor(event: OwnerRemoved) {
     this._event = event;
   }
 
@@ -162,34 +126,34 @@ export class OwnerRemoval__Params {
   }
 }
 
-export class RequirementChange extends ethereum.Event {
-  get params(): RequirementChange__Params {
-    return new RequirementChange__Params(this);
+export class RequireExecutionChanged extends ethereum.Event {
+  get params(): RequireExecutionChanged__Params {
+    return new RequireExecutionChanged__Params(this);
   }
 }
 
-export class RequirementChange__Params {
-  _event: RequirementChange;
+export class RequireExecutionChanged__Params {
+  _event: RequireExecutionChanged;
 
-  constructor(event: RequirementChange) {
+  constructor(event: RequireExecutionChanged) {
     this._event = event;
   }
 
-  get required(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+  get requireExecution(): boolean {
+    return this._event.parameters[0].value.toBoolean();
   }
 }
 
-export class Revocation extends ethereum.Event {
-  get params(): Revocation__Params {
-    return new Revocation__Params(this);
+export class TransactionConfirmed extends ethereum.Event {
+  get params(): TransactionConfirmed__Params {
+    return new TransactionConfirmed__Params(this);
   }
 }
 
-export class Revocation__Params {
-  _event: Revocation;
+export class TransactionConfirmed__Params {
+  _event: TransactionConfirmed;
 
-  constructor(event: Revocation) {
+  constructor(event: TransactionConfirmed) {
     this._event = event;
   }
 
@@ -202,16 +166,16 @@ export class Revocation__Params {
   }
 }
 
-export class Submission extends ethereum.Event {
-  get params(): Submission__Params {
-    return new Submission__Params(this);
+export class TransactionExecuted extends ethereum.Event {
+  get params(): TransactionExecuted__Params {
+    return new TransactionExecuted__Params(this);
   }
 }
 
-export class Submission__Params {
-  _event: Submission;
+export class TransactionExecuted__Params {
+  _event: TransactionExecuted;
 
-  constructor(event: Submission) {
+  constructor(event: TransactionExecuted) {
     this._event = event;
   }
 
@@ -220,23 +184,61 @@ export class Submission__Params {
   }
 }
 
+export class TransactionExpiryChanged extends ethereum.Event {
+  get params(): TransactionExpiryChanged__Params {
+    return new TransactionExpiryChanged__Params(this);
+  }
+}
+
+export class TransactionExpiryChanged__Params {
+  _event: TransactionExpiryChanged;
+
+  constructor(event: TransactionExpiryChanged) {
+    this._event = event;
+  }
+
+  get transactionExpiry(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
+export class TransactionSubmitted extends ethereum.Event {
+  get params(): TransactionSubmitted__Params {
+    return new TransactionSubmitted__Params(this);
+  }
+}
+
+export class TransactionSubmitted__Params {
+  _event: TransactionSubmitted;
+
+  constructor(event: TransactionSubmitted) {
+    this._event = event;
+  }
+
+  get sender(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get transactionId(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
 export class APTeamMultiSig__transactionsResult {
-  value0: string;
-  value1: string;
-  value2: Address;
-  value3: BigInt;
-  value4: Bytes;
-  value5: boolean;
-  value6: Bytes;
+  value0: Address;
+  value1: BigInt;
+  value2: Bytes;
+  value3: boolean;
+  value4: BigInt;
+  value5: Bytes;
 
   constructor(
-    value0: string,
-    value1: string,
-    value2: Address,
-    value3: BigInt,
-    value4: Bytes,
-    value5: boolean,
-    value6: Bytes
+    value0: Address,
+    value1: BigInt,
+    value2: Bytes,
+    value3: boolean,
+    value4: BigInt,
+    value5: Bytes
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -244,47 +246,41 @@ export class APTeamMultiSig__transactionsResult {
     this.value3 = value3;
     this.value4 = value4;
     this.value5 = value5;
-    this.value6 = value6;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromString(this.value0));
-    map.set("value1", ethereum.Value.fromString(this.value1));
-    map.set("value2", ethereum.Value.fromAddress(this.value2));
-    map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
-    map.set("value4", ethereum.Value.fromBytes(this.value4));
-    map.set("value5", ethereum.Value.fromBoolean(this.value5));
-    map.set("value6", ethereum.Value.fromBytes(this.value6));
+    map.set("value0", ethereum.Value.fromAddress(this.value0));
+    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
+    map.set("value2", ethereum.Value.fromBytes(this.value2));
+    map.set("value3", ethereum.Value.fromBoolean(this.value3));
+    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
+    map.set("value5", ethereum.Value.fromBytes(this.value5));
     return map;
   }
 
-  getTitle(): string {
+  getDestination(): Address {
     return this.value0;
   }
 
-  getDescription(): string {
+  getValue(): BigInt {
     return this.value1;
   }
 
-  getDestination(): Address {
+  getData(): Bytes {
     return this.value2;
   }
 
-  getValue(): BigInt {
+  getExecuted(): boolean {
     return this.value3;
   }
 
-  getData(): Bytes {
+  getExpiry(): BigInt {
     return this.value4;
   }
 
-  getExecuted(): boolean {
-    return this.value5;
-  }
-
   getMetadata(): Bytes {
-    return this.value6;
+    return this.value5;
   }
 }
 
@@ -293,20 +289,20 @@ export class APTeamMultiSig extends ethereum.SmartContract {
     return new APTeamMultiSig("APTeamMultiSig", address);
   }
 
-  MAX_OWNER_COUNT(): BigInt {
+  activeOwnersCount(): BigInt {
     let result = super.call(
-      "MAX_OWNER_COUNT",
-      "MAX_OWNER_COUNT():(uint256)",
+      "activeOwnersCount",
+      "activeOwnersCount():(uint256)",
       []
     );
 
     return result[0].toBigInt();
   }
 
-  try_MAX_OWNER_COUNT(): ethereum.CallResult<BigInt> {
+  try_activeOwnersCount(): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "MAX_OWNER_COUNT",
-      "MAX_OWNER_COUNT():(uint256)",
+      "activeOwnersCount",
+      "activeOwnersCount():(uint256)",
       []
     );
     if (result.reverted) {
@@ -316,36 +312,50 @@ export class APTeamMultiSig extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  confirmations(param0: BigInt, param1: Address): boolean {
+  approvalsRequired(): BigInt {
     let result = super.call(
-      "confirmations",
-      "confirmations(uint256,address):(bool)",
-      [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1)
-      ]
+      "approvalsRequired",
+      "approvalsRequired():(uint256)",
+      []
     );
 
-    return result[0].toBoolean();
+    return result[0].toBigInt();
   }
 
-  try_confirmations(
-    param0: BigInt,
-    param1: Address
-  ): ethereum.CallResult<boolean> {
+  try_approvalsRequired(): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "confirmations",
-      "confirmations(uint256,address):(bool)",
-      [
-        ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1)
-      ]
+      "approvalsRequired",
+      "approvalsRequired():(uint256)",
+      []
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  confirmations(param0: BigInt): BigInt {
+    let result = super.call(
+      "confirmations",
+      "confirmations(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_confirmations(param0: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "confirmations",
+      "confirmations(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   getConfirmationCount(transactionId: BigInt): BigInt {
@@ -371,119 +381,59 @@ export class APTeamMultiSig extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getConfirmations(transactionId: BigInt): Array<Address> {
+  getConfirmationStatus(transactionId: BigInt, ownerAddr: Address): boolean {
     let result = super.call(
-      "getConfirmations",
-      "getConfirmations(uint256):(address[])",
-      [ethereum.Value.fromUnsignedBigInt(transactionId)]
+      "getConfirmationStatus",
+      "getConfirmationStatus(uint256,address):(bool)",
+      [
+        ethereum.Value.fromUnsignedBigInt(transactionId),
+        ethereum.Value.fromAddress(ownerAddr)
+      ]
     );
 
-    return result[0].toAddressArray();
+    return result[0].toBoolean();
   }
 
-  try_getConfirmations(
-    transactionId: BigInt
-  ): ethereum.CallResult<Array<Address>> {
+  try_getConfirmationStatus(
+    transactionId: BigInt,
+    ownerAddr: Address
+  ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
-      "getConfirmations",
-      "getConfirmations(uint256):(address[])",
-      [ethereum.Value.fromUnsignedBigInt(transactionId)]
+      "getConfirmationStatus",
+      "getConfirmationStatus(uint256,address):(bool)",
+      [
+        ethereum.Value.fromUnsignedBigInt(transactionId),
+        ethereum.Value.fromAddress(ownerAddr)
+      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddressArray());
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  getOwners(): Array<Address> {
-    let result = super.call("getOwners", "getOwners():(address[])", []);
-
-    return result[0].toAddressArray();
-  }
-
-  try_getOwners(): ethereum.CallResult<Array<Address>> {
-    let result = super.tryCall("getOwners", "getOwners():(address[])", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddressArray());
-  }
-
-  getTransactionCount(pending: boolean, executed: boolean): BigInt {
+  getOwnerStatus(ownerAddr: Address): boolean {
     let result = super.call(
-      "getTransactionCount",
-      "getTransactionCount(bool,bool):(uint256)",
-      [
-        ethereum.Value.fromBoolean(pending),
-        ethereum.Value.fromBoolean(executed)
-      ]
+      "getOwnerStatus",
+      "getOwnerStatus(address):(bool)",
+      [ethereum.Value.fromAddress(ownerAddr)]
     );
 
-    return result[0].toBigInt();
+    return result[0].toBoolean();
   }
 
-  try_getTransactionCount(
-    pending: boolean,
-    executed: boolean
-  ): ethereum.CallResult<BigInt> {
+  try_getOwnerStatus(ownerAddr: Address): ethereum.CallResult<boolean> {
     let result = super.tryCall(
-      "getTransactionCount",
-      "getTransactionCount(bool,bool):(uint256)",
-      [
-        ethereum.Value.fromBoolean(pending),
-        ethereum.Value.fromBoolean(executed)
-      ]
+      "getOwnerStatus",
+      "getOwnerStatus(address):(bool)",
+      [ethereum.Value.fromAddress(ownerAddr)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  getTransactionIds(
-    from: BigInt,
-    to: BigInt,
-    pending: boolean,
-    executed: boolean
-  ): Array<BigInt> {
-    let result = super.call(
-      "getTransactionIds",
-      "getTransactionIds(uint256,uint256,bool,bool):(uint256[])",
-      [
-        ethereum.Value.fromUnsignedBigInt(from),
-        ethereum.Value.fromUnsignedBigInt(to),
-        ethereum.Value.fromBoolean(pending),
-        ethereum.Value.fromBoolean(executed)
-      ]
-    );
-
-    return result[0].toBigIntArray();
-  }
-
-  try_getTransactionIds(
-    from: BigInt,
-    to: BigInt,
-    pending: boolean,
-    executed: boolean
-  ): ethereum.CallResult<Array<BigInt>> {
-    let result = super.tryCall(
-      "getTransactionIds",
-      "getTransactionIds(uint256,uint256,bool,bool):(uint256[])",
-      [
-        ethereum.Value.fromUnsignedBigInt(from),
-        ethereum.Value.fromUnsignedBigInt(to),
-        ethereum.Value.fromBoolean(pending),
-        ethereum.Value.fromBoolean(executed)
-      ]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   isConfirmed(transactionId: BigInt): boolean {
@@ -524,25 +474,6 @@ export class APTeamMultiSig extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  owners(param0: BigInt): Address {
-    let result = super.call("owners", "owners(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(param0)
-    ]);
-
-    return result[0].toAddress();
-  }
-
-  try_owners(param0: BigInt): ethereum.CallResult<Address> {
-    let result = super.tryCall("owners", "owners(uint256):(address)", [
-      ethereum.Value.fromUnsignedBigInt(param0)
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   requireExecution(): boolean {
     let result = super.call(
       "requireExecution",
@@ -566,24 +497,7 @@ export class APTeamMultiSig extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  required(): BigInt {
-    let result = super.call("required", "required():(uint256)", []);
-
-    return result[0].toBigInt();
-  }
-
-  try_required(): ethereum.CallResult<BigInt> {
-    let result = super.tryCall("required", "required():(uint256)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
   submitTransaction(
-    title: string,
-    description: string,
     destination: Address,
     value: BigInt,
     data: Bytes,
@@ -591,10 +505,8 @@ export class APTeamMultiSig extends ethereum.SmartContract {
   ): BigInt {
     let result = super.call(
       "submitTransaction",
-      "submitTransaction(string,string,address,uint256,bytes,bytes):(uint256)",
+      "submitTransaction(address,uint256,bytes,bytes):(uint256)",
       [
-        ethereum.Value.fromString(title),
-        ethereum.Value.fromString(description),
         ethereum.Value.fromAddress(destination),
         ethereum.Value.fromUnsignedBigInt(value),
         ethereum.Value.fromBytes(data),
@@ -606,8 +518,6 @@ export class APTeamMultiSig extends ethereum.SmartContract {
   }
 
   try_submitTransaction(
-    title: string,
-    description: string,
     destination: Address,
     value: BigInt,
     data: Bytes,
@@ -615,10 +525,8 @@ export class APTeamMultiSig extends ethereum.SmartContract {
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "submitTransaction",
-      "submitTransaction(string,string,address,uint256,bytes,bytes):(uint256)",
+      "submitTransaction(address,uint256,bytes,bytes):(uint256)",
       [
-        ethereum.Value.fromString(title),
-        ethereum.Value.fromString(description),
         ethereum.Value.fromAddress(destination),
         ethereum.Value.fromUnsignedBigInt(value),
         ethereum.Value.fromBytes(data),
@@ -678,21 +586,43 @@ export class APTeamMultiSig extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  transactionExpiry(): BigInt {
+    let result = super.call(
+      "transactionExpiry",
+      "transactionExpiry():(uint256)",
+      []
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_transactionExpiry(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "transactionExpiry",
+      "transactionExpiry():(uint256)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   transactions(param0: BigInt): APTeamMultiSig__transactionsResult {
     let result = super.call(
       "transactions",
-      "transactions(uint256):(string,string,address,uint256,bytes,bool,bytes)",
+      "transactions(uint256):(address,uint256,bytes,bool,uint256,bytes)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
     return new APTeamMultiSig__transactionsResult(
-      result[0].toString(),
-      result[1].toString(),
-      result[2].toAddress(),
-      result[3].toBigInt(),
-      result[4].toBytes(),
-      result[5].toBoolean(),
-      result[6].toBytes()
+      result[0].toAddress(),
+      result[1].toBigInt(),
+      result[2].toBytes(),
+      result[3].toBoolean(),
+      result[4].toBigInt(),
+      result[5].toBytes()
     );
   }
 
@@ -701,7 +631,7 @@ export class APTeamMultiSig extends ethereum.SmartContract {
   ): ethereum.CallResult<APTeamMultiSig__transactionsResult> {
     let result = super.tryCall(
       "transactions",
-      "transactions(uint256):(string,string,address,uint256,bytes,bool,bytes)",
+      "transactions(uint256):(address,uint256,bytes,bool,uint256,bytes)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -710,13 +640,12 @@ export class APTeamMultiSig extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(
       new APTeamMultiSig__transactionsResult(
-        value[0].toString(),
-        value[1].toString(),
-        value[2].toAddress(),
-        value[3].toBigInt(),
-        value[4].toBytes(),
-        value[5].toBoolean(),
-        value[6].toBytes()
+        value[0].toAddress(),
+        value[1].toBigInt(),
+        value[2].toBytes(),
+        value[3].toBoolean(),
+        value[4].toBigInt(),
+        value[5].toBytes()
       )
     );
   }
@@ -748,32 +677,62 @@ export class DefaultCall__Outputs {
   }
 }
 
-export class AddOwnerCall extends ethereum.Call {
-  get inputs(): AddOwnerCall__Inputs {
-    return new AddOwnerCall__Inputs(this);
+export class AddOwnersCall extends ethereum.Call {
+  get inputs(): AddOwnersCall__Inputs {
+    return new AddOwnersCall__Inputs(this);
   }
 
-  get outputs(): AddOwnerCall__Outputs {
-    return new AddOwnerCall__Outputs(this);
+  get outputs(): AddOwnersCall__Outputs {
+    return new AddOwnersCall__Outputs(this);
   }
 }
 
-export class AddOwnerCall__Inputs {
-  _call: AddOwnerCall;
+export class AddOwnersCall__Inputs {
+  _call: AddOwnersCall;
 
-  constructor(call: AddOwnerCall) {
+  constructor(call: AddOwnersCall) {
     this._call = call;
   }
 
-  get _owner(): Address {
-    return this._call.inputValues[0].value.toAddress();
+  get owners(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
   }
 }
 
-export class AddOwnerCall__Outputs {
-  _call: AddOwnerCall;
+export class AddOwnersCall__Outputs {
+  _call: AddOwnersCall;
 
-  constructor(call: AddOwnerCall) {
+  constructor(call: AddOwnersCall) {
+    this._call = call;
+  }
+}
+
+export class ChangeApprovalsRequirementCall extends ethereum.Call {
+  get inputs(): ChangeApprovalsRequirementCall__Inputs {
+    return new ChangeApprovalsRequirementCall__Inputs(this);
+  }
+
+  get outputs(): ChangeApprovalsRequirementCall__Outputs {
+    return new ChangeApprovalsRequirementCall__Outputs(this);
+  }
+}
+
+export class ChangeApprovalsRequirementCall__Inputs {
+  _call: ChangeApprovalsRequirementCall;
+
+  constructor(call: ChangeApprovalsRequirementCall) {
+    this._call = call;
+  }
+
+  get _approvalsRequired(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class ChangeApprovalsRequirementCall__Outputs {
+  _call: ChangeApprovalsRequirementCall;
+
+  constructor(call: ChangeApprovalsRequirementCall) {
     this._call = call;
   }
 }
@@ -808,32 +767,32 @@ export class ChangeRequireExecutionCall__Outputs {
   }
 }
 
-export class ChangeRequirementCall extends ethereum.Call {
-  get inputs(): ChangeRequirementCall__Inputs {
-    return new ChangeRequirementCall__Inputs(this);
+export class ChangeTransactionExpiryCall extends ethereum.Call {
+  get inputs(): ChangeTransactionExpiryCall__Inputs {
+    return new ChangeTransactionExpiryCall__Inputs(this);
   }
 
-  get outputs(): ChangeRequirementCall__Outputs {
-    return new ChangeRequirementCall__Outputs(this);
+  get outputs(): ChangeTransactionExpiryCall__Outputs {
+    return new ChangeTransactionExpiryCall__Outputs(this);
   }
 }
 
-export class ChangeRequirementCall__Inputs {
-  _call: ChangeRequirementCall;
+export class ChangeTransactionExpiryCall__Inputs {
+  _call: ChangeTransactionExpiryCall;
 
-  constructor(call: ChangeRequirementCall) {
+  constructor(call: ChangeTransactionExpiryCall) {
     this._call = call;
   }
 
-  get _required(): BigInt {
+  get _transactionExpiry(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
   }
 }
 
-export class ChangeRequirementCall__Outputs {
-  _call: ChangeRequirementCall;
+export class ChangeTransactionExpiryCall__Outputs {
+  _call: ChangeTransactionExpiryCall;
 
-  constructor(call: ChangeRequirementCall) {
+  constructor(call: ChangeTransactionExpiryCall) {
     this._call = call;
   }
 }
@@ -915,16 +874,20 @@ export class InitializeCall__Inputs {
     this._call = call;
   }
 
-  get _owners(): Array<Address> {
+  get owners(): Array<Address> {
     return this._call.inputValues[0].value.toAddressArray();
   }
 
-  get _required(): BigInt {
+  get _approvalsRequired(): BigInt {
     return this._call.inputValues[1].value.toBigInt();
   }
 
   get _requireExecution(): boolean {
     return this._call.inputValues[2].value.toBoolean();
+  }
+
+  get _transactionExpiry(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
   }
 }
 
@@ -936,32 +899,32 @@ export class InitializeCall__Outputs {
   }
 }
 
-export class RemoveOwnerCall extends ethereum.Call {
-  get inputs(): RemoveOwnerCall__Inputs {
-    return new RemoveOwnerCall__Inputs(this);
+export class RemoveOwnersCall extends ethereum.Call {
+  get inputs(): RemoveOwnersCall__Inputs {
+    return new RemoveOwnersCall__Inputs(this);
   }
 
-  get outputs(): RemoveOwnerCall__Outputs {
-    return new RemoveOwnerCall__Outputs(this);
+  get outputs(): RemoveOwnersCall__Outputs {
+    return new RemoveOwnersCall__Outputs(this);
   }
 }
 
-export class RemoveOwnerCall__Inputs {
-  _call: RemoveOwnerCall;
+export class RemoveOwnersCall__Inputs {
+  _call: RemoveOwnersCall;
 
-  constructor(call: RemoveOwnerCall) {
+  constructor(call: RemoveOwnersCall) {
     this._call = call;
   }
 
-  get _owner(): Address {
-    return this._call.inputValues[0].value.toAddress();
+  get owners(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
   }
 }
 
-export class RemoveOwnerCall__Outputs {
-  _call: RemoveOwnerCall;
+export class RemoveOwnersCall__Outputs {
+  _call: RemoveOwnersCall;
 
-  constructor(call: RemoveOwnerCall) {
+  constructor(call: RemoveOwnersCall) {
     this._call = call;
   }
 }
@@ -983,11 +946,11 @@ export class ReplaceOwnerCall__Inputs {
     this._call = call;
   }
 
-  get _owner(): Address {
+  get currOwner(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get _newOwner(): Address {
+  get newOwner(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 }
@@ -1030,6 +993,40 @@ export class RevokeConfirmationCall__Outputs {
   }
 }
 
+export class RevokeConfirmationOfFormerOwnerCall extends ethereum.Call {
+  get inputs(): RevokeConfirmationOfFormerOwnerCall__Inputs {
+    return new RevokeConfirmationOfFormerOwnerCall__Inputs(this);
+  }
+
+  get outputs(): RevokeConfirmationOfFormerOwnerCall__Outputs {
+    return new RevokeConfirmationOfFormerOwnerCall__Outputs(this);
+  }
+}
+
+export class RevokeConfirmationOfFormerOwnerCall__Inputs {
+  _call: RevokeConfirmationOfFormerOwnerCall;
+
+  constructor(call: RevokeConfirmationOfFormerOwnerCall) {
+    this._call = call;
+  }
+
+  get transactionId(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get formerOwner(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class RevokeConfirmationOfFormerOwnerCall__Outputs {
+  _call: RevokeConfirmationOfFormerOwnerCall;
+
+  constructor(call: RevokeConfirmationOfFormerOwnerCall) {
+    this._call = call;
+  }
+}
+
 export class SubmitTransactionCall extends ethereum.Call {
   get inputs(): SubmitTransactionCall__Inputs {
     return new SubmitTransactionCall__Inputs(this);
@@ -1047,28 +1044,20 @@ export class SubmitTransactionCall__Inputs {
     this._call = call;
   }
 
-  get title(): string {
-    return this._call.inputValues[0].value.toString();
-  }
-
-  get description(): string {
-    return this._call.inputValues[1].value.toString();
-  }
-
   get destination(): Address {
-    return this._call.inputValues[2].value.toAddress();
+    return this._call.inputValues[0].value.toAddress();
   }
 
   get value(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
+    return this._call.inputValues[1].value.toBigInt();
   }
 
   get data(): Bytes {
-    return this._call.inputValues[4].value.toBytes();
+    return this._call.inputValues[2].value.toBytes();
   }
 
   get metadata(): Bytes {
-    return this._call.inputValues[5].value.toBytes();
+    return this._call.inputValues[3].value.toBytes();
   }
 }
 

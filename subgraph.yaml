@@ -3,695 +3,293 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: Router
-    network: mumbai
-    source:
-      address: "0xdf05B770A292480e50172217Ec9b80B1C150103B"
-      abi: Router
-      startBlock: 35000000
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Deposit
-        - FallbackRefund
-        - Harvest
-        - Initialized
-        - LogError
-        - LogErrorBytes
-        - OwnershipTransferred
-        - Redemption
-        - TokensSent
-      abis:
-        - name: Router
-          file: ./abis/Router.json
-      eventHandlers:
-        - event: Deposit((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8))
-          handler: handleDeposit
-        - event: FallbackRefund((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),uint256)
-          handler: handleFallbackRefund
-        - event: Harvest((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8))
-          handler: handleHarvest
-        - event: Initialized(uint8)
-          handler: handleInitialized
-        - event: LogError((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),string)
-          handler: handleLogError
-        - event: LogErrorBytes((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),bytes)
-          handler: handleLogErrorBytes
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
-        - event: Redemption((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),uint256)
-          handler: handleRedemption
-        - event: TokensSent((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),uint256)
-          handler: handleTokensSent
-      file: ./src/router.ts
-  - kind: ethereum
     name: APTeamMultiSig
     network: mumbai
     source:
-      address: "0xD812901336D4f1c910a2Ac51921E0105BD980887"
+      address: "0x8669Fd38E434C0724834F4b995B85bD50831E7c7"
       abi: APTeamMultiSig
-      startBlock: 35000000
+      startBlock: 37000000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Confirmation
+        - ApprovalsRequiredChanged
+        - ConfirmationRevoked
         - APTeamMultiSigDeposit
-        - Execution
-        - ExecutionFailure
-        - ExecutionRequiredChange
         - APTeamMultiSigInitialized
-        - OwnerAddition
-        - OwnerRemoval
-        - RequirementChange
-        - Revocation
-        - Submission
+        - OwnerAdded
+        - OwnerRemoved
+        - RequireExecutionChanged
+        - TransactionConfirmed
+        - TransactionExecuted
+        - TransactionExpiryChanged
+        - TransactionSubmitted
       abis:
         - name: APTeamMultiSig
           file: ./abis/APTeamMultiSig.json
       eventHandlers:
-        - event: Confirmation(indexed address,indexed uint256)
-          handler: handleConfirmation
-        - event: Deposit(indexed address,uint256)
+        - event: ApprovalsRequiredChanged(uint256)
+          handler: handleApprovalsRequiredChanged
+        - event: ConfirmationRevoked(address,uint256)
+          handler: handleConfirmationRevoked
+        - event: Deposit(address,uint256)
           handler: handleDeposit
-        - event: Execution(indexed uint256)
-          handler: handleExecution
-        - event: ExecutionFailure(indexed uint256)
-          handler: handleExecutionFailure
-        - event: ExecutionRequiredChange(bool)
-          handler: handleExecutionRequiredChange
         - event: Initialized(uint8)
           handler: handleInitialized
-        - event: OwnerAddition(indexed address)
-          handler: handleOwnerAddition
-        - event: OwnerRemoval(indexed address)
-          handler: handleOwnerRemoval
-        - event: RequirementChange(uint256)
-          handler: handleRequirementChange
-        - event: Revocation(indexed address,indexed uint256)
-          handler: handleRevocation
-        - event: Submission(indexed uint256)
-          handler: handleSubmission
+        - event: OwnerAdded(address)
+          handler: handleOwnerAdded
+        - event: OwnerRemoved(address)
+          handler: handleOwnerRemoved
+        - event: RequireExecutionChanged(bool)
+          handler: handleRequireExecutionChanged
+        - event: TransactionConfirmed(address,uint256)
+          handler: handleTransactionConfirmed
+        - event: TransactionExecuted(uint256)
+          handler: handleTransactionExecuted
+        - event: TransactionExpiryChanged(uint256)
+          handler: handleTransactionExpiryChanged
+        - event: TransactionSubmitted(address,uint256)
+          handler: handleTransactionSubmitted
       file: ./src/ap-team-multi-sig.ts
   - kind: ethereum
     name: EndowmentMultiSigFactory
     network: mumbai
     source:
-      address: "0xBCB725c55e729d39BFD16eB4eC735A39BC0550DD"
+      address: "0x0d7B9bCE00a01b525181013383F82d35D079F98d"
       abi: EndowmentMultiSigFactory
-      startBlock: 35000000
+      startBlock: 37000000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - ContractInstantiation
+        - ContractInstantiated
+        - ImplementationUpdated
         - EndowmentMultiSigFactoryOwnershipTransferred
+        - ProxyAdminUpdated
       abis:
         - name: EndowmentMultiSigFactory
           file: ./abis/EndowmentMultiSigFactory.json
       eventHandlers:
-        - event: ContractInstantiation(address,address)
-          handler: handleContractInstantiation
+        - event: ContractInstantiated(address,address)
+          handler: handleContractInstantiated
+        - event: ImplementationUpdated(address)
+          handler: handleImplementationUpdated
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
+        - event: ProxyAdminUpdated(address)
+          handler: handleProxyAdminUpdated
       file: ./src/endowment-multi-sig-factory.ts
   - kind: ethereum
     name: Registrar
     network: mumbai
     source:
-      address: "0x74f62eE5330EE95B72c6CDFA301Be106bDe5D454"
+      address: "0x982B2Ce3a8D014Af81F0F7122f3E634F3E1aFbee"
       abi: Registrar
-      startBlock: 35000000
+      startBlock: 37000000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - AccountsContractStorageChanged
-        - AngelProtocolParamsChanged
-        - DeleteNetworkConnection
-        - FeeUpdated
+        - AccountsContractStorageUpdated
+        - AngelProtocolParamsUpdated
+        - ConfigUpdated
+        - FeeSettingsUpdated
         - GasFeeUpdated
         - RegistrarInitialized
+        - NetworkConnectionPosted
+        - NetworkConnectionRemoved
         - RegistrarOwnershipTransferred
-        - PostNetworkConnection
-        - RebalanceParamsChanged
-        - StrategyApprovalChanged
-        - StrategyParamsChanged
-        - TokenAcceptanceChanged
-        - UpdateRegistrarConfig
+        - RebalanceParamsUpdated
+        - StrategyApprovalUpdated
+        - StrategyParamsUpdated
+        - TokenAcceptanceUpdated
       abis:
         - name: Registrar
           file: ./abis/Registrar.json
       eventHandlers:
-        - event: AccountsContractStorageChanged(indexed string,indexed string)
-          handler: handleAccountsContractStorageChanged
-        - event: AngelProtocolParamsChanged()
-          handler: handleAngelProtocolParamsChanged
-        - event: DeleteNetworkConnection(uint256)
-          handler: handleDeleteNetworkConnection
-        - event: FeeUpdated(uint8,uint256,address)
-          handler: handleFeeUpdated
-        - event: GasFeeUpdated(indexed address,uint256)
+        - event: AccountsContractStorageUpdated(string,string)
+          handler: handleAccountsContractStorageUpdated
+        - event: AngelProtocolParamsUpdated()
+          handler: handleAngelProtocolParamsUpdated
+        - event: ConfigUpdated()
+          handler: handleConfigUpdated
+        - event: FeeSettingsUpdated(uint8,uint256,address)
+          handler: handleFeeSettingsUpdated
+        - event: GasFeeUpdated(address,uint256)
           handler: handleGasFeeUpdated
         - event: Initialized(uint8)
           handler: handleInitialized
+        - event: NetworkConnectionPosted(uint256)
+          handler: handleNetworkConnectionPosted
+        - event: NetworkConnectionRemoved(uint256)
+          handler: handleNetworkConnectionRemoved
         - event: OwnershipTransferred(indexed address,indexed address)
           handler: handleOwnershipTransferred
-        - event: PostNetworkConnection(uint256)
-          handler: handlePostNetworkConnection
-        - event: RebalanceParamsChanged()
-          handler: handleRebalanceParamsChanged
-        - event: StrategyApprovalChanged(indexed bytes4,uint8)
-          handler: handleStrategyApprovalChanged
-        - event: StrategyParamsChanged(indexed bytes4,indexed address,indexed address,uint8)
-          handler: handleStrategyParamsChanged
-        - event: TokenAcceptanceChanged(indexed address,bool)
-          handler: handleTokenAcceptanceChanged
-        - event: UpdateRegistrarConfig()
-          handler: handleUpdateRegistrarConfig
+        - event: RebalanceParamsUpdated()
+          handler: handleRebalanceParamsUpdated
+        - event: StrategyApprovalUpdated(bytes4,uint8)
+          handler: handleStrategyApprovalUpdated
+        - event: StrategyParamsUpdated(bytes4,address,address,uint8)
+          handler: handleStrategyParamsUpdated
+        - event: TokenAcceptanceUpdated(address,bool)
+          handler: handleTokenAcceptanceUpdated
       file: ./src/registrar.ts
   - kind: ethereum
     name: Accounts
     network: mumbai
     source:
-      address: "0x8657f7a1512905FCabF6053c187881Fd4264117b"
+      address: "0xc2bA254F7De519ef72C4f69Aa4843e89B6F8483d"
       abi: Accounts
-      startBlock: 35000000
+      startBlock: 37000000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - AllowanceStateUpdatedTo
+        - AllowanceRemoved
+        - AllowanceUpdated
+        - AccountsConfigUpdated
         - DaoContractCreated
         - DonationDeposited
-        - DonationMatchSetup
+        - DonationMatchCreated
         - DonationWithdrawn
         - EndowmentCreated
         - EndowmentSettingUpdated
-        - RemoveAllowance
-        - SwapToken
-        - UpdateConfig
-        - UpdateEndowment
-        - AllowanceStateUpdatedTo1
-        - DaoContractCreated1
-        - DonationDeposited1
-        - DonationMatchSetup1
-        - DonationWithdrawn1
-        - EndowmentCreated1
-        - EndowmentSettingUpdated1
-        - RemoveAllowance1
-        - SwapToken1
-        - UpdateConfig1
-        - UpdateEndowment1
-        - AllowanceStateUpdatedTo2
-        - DaoContractCreated2
-        - DonationDeposited2
-        - DonationMatchSetup2
-        - DonationWithdrawn2
-        - EndowmentCreated2
-        - EndowmentSettingUpdated2
-        - RemoveAllowance2
-        - SwapToken2
-        - UpdateConfig2
-        - UpdateEndowment2
-        - AllowanceStateUpdatedTo3
-        - DaoContractCreated3
-        - DonationDeposited3
-        - DonationMatchSetup3
-        - DonationWithdrawn3
-        - EndowmentCreated3
-        - EndowmentSettingUpdated3
-        - RemoveAllowance3
-        - SwapToken3
-        - UpdateConfig3
-        - UpdateEndowment3
-        - AllowanceStateUpdatedTo4
-        - DaoContractCreated4
-        - DonationDeposited4
-        - DonationMatchSetup4
-        - DonationWithdrawn4
-        - EndowmentCreated4
-        - EndowmentSettingUpdated4
-        - RemoveAllowance4
-        - SwapToken4
-        - SwappedToken
-        - UpdateConfig4
-        - UpdateEndowment4
-        - AllowanceStateUpdatedTo5
-        - DaoContractCreated5
-        - DonationDeposited5
-        - DonationMatchSetup5
-        - DonationWithdrawn5
-        - EndowmentCreated5
-        - EndowmentSettingUpdated5
-        - RemoveAllowance5
-        - SwapToken5
-        - UpdateConfig5
-        - UpdateEndowment5
-        - AllowanceStateUpdatedTo6
-        - DaoContractCreated6
-        - DonationDeposited6
-        - DonationMatchSetup6
-        - DonationWithdrawn6
-        - EndowmentCreated6
-        - EndowmentSettingUpdated6
-        - RemoveAllowance6
-        - SwapToken6
-        - UpdateConfig6
-        - UpdateEndowment6
-        - AllowanceStateUpdatedTo7
-        - DaoContractCreated7
-        - DonationDeposited7
-        - DonationMatchSetup7
-        - DonationWithdrawn7
-        - EndowmentCreated7
-        - EndowmentSettingUpdated7
-        - RemoveAllowance7
-        - SwapToken7
-        - UpdateConfig7
-        - UpdateEndowment7
-        - AllowanceStateUpdatedTo8
-        - DaoContractCreated8
-        - DonationDeposited8
-        - DonationMatchSetup8
-        - DonationWithdrawn8
-        - EndowmentCreated8
-        - EndowmentSettingUpdated8
-        - RemoveAllowance8
-        - SwapToken8
-        - UpdateConfig8
-        - UpdateEndowment8
-        - AllowanceStateUpdatedTo9
-        - DaoContractCreated9
-        - DonationDeposited9
-        - DonationMatchSetup9
-        - DonationWithdrawn9
-        - EndowmentCreated9
-        - EndowmentSettingUpdated9
-        - RemoveAllowance9
-        - SwapToken9
-        - UpdateConfig9
-        - UpdateEndowment9
-        - AllowanceStateUpdatedTo10
-        - DaoContractCreated10
-        - DonationDeposited10
-        - DonationMatchSetup10
-        - DonationWithdrawn10
-        - EndowmentCreated10
-        - EndowmentSettingUpdated10
-        - RemoveAllowance10
-        - SwapToken10
-        - UpdateConfig10
-        - UpdateEndowment10
-        - AllowanceStateUpdatedTo11
-        - DaoContractCreated11
-        - DonationDeposited11
-        - DonationMatchSetup11
-        - DonationWithdrawn11
-        - EndowmentCreated11
-        - EndowmentSettingUpdated11
-        - RemoveAllowance11
-        - SwapToken11
-        - UpdateConfig11
-        - UpdateEndowment11
-        - AllowanceStateUpdatedTo12
-        - DaoContractCreated12
-        - DonationDeposited12
-        - DonationMatchSetup12
-        - DonationWithdrawn12
-        - EndowmentCreated12
-        - EndowmentSettingUpdated12
-        - RemoveAllowance12
-        - SwapToken12
-        - UpdateConfig12
-        - UpdateEndowment12
+        - EndowmentUpdated
+        - OwnerUpdated
+        - TokenSwapped
       abis:
         - name: Accounts
           file: ./abis/Accounts.json
       eventHandlers:
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo
+        - event: AllowanceRemoved(address,address,address)
+          handler: handleAllowanceRemoved
+        - event: AllowanceUpdated(address,address,address,uint256)
+          handler: handleAllowanceUpdated
+        - event: ConfigUpdated()
+          handler: handleConfigUpdated
         - event: DaoContractCreated(uint32,address)
           handler: handleDaoContractCreated
-        - event: DonationDeposited(uint256,uint256)
+        - event: DonationDeposited(uint256,address,uint256)
           handler: handleDonationDeposited
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup
-        - event: DonationWithdrawn(uint256,address,uint256)
+        - event: DonationMatchCreated(uint256,address)
+          handler: handleDonationMatchCreated
+        - event: DonationWithdrawn(uint256,address,address,uint256)
           handler: handleDonationWithdrawn
         - event: EndowmentCreated(uint256)
           handler: handleEndowmentCreated
         - event: EndowmentSettingUpdated(uint256,string)
           handler: handleEndowmentSettingUpdated
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken
-        - event: UpdateConfig()
-          handler: handleUpdateConfig
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo1
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated1
-        - event: DonationDeposited(uint256,uint256)
-          handler: handleDonationDeposited1
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup1
-        - event: DonationWithdrawn(uint256,address,uint256)
-          handler: handleDonationWithdrawn1
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated1
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated1
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance1
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken1
-        - event: UpdateConfig()
-          handler: handleUpdateConfig1
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment1
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo2
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated2
-        - event: DonationDeposited(uint256,uint256)
-          handler: handleDonationDeposited2
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup2
-        - event: DonationWithdrawn(uint256,address,uint256)
-          handler: handleDonationWithdrawn2
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated2
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated2
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance2
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken2
-        - event: UpdateConfig()
-          handler: handleUpdateConfig2
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment2
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo3
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated3
-        - event: DonationDeposited(uint256,uint256)
-          handler: handleDonationDeposited3
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup3
-        - event: DonationWithdrawn(uint256,address,uint256)
-          handler: handleDonationWithdrawn3
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated3
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated3
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance3
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken3
-        - event: UpdateConfig()
-          handler: handleUpdateConfig3
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment3
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo4
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated4
-        - event: DonationDeposited(uint256,uint256)
-          handler: handleDonationDeposited4
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup4
-        - event: DonationWithdrawn(uint256,address,uint256)
-          handler: handleDonationWithdrawn4
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated4
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated4
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance4
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken4
-        - event: SwappedToken(uint256)
-          handler: handleSwappedToken
-        - event: UpdateConfig()
-          handler: handleUpdateConfig4
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment4
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo5
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated5
-        - event: DonationDeposited(uint256,uint256)
-          handler: handleDonationDeposited5
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup5
-        - event: DonationWithdrawn(uint256,address,uint256)
-          handler: handleDonationWithdrawn5
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated5
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated5
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance5
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken5
-        - event: UpdateConfig()
-          handler: handleUpdateConfig5
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment5
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo6
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated6
-        - event: DonationDeposited(uint256,uint256)
-          handler: handleDonationDeposited6
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup6
-        - event: DonationWithdrawn(uint256,address,uint256)
-          handler: handleDonationWithdrawn6
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated6
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated6
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance6
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken6
-        - event: UpdateConfig()
-          handler: handleUpdateConfig6
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment6
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo7
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated7
-        - event: DonationDeposited(uint256,uint256)
-          handler: handleDonationDeposited7
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup7
-        - event: DonationWithdrawn(uint256,address,uint256)
-          handler: handleDonationWithdrawn7
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated7
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated7
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance7
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken7
-        - event: UpdateConfig()
-          handler: handleUpdateConfig7
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment7
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo8
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated8
-        - event: DonationDeposited(uint256,uint256)
-          handler: handleDonationDeposited8
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup8
-        - event: DonationWithdrawn(uint256,address,uint256)
-          handler: handleDonationWithdrawn8
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated8
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated8
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance8
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken8
-        - event: UpdateConfig()
-          handler: handleUpdateConfig8
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment8
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo9
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated9
-        - event: DonationDeposited(uint256,uint256)
-          handler: handleDonationDeposited9
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup9
-        - event: DonationWithdrawn(uint256,address,uint256)
-          handler: handleDonationWithdrawn9
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated9
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated9
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance9
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken9
-        - event: UpdateConfig()
-          handler: handleUpdateConfig9
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment9
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo10
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated10
-        - event: DonationDeposited(uint256,uint256)
-          handler: handleDonationDeposited10
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup10
-        - event: DonationWithdrawn(uint256,address,uint256)
-          handler: handleDonationWithdrawn10
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated10
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated10
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance10
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken10
-        - event: UpdateConfig()
-          handler: handleUpdateConfig10
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment10
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo11
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated11
-        - event: DonationDeposited(uint256,uint256)
-          handler: handleDonationDeposited11
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup11
-        - event: DonationWithdrawn(uint256,address,uint256)
-          handler: handleDonationWithdrawn11
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated11
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated11
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance11
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken11
-        - event: UpdateConfig()
-          handler: handleUpdateConfig11
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment11
-        - event: AllowanceStateUpdatedTo(address,address,address,uint256)
-          handler: handleAllowanceStateUpdatedTo12
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated12
-        - event: DonationDeposited(uint256,uint256)
-          handler: handleDonationDeposited12
-        - event: DonationMatchSetup(uint256,address)
-          handler: handleDonationMatchSetup12
-        - event: DonationWithdrawn(uint256,address,uint256)
-          handler: handleDonationWithdrawn12
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated12
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated12
-        - event: RemoveAllowance(address,address,address)
-          handler: handleRemoveAllowance12
-        - event: SwapToken(uint256,uint8,address,uint256,address,uint256)
-          handler: handleSwapToken12
-        - event: UpdateConfig()
-          handler: handleUpdateConfig12
-        - event: UpdateEndowment(uint256)
-          handler: handleUpdateEndowment12
+        - event: EndowmentUpdated(uint256)
+          handler: handleEndowmentUpdated
+        - event: OwnerUpdated(address)
+          handler: handleOwnerUpdated
+        - event: TokenSwapped(uint256,uint8,address,uint256,address,uint256)
+          handler: handleTokenSwapped
       file: ./src/accounts.ts
   - kind: ethereum
-    name: CharityApplication
+    name: CharityApplications
     network: mumbai
     source:
-      address: "0x6c2336467Ba4056313F8c8a3399531D4b652d042"
-      abi: CharityApplication
-      startBlock: 35000000
+      address: "0x824F03DdEB9a7cd6852AA156392e358ACC79924b"
+      abi: CharityApplications
+      startBlock: 37000000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - CharityApproved
-        - CharityProposed
-        - CharityRejected
-        - CharityApplicationDeposit
+        - ApplicationConfirmationRevoked
+        - ApplicationConfirmed
+        - ApplicationExecuted
+        - ApplicationProposed
+        - CharityApplicationsApprovalsRequiredChanged
+        - CharityApplicationsConfirmationRevoked
+        - CharityApplicationsDeposit
         - GasSent
-        - InitilizedCharityApplication
+        - CharityApplicationsInitialized
+        - CharityApplicationsOwnerAdded
+        - CharityApplicationsOwnerRemoved
+        - CharityApplicationsRequireExecutionChanged
         - SeedAssetSent
+        - CharityApplicationsTransactionConfirmed
+        - CharityApplicationsTransactionExecuted
+        - CharityApplicationsTransactionExpiryChanged
+        - CharityApplicationsTransactionSubmitted
       abis:
-        - name: CharityApplication
-          file: ./abis/CharityApplication.json
+        - name: CharityApplications
+          file: ./abis/CharityApplications.json
       eventHandlers:
-        - event: CharityApproved(indexed uint256,indexed uint256)
-          handler: handleCharityApproved
-        - event: CharityProposed(indexed address,indexed uint256,string)
-          handler: handleCharityProposed
-        - event: CharityRejected(indexed uint256)
-          handler: handleCharityRejected
-        - event: Deposit(indexed address,uint256)
+        - event: ApplicationConfirmationRevoked(uint256,address)
+          handler: handleApplicationConfirmationRevoked
+        - event: ApplicationConfirmed(uint256,address)
+          handler: handleApplicationConfirmed
+        - event: ApplicationExecuted(uint256)
+          handler: handleApplicationExecuted
+        - event: ApplicationProposed(uint256)
+          handler: handleApplicationProposed
+        - event: ApprovalsRequiredChanged(uint256)
+          handler: handleApprovalsRequiredChanged
+        - event: ConfirmationRevoked(address,uint256)
+          handler: handleConfirmationRevoked
+        - event: Deposit(address,uint256)
           handler: handleDeposit
-        - event: GasSent(indexed uint256,indexed address,uint256)
+        - event: GasSent(uint256,address,uint256)
           handler: handleGasSent
-        - event: InitilizedCharityApplication()
-          handler: handleInitilizedCharityApplication
-        - event: SeedAssetSent(indexed uint256,indexed address,uint256)
+        - event: Initialized(uint8)
+          handler: handleInitialized
+        - event: OwnerAdded(address)
+          handler: handleOwnerAdded
+        - event: OwnerRemoved(address)
+          handler: handleOwnerRemoved
+        - event: RequireExecutionChanged(bool)
+          handler: handleRequireExecutionChanged
+        - event: SeedAssetSent(uint256,address,uint256)
           handler: handleSeedAssetSent
-      file: ./src/charity-application.ts
+        - event: TransactionConfirmed(address,uint256)
+          handler: handleTransactionConfirmed
+        - event: TransactionExecuted(uint256)
+          handler: handleTransactionExecuted
+        - event: TransactionExpiryChanged(uint256)
+          handler: handleTransactionExpiryChanged
+        - event: TransactionSubmitted(address,uint256)
+          handler: handleTransactionSubmitted
+      file: ./src/charity-applications.ts
   - kind: ethereum
     name: IndexFund
     network: mumbai
     source:
-      address: "0xE036D1034640fa16280682fd8CC00Ccf3D42e8E4"
+      address: "0xd3e8AC29422D8C180E89405879C5C6766e9528C8"
       abi: IndexFund
-      startBlock: 35000000
+      startBlock: 37000000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - ConfigUpdated
+        - ActiveFundUpdated
+        - IndexFundConfigUpdated
         - DonationMessagesUpdated
         - IndexFundCreated
         - IndexFundRemoved
         - IndexFundInitialized
-        - MemberAdded
         - MemberRemoved
-        - OwnerUpdated
+        - MembersUpdated
+        - IndexFundOwnerUpdated
         - RegistrarUpdated
-        - UpdateActiveFund
-        - UpdateIndexFundState
+        - StateUpdated
       abis:
         - name: IndexFund
           file: ./abis/IndexFund.json
       eventHandlers:
+        - event: ActiveFundUpdated(uint256)
+          handler: handleActiveFundUpdated
         - event: ConfigUpdated()
           handler: handleConfigUpdated
-        - event: DonationMessagesUpdated()
+        - event: DonationMessagesUpdated(uint256)
           handler: handleDonationMessagesUpdated
         - event: IndexFundCreated(uint256)
           handler: handleIndexFundCreated
@@ -699,69 +297,61 @@ dataSources:
           handler: handleIndexFundRemoved
         - event: Initialized(uint8)
           handler: handleInitialized
-        - event: MemberAdded(uint256,uint32)
-          handler: handleMemberAdded
         - event: MemberRemoved(uint256,uint32)
           handler: handleMemberRemoved
+        - event: MembersUpdated(uint256,uint32[])
+          handler: handleMembersUpdated
         - event: OwnerUpdated(address)
           handler: handleOwnerUpdated
         - event: RegistrarUpdated(address)
           handler: handleRegistrarUpdated
-        - event: UpdateActiveFund(uint256)
-          handler: handleUpdateActiveFund
-        - event: UpdateIndexFundState()
-          handler: handleUpdateIndexFundState
+        - event: StateUpdated()
+          handler: handleStateUpdated
       file: ./src/index-fund.ts
   - kind: ethereum
-    name: ApplicationsMultiSig
+    name: Router
     network: mumbai
     source:
-      address: "0xaDC97799AAC1430e297edb86136579710B081e0A"
-      abi: ApplicationsMultiSig
-      startBlock: 35000000
+      address: "0x06bA67bcA8e8Ccfbcd48BC52ccd744f212F0D662"
+      abi: Router
+      startBlock: 37000000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - ApplicationsMultiSigConfirmation
-        - ApplicationsMultiSigDeposit
-        - ApplicationsMultiSigExecution
-        - ApplicationsMultiSigExecutionFailure
-        - ApplicationsMultiSigExecutionRequiredChange
-        - ApplicationsMultiSigInitialized
-        - ApplicationsMultiSigOwnerAddition
-        - ApplicationsMultiSigOwnerRemoval
-        - ApplicationsMultiSigRequirementChange
-        - ApplicationsMultiSigRevocation
-        - ApplicationsMultiSigSubmission
+        - Deposit
+        - ErrorBytesLogged
+        - ErrorLogged
+        - Initialized
+        - OwnershipTransferred
+        - Redeem
+        - Refund
+        - RewardsHarvested
+        - Transfer
       abis:
-        - name: ApplicationsMultiSig
-          file: ./abis/ApplicationsMultiSig.json
+        - name: Router
+          file: ./abis/Router.json
       eventHandlers:
-        - event: Confirmation(indexed address,indexed uint256)
-          handler: handleConfirmation
-        - event: Deposit(indexed address,uint256)
+        - event: Deposit((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8))
           handler: handleDeposit
-        - event: Execution(indexed uint256)
-          handler: handleExecution
-        - event: ExecutionFailure(indexed uint256)
-          handler: handleExecutionFailure
-        - event: ExecutionRequiredChange(bool)
-          handler: handleExecutionRequiredChange
+        - event: ErrorBytesLogged((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),bytes)
+          handler: handleErrorBytesLogged
+        - event: ErrorLogged((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),string)
+          handler: handleErrorLogged
         - event: Initialized(uint8)
           handler: handleInitialized
-        - event: OwnerAddition(indexed address)
-          handler: handleOwnerAddition
-        - event: OwnerRemoval(indexed address)
-          handler: handleOwnerRemoval
-        - event: RequirementChange(uint256)
-          handler: handleRequirementChange
-        - event: Revocation(indexed address,indexed uint256)
-          handler: handleRevocation
-        - event: Submission(indexed uint256)
-          handler: handleSubmission
-      file: ./src/applications-multi-sig.ts
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Redeem((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),uint256)
+          handler: handleRedeem
+        - event: Refund((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),uint256)
+          handler: handleRefund
+        - event: RewardsHarvested((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8))
+          handler: handleRewardsHarvested
+        - event: Transfer((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),uint256)
+          handler: handleTransfer
+      file: ./src/router.ts
 templates:
   - kind: ethereum
     name: EndowmentMultiSig
@@ -773,41 +363,41 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - EndowmentMultiSigConfirmation
+        - EndowmentMultiSigApprovalsRequiredChanged
+        - EndowmentMultiSigConfirmationRevoked
         - EndowmentMultiSigDeposit
-        - EndowmentMultiSigExecution
-        - EndowmentMultiSigExecutionFailure
-        - EndowmentMultiSigExecutionRequiredChange
         - EndowmentMultiSigInitialized
-        - EndowmentMultiSigOwnerAddition
-        - EndowmentMultiSigOwnerRemoval
-        - EndowmentMultiSigRequirementChange
-        - EndowmentMultiSigRevocation
-        - EndowmentMultiSigSubmission
+        - EndowmentMultiSigOwnerAdded
+        - EndowmentMultiSigOwnerRemoved
+        - EndowmentMultiSigRequireExecutionChanged
+        - EndowmentMultiSigTransactionConfirmed
+        - EndowmentMultiSigTransactionExecuted
+        - EndowmentMultiSigTransactionExpiryChanged
+        - EndowmentMultiSigTransactionSubmitted
       abis:
         - name: EndowmentMultiSig
           file: ./abis/EndowmentMultiSig.json
       eventHandlers:
-        - event: Confirmation(indexed address,indexed uint256)
-          handler: handleConfirmation
-        - event: Deposit(indexed address,uint256)
+        - event: ApprovalsRequiredChanged(uint256)
+          handler: handleApprovalsRequiredChanged
+        - event: ConfirmationRevoked(address,uint256)
+          handler: handleConfirmationRevoked
+        - event: Deposit(address,uint256)
           handler: handleDeposit
-        - event: Execution(indexed uint256)
-          handler: handleExecution
-        - event: ExecutionFailure(indexed uint256)
-          handler: handleExecutionFailure
-        - event: ExecutionRequiredChange(bool)
-          handler: handleExecutionRequiredChange
         - event: Initialized(uint8)
           handler: handleInitialized
-        - event: OwnerAddition(indexed address)
-          handler: handleOwnerAddition
-        - event: OwnerRemoval(indexed address)
-          handler: handleOwnerRemoval
-        - event: RequirementChange(uint256)
-          handler: handleRequirementChange
-        - event: Revocation(indexed address,indexed uint256)
-          handler: handleRevocation
-        - event: Submission(indexed uint256)
-          handler: handleSubmission
+        - event: OwnerAdded(address)
+          handler: handleOwnerAdded
+        - event: OwnerRemoved(address)
+          handler: handleOwnerRemoved
+        - event: RequireExecutionChanged(bool)
+          handler: handleRequireExecutionChanged
+        - event: TransactionConfirmed(address,uint256)
+          handler: handleTransactionConfirmed
+        - event: TransactionExecuted(uint256)
+          handler: handleTransactionExecuted
+        - event: TransactionExpiryChanged(uint256)
+          handler: handleTransactionExpiryChanged
+        - event: TransactionSubmitted(address,uint256)
+          handler: handleTransactionSubmitted
       file: ./src/endowment-multi-sig.ts

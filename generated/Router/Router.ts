@@ -64,31 +64,31 @@ export class DepositActionStruct extends ethereum.Tuple {
   }
 }
 
-export class FallbackRefund extends ethereum.Event {
-  get params(): FallbackRefund__Params {
-    return new FallbackRefund__Params(this);
+export class ErrorBytesLogged extends ethereum.Event {
+  get params(): ErrorBytesLogged__Params {
+    return new ErrorBytesLogged__Params(this);
   }
 }
 
-export class FallbackRefund__Params {
-  _event: FallbackRefund;
+export class ErrorBytesLogged__Params {
+  _event: ErrorBytesLogged;
 
-  constructor(event: FallbackRefund) {
+  constructor(event: ErrorBytesLogged) {
     this._event = event;
   }
 
-  get action(): FallbackRefundActionStruct {
-    return changetype<FallbackRefundActionStruct>(
+  get action(): ErrorBytesLoggedActionStruct {
+    return changetype<ErrorBytesLoggedActionStruct>(
       this._event.parameters[0].value.toTuple()
     );
   }
 
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+  get data(): Bytes {
+    return this._event.parameters[1].value.toBytes();
   }
 }
 
-export class FallbackRefundActionStruct extends ethereum.Tuple {
+export class ErrorBytesLoggedActionStruct extends ethereum.Tuple {
   get destinationChain(): string {
     return this[0].toString();
   }
@@ -122,27 +122,31 @@ export class FallbackRefundActionStruct extends ethereum.Tuple {
   }
 }
 
-export class Harvest extends ethereum.Event {
-  get params(): Harvest__Params {
-    return new Harvest__Params(this);
+export class ErrorLogged extends ethereum.Event {
+  get params(): ErrorLogged__Params {
+    return new ErrorLogged__Params(this);
   }
 }
 
-export class Harvest__Params {
-  _event: Harvest;
+export class ErrorLogged__Params {
+  _event: ErrorLogged;
 
-  constructor(event: Harvest) {
+  constructor(event: ErrorLogged) {
     this._event = event;
   }
 
-  get action(): HarvestActionStruct {
-    return changetype<HarvestActionStruct>(
+  get action(): ErrorLoggedActionStruct {
+    return changetype<ErrorLoggedActionStruct>(
       this._event.parameters[0].value.toTuple()
     );
   }
+
+  get message(): string {
+    return this._event.parameters[1].value.toString();
+  }
 }
 
-export class HarvestActionStruct extends ethereum.Tuple {
+export class ErrorLoggedActionStruct extends ethereum.Tuple {
   get destinationChain(): string {
     return this[0].toString();
   }
@@ -194,122 +198,6 @@ export class Initialized__Params {
   }
 }
 
-export class LogError extends ethereum.Event {
-  get params(): LogError__Params {
-    return new LogError__Params(this);
-  }
-}
-
-export class LogError__Params {
-  _event: LogError;
-
-  constructor(event: LogError) {
-    this._event = event;
-  }
-
-  get action(): LogErrorActionStruct {
-    return changetype<LogErrorActionStruct>(
-      this._event.parameters[0].value.toTuple()
-    );
-  }
-
-  get message(): string {
-    return this._event.parameters[1].value.toString();
-  }
-}
-
-export class LogErrorActionStruct extends ethereum.Tuple {
-  get destinationChain(): string {
-    return this[0].toString();
-  }
-
-  get strategyId(): Bytes {
-    return this[1].toBytes();
-  }
-
-  get selector(): Bytes {
-    return this[2].toBytes();
-  }
-
-  get accountIds(): Array<BigInt> {
-    return this[3].toBigIntArray();
-  }
-
-  get token(): Address {
-    return this[4].toAddress();
-  }
-
-  get lockAmt(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get liqAmt(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get status(): i32 {
-    return this[7].toI32();
-  }
-}
-
-export class LogErrorBytes extends ethereum.Event {
-  get params(): LogErrorBytes__Params {
-    return new LogErrorBytes__Params(this);
-  }
-}
-
-export class LogErrorBytes__Params {
-  _event: LogErrorBytes;
-
-  constructor(event: LogErrorBytes) {
-    this._event = event;
-  }
-
-  get action(): LogErrorBytesActionStruct {
-    return changetype<LogErrorBytesActionStruct>(
-      this._event.parameters[0].value.toTuple()
-    );
-  }
-
-  get data(): Bytes {
-    return this._event.parameters[1].value.toBytes();
-  }
-}
-
-export class LogErrorBytesActionStruct extends ethereum.Tuple {
-  get destinationChain(): string {
-    return this[0].toString();
-  }
-
-  get strategyId(): Bytes {
-    return this[1].toBytes();
-  }
-
-  get selector(): Bytes {
-    return this[2].toBytes();
-  }
-
-  get accountIds(): Array<BigInt> {
-    return this[3].toBigIntArray();
-  }
-
-  get token(): Address {
-    return this[4].toAddress();
-  }
-
-  get lockAmt(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get liqAmt(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get status(): i32 {
-    return this[7].toI32();
-  }
-}
-
 export class OwnershipTransferred extends ethereum.Event {
   get params(): OwnershipTransferred__Params {
     return new OwnershipTransferred__Params(this);
@@ -332,21 +220,21 @@ export class OwnershipTransferred__Params {
   }
 }
 
-export class Redemption extends ethereum.Event {
-  get params(): Redemption__Params {
-    return new Redemption__Params(this);
+export class Redeem extends ethereum.Event {
+  get params(): Redeem__Params {
+    return new Redeem__Params(this);
   }
 }
 
-export class Redemption__Params {
-  _event: Redemption;
+export class Redeem__Params {
+  _event: Redeem;
 
-  constructor(event: Redemption) {
+  constructor(event: Redeem) {
     this._event = event;
   }
 
-  get action(): RedemptionActionStruct {
-    return changetype<RedemptionActionStruct>(
+  get action(): RedeemActionStruct {
+    return changetype<RedeemActionStruct>(
       this._event.parameters[0].value.toTuple()
     );
   }
@@ -356,7 +244,7 @@ export class Redemption__Params {
   }
 }
 
-export class RedemptionActionStruct extends ethereum.Tuple {
+export class RedeemActionStruct extends ethereum.Tuple {
   get destinationChain(): string {
     return this[0].toString();
   }
@@ -390,21 +278,21 @@ export class RedemptionActionStruct extends ethereum.Tuple {
   }
 }
 
-export class TokensSent extends ethereum.Event {
-  get params(): TokensSent__Params {
-    return new TokensSent__Params(this);
+export class Refund extends ethereum.Event {
+  get params(): Refund__Params {
+    return new Refund__Params(this);
   }
 }
 
-export class TokensSent__Params {
-  _event: TokensSent;
+export class Refund__Params {
+  _event: Refund;
 
-  constructor(event: TokensSent) {
+  constructor(event: Refund) {
     this._event = event;
   }
 
-  get action(): TokensSentActionStruct {
-    return changetype<TokensSentActionStruct>(
+  get action(): RefundActionStruct {
+    return changetype<RefundActionStruct>(
       this._event.parameters[0].value.toTuple()
     );
   }
@@ -414,7 +302,119 @@ export class TokensSent__Params {
   }
 }
 
-export class TokensSentActionStruct extends ethereum.Tuple {
+export class RefundActionStruct extends ethereum.Tuple {
+  get destinationChain(): string {
+    return this[0].toString();
+  }
+
+  get strategyId(): Bytes {
+    return this[1].toBytes();
+  }
+
+  get selector(): Bytes {
+    return this[2].toBytes();
+  }
+
+  get accountIds(): Array<BigInt> {
+    return this[3].toBigIntArray();
+  }
+
+  get token(): Address {
+    return this[4].toAddress();
+  }
+
+  get lockAmt(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get liqAmt(): BigInt {
+    return this[6].toBigInt();
+  }
+
+  get status(): i32 {
+    return this[7].toI32();
+  }
+}
+
+export class RewardsHarvested extends ethereum.Event {
+  get params(): RewardsHarvested__Params {
+    return new RewardsHarvested__Params(this);
+  }
+}
+
+export class RewardsHarvested__Params {
+  _event: RewardsHarvested;
+
+  constructor(event: RewardsHarvested) {
+    this._event = event;
+  }
+
+  get action(): RewardsHarvestedActionStruct {
+    return changetype<RewardsHarvestedActionStruct>(
+      this._event.parameters[0].value.toTuple()
+    );
+  }
+}
+
+export class RewardsHarvestedActionStruct extends ethereum.Tuple {
+  get destinationChain(): string {
+    return this[0].toString();
+  }
+
+  get strategyId(): Bytes {
+    return this[1].toBytes();
+  }
+
+  get selector(): Bytes {
+    return this[2].toBytes();
+  }
+
+  get accountIds(): Array<BigInt> {
+    return this[3].toBigIntArray();
+  }
+
+  get token(): Address {
+    return this[4].toAddress();
+  }
+
+  get lockAmt(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get liqAmt(): BigInt {
+    return this[6].toBigInt();
+  }
+
+  get status(): i32 {
+    return this[7].toI32();
+  }
+}
+
+export class Transfer extends ethereum.Event {
+  get params(): Transfer__Params {
+    return new Transfer__Params(this);
+  }
+}
+
+export class Transfer__Params {
+  _event: Transfer;
+
+  constructor(event: Transfer) {
+    this._event = event;
+  }
+
+  get action(): TransferActionStruct {
+    return changetype<TransferActionStruct>(
+      this._event.parameters[0].value.toTuple()
+    );
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+}
+
+export class TransferActionStruct extends ethereum.Tuple {
   get destinationChain(): string {
     return this[0].toString();
   }

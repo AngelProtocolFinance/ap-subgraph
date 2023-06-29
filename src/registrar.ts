@@ -1,43 +1,42 @@
-import { Value } from "@graphprotocol/graph-ts"
 import {
-  AccountsContractStorageChanged as AccountsContractStorageChangedEvent,
-  AngelProtocolParamsChanged as AngelProtocolParamsChangedEvent,
-  DeleteNetworkConnection as DeleteNetworkConnectionEvent,
-  FeeUpdated as FeeUpdatedEvent,
+  AccountsContractStorageUpdated as AccountsContractStorageUpdatedEvent,
+  AngelProtocolParamsUpdated as AngelProtocolParamsUpdatedEvent,
+  ConfigUpdated as ConfigUpdatedEvent,
+  FeeSettingsUpdated as FeeSettingsUpdatedEvent,
   GasFeeUpdated as GasFeeUpdatedEvent,
   Initialized as InitializedEvent,
+  NetworkConnectionPosted as NetworkConnectionPostedEvent,
+  NetworkConnectionRemoved as NetworkConnectionRemovedEvent,
   OwnershipTransferred as OwnershipTransferredEvent,
-  PostNetworkConnection as PostNetworkConnectionEvent,
-  RebalanceParamsChanged as RebalanceParamsChangedEvent,
-  StrategyApprovalChanged as StrategyApprovalChangedEvent,
-  StrategyParamsChanged as StrategyParamsChangedEvent,
-  TokenAcceptanceChanged as TokenAcceptanceChangedEvent,
-  UpdateRegistrarConfig as UpdateRegistrarConfigEvent
+  RebalanceParamsUpdated as RebalanceParamsUpdatedEvent,
+  StrategyApprovalUpdated as StrategyApprovalUpdatedEvent,
+  StrategyParamsUpdated as StrategyParamsUpdatedEvent,
+  TokenAcceptanceUpdated as TokenAcceptanceUpdatedEvent
 } from "../generated/Registrar/Registrar"
 import {
-  AccountsContractStorageChanged,
-  AngelProtocolParamsChanged,
-  DeleteNetworkConnection,
-  FeeUpdated,
+  AccountsContractStorageUpdated,
+  AngelProtocolParamsUpdated,
+  ConfigUpdated,
+  FeeSettingsUpdated,
   GasFeeUpdated,
-  Initialized,
-  OwnershipTransferred,
-  PostNetworkConnection,
-  RebalanceParamsChanged,
-  StrategyApprovalChanged,
-  StrategyParamsChanged,
-  TokenAcceptanceChanged,
-  UpdateRegistrarConfig
+  RegistrarInitialized,
+  NetworkConnectionPosted,
+  NetworkConnectionRemoved,
+  RegistrarOwnershipTransferred,
+  RebalanceParamsUpdated,
+  StrategyApprovalUpdated,
+  StrategyParamsUpdated,
+  TokenAcceptanceUpdated
 } from "../generated/schema"
 
-export function handleAccountsContractStorageChanged(
-  event: AccountsContractStorageChangedEvent
+export function handleAccountsContractStorageUpdated(
+  event: AccountsContractStorageUpdatedEvent
 ): void {
-  let entity = new AccountsContractStorageChanged(
+  let entity = new AccountsContractStorageUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity._chainName = Value.fromBytes(event.params._chainName).toString()
-  entity._accountsContractAddress = Value.fromBytes(event.params._accountsContractAddress).toString()
+  entity._chainName = event.params._chainName
+  entity._accountsContractAddress = event.params._accountsContractAddress
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -46,10 +45,10 @@ export function handleAccountsContractStorageChanged(
   entity.save()
 }
 
-export function handleAngelProtocolParamsChanged(
-  event: AngelProtocolParamsChangedEvent
+export function handleAngelProtocolParamsUpdated(
+  event: AngelProtocolParamsUpdatedEvent
 ): void {
-  let entity = new AngelProtocolParamsChanged(
+  let entity = new AngelProtocolParamsUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
 
@@ -60,13 +59,10 @@ export function handleAngelProtocolParamsChanged(
   entity.save()
 }
 
-export function handleDeleteNetworkConnection(
-  event: DeleteNetworkConnectionEvent
-): void {
-  let entity = new DeleteNetworkConnection(
+export function handleConfigUpdated(event: ConfigUpdatedEvent): void {
+  let entity = new ConfigUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity.chainId = event.params.chainId
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -75,13 +71,13 @@ export function handleDeleteNetworkConnection(
   entity.save()
 }
 
-export function handleFeeUpdated(event: FeeUpdatedEvent): void {
-  let entity = new FeeUpdated(
+export function handleFeeSettingsUpdated(event: FeeSettingsUpdatedEvent): void {
+  let entity = new FeeSettingsUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
-  entity._fee = event.params._fee
-  entity._rate = event.params._rate
-  entity._payout = event.params._payout
+  entity._feeType = event.params._feeType
+  entity._bpsRate = event.params._bpsRate
+  entity._payoutAddress = event.params._payoutAddress
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp
@@ -105,7 +101,7 @@ export function handleGasFeeUpdated(event: GasFeeUpdatedEvent): void {
 }
 
 export function handleInitialized(event: InitializedEvent): void {
-  let entity = new Initialized(
+  let entity = new RegistrarInitialized(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.version = event.params.version
@@ -117,10 +113,40 @@ export function handleInitialized(event: InitializedEvent): void {
   entity.save()
 }
 
+export function handleNetworkConnectionPosted(
+  event: NetworkConnectionPostedEvent
+): void {
+  let entity = new NetworkConnectionPosted(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.chainId = event.params.chainId
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleNetworkConnectionRemoved(
+  event: NetworkConnectionRemovedEvent
+): void {
+  let entity = new NetworkConnectionRemoved(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.chainId = event.params.chainId
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
 export function handleOwnershipTransferred(
   event: OwnershipTransferredEvent
 ): void {
-  let entity = new OwnershipTransferred(
+  let entity = new RegistrarOwnershipTransferred(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.previousOwner = event.params.previousOwner
@@ -133,25 +159,10 @@ export function handleOwnershipTransferred(
   entity.save()
 }
 
-export function handlePostNetworkConnection(
-  event: PostNetworkConnectionEvent
+export function handleRebalanceParamsUpdated(
+  event: RebalanceParamsUpdatedEvent
 ): void {
-  let entity = new PostNetworkConnection(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.chainId = event.params.chainId
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleRebalanceParamsChanged(
-  event: RebalanceParamsChangedEvent
-): void {
-  let entity = new RebalanceParamsChanged(
+  let entity = new RebalanceParamsUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
 
@@ -162,10 +173,10 @@ export function handleRebalanceParamsChanged(
   entity.save()
 }
 
-export function handleStrategyApprovalChanged(
-  event: StrategyApprovalChangedEvent
+export function handleStrategyApprovalUpdated(
+  event: StrategyApprovalUpdatedEvent
 ): void {
-  let entity = new StrategyApprovalChanged(
+  let entity = new StrategyApprovalUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity._strategyId = event.params._strategyId
@@ -178,10 +189,10 @@ export function handleStrategyApprovalChanged(
   entity.save()
 }
 
-export function handleStrategyParamsChanged(
-  event: StrategyParamsChangedEvent
+export function handleStrategyParamsUpdated(
+  event: StrategyParamsUpdatedEvent
 ): void {
-  let entity = new StrategyParamsChanged(
+  let entity = new StrategyParamsUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity._strategyId = event.params._strategyId
@@ -196,28 +207,14 @@ export function handleStrategyParamsChanged(
   entity.save()
 }
 
-export function handleTokenAcceptanceChanged(
-  event: TokenAcceptanceChangedEvent
+export function handleTokenAcceptanceUpdated(
+  event: TokenAcceptanceUpdatedEvent
 ): void {
-  let entity = new TokenAcceptanceChanged(
+  let entity = new TokenAcceptanceUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity._tokenAddr = event.params._tokenAddr
   entity._isAccepted = event.params._isAccepted
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleUpdateRegistrarConfig(
-  event: UpdateRegistrarConfigEvent
-): void {
-  let entity = new UpdateRegistrarConfig(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

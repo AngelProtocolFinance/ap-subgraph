@@ -1,18 +1,104 @@
 import { newMockEvent } from "matchstick-as"
 import { ethereum, BigInt, Address } from "@graphprotocol/graph-ts"
 import {
+  ApplicationConfirmationRevoked,
+  ApplicationConfirmed,
+  ApplicationExecuted,
+  ApplicationProposed,
   ApprovalsRequiredChanged,
   ConfirmationRevoked,
   Deposit,
+  GasSent,
   Initialized,
   OwnerAdded,
   OwnerRemoved,
   RequireExecutionChanged,
+  SeedAssetSent,
   TransactionConfirmed,
   TransactionExecuted,
   TransactionExpiryChanged,
   TransactionSubmitted
-} from "../generated/EndowmentMultiSig/EndowmentMultiSig"
+} from "../generated/CharityApplications/CharityApplications"
+
+export function createApplicationConfirmationRevokedEvent(
+  proposalId: BigInt,
+  owner: Address
+): ApplicationConfirmationRevoked {
+  let applicationConfirmationRevokedEvent = changetype<
+    ApplicationConfirmationRevoked
+  >(newMockEvent())
+
+  applicationConfirmationRevokedEvent.parameters = new Array()
+
+  applicationConfirmationRevokedEvent.parameters.push(
+    new ethereum.EventParam(
+      "proposalId",
+      ethereum.Value.fromUnsignedBigInt(proposalId)
+    )
+  )
+  applicationConfirmationRevokedEvent.parameters.push(
+    new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner))
+  )
+
+  return applicationConfirmationRevokedEvent
+}
+
+export function createApplicationConfirmedEvent(
+  proposalId: BigInt,
+  owner: Address
+): ApplicationConfirmed {
+  let applicationConfirmedEvent = changetype<ApplicationConfirmed>(
+    newMockEvent()
+  )
+
+  applicationConfirmedEvent.parameters = new Array()
+
+  applicationConfirmedEvent.parameters.push(
+    new ethereum.EventParam(
+      "proposalId",
+      ethereum.Value.fromUnsignedBigInt(proposalId)
+    )
+  )
+  applicationConfirmedEvent.parameters.push(
+    new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner))
+  )
+
+  return applicationConfirmedEvent
+}
+
+export function createApplicationExecutedEvent(
+  proposalId: BigInt
+): ApplicationExecuted {
+  let applicationExecutedEvent = changetype<ApplicationExecuted>(newMockEvent())
+
+  applicationExecutedEvent.parameters = new Array()
+
+  applicationExecutedEvent.parameters.push(
+    new ethereum.EventParam(
+      "proposalId",
+      ethereum.Value.fromUnsignedBigInt(proposalId)
+    )
+  )
+
+  return applicationExecutedEvent
+}
+
+export function createApplicationProposedEvent(
+  proposalId: BigInt
+): ApplicationProposed {
+  let applicationProposedEvent = changetype<ApplicationProposed>(newMockEvent())
+
+  applicationProposedEvent.parameters = new Array()
+
+  applicationProposedEvent.parameters.push(
+    new ethereum.EventParam(
+      "proposalId",
+      ethereum.Value.fromUnsignedBigInt(proposalId)
+    )
+  )
+
+  return applicationProposedEvent
+}
 
 export function createApprovalsRequiredChangedEvent(
   approvalsRequired: BigInt
@@ -67,6 +153,31 @@ export function createDepositEvent(sender: Address, amount: BigInt): Deposit {
   )
 
   return depositEvent
+}
+
+export function createGasSentEvent(
+  endowmentId: BigInt,
+  member: Address,
+  amount: BigInt
+): GasSent {
+  let gasSentEvent = changetype<GasSent>(newMockEvent())
+
+  gasSentEvent.parameters = new Array()
+
+  gasSentEvent.parameters.push(
+    new ethereum.EventParam(
+      "endowmentId",
+      ethereum.Value.fromUnsignedBigInt(endowmentId)
+    )
+  )
+  gasSentEvent.parameters.push(
+    new ethereum.EventParam("member", ethereum.Value.fromAddress(member))
+  )
+  gasSentEvent.parameters.push(
+    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+  )
+
+  return gasSentEvent
 }
 
 export function createInitializedEvent(version: i32): Initialized {
@@ -125,6 +236,31 @@ export function createRequireExecutionChangedEvent(
   )
 
   return requireExecutionChangedEvent
+}
+
+export function createSeedAssetSentEvent(
+  endowmentId: BigInt,
+  asset: Address,
+  amount: BigInt
+): SeedAssetSent {
+  let seedAssetSentEvent = changetype<SeedAssetSent>(newMockEvent())
+
+  seedAssetSentEvent.parameters = new Array()
+
+  seedAssetSentEvent.parameters.push(
+    new ethereum.EventParam(
+      "endowmentId",
+      ethereum.Value.fromUnsignedBigInt(endowmentId)
+    )
+  )
+  seedAssetSentEvent.parameters.push(
+    new ethereum.EventParam("asset", ethereum.Value.fromAddress(asset))
+  )
+  seedAssetSentEvent.parameters.push(
+    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+  )
+
+  return seedAssetSentEvent
 }
 
 export function createTransactionConfirmedEvent(

@@ -1,29 +1,103 @@
 import {
+  ApplicationConfirmationRevoked as ApplicationConfirmationRevokedEvent,
+  ApplicationConfirmed as ApplicationConfirmedEvent,
+  ApplicationExecuted as ApplicationExecutedEvent,
+  ApplicationProposed as ApplicationProposedEvent,
   ApprovalsRequiredChanged as ApprovalsRequiredChangedEvent,
   ConfirmationRevoked as ConfirmationRevokedEvent,
   Deposit as DepositEvent,
+  GasSent as GasSentEvent,
   Initialized as InitializedEvent,
   OwnerAdded as OwnerAddedEvent,
   OwnerRemoved as OwnerRemovedEvent,
   RequireExecutionChanged as RequireExecutionChangedEvent,
+  SeedAssetSent as SeedAssetSentEvent,
   TransactionConfirmed as TransactionConfirmedEvent,
   TransactionExecuted as TransactionExecutedEvent,
   TransactionExpiryChanged as TransactionExpiryChangedEvent,
   TransactionSubmitted as TransactionSubmittedEvent
-} from "../generated/EndowmentMultiSig/EndowmentMultiSig"
+} from "../generated/CharityApplications/CharityApplications"
 import {
+  ApplicationConfirmationRevoked,
+  ApplicationConfirmed,
+  ApplicationExecuted,
+  ApplicationProposed,
   ApprovalsRequiredChanged,
+  CharityApplicationsDeposit,
+  CharityApplicationsInitialized,
   ConfirmationRevoked,
-  EndowmentMultiSigDeposit,
-  EndowmentMultiSigInitialized,
+  GasSent,
   OwnerAdded,
   OwnerRemoved,
   RequireExecutionChanged,
+  SeedAssetSent,
   TransactionConfirmed,
   TransactionExecuted,
   TransactionExpiryChanged,
   TransactionSubmitted
 } from "../generated/schema"
+
+export function handleApplicationConfirmationRevoked(
+  event: ApplicationConfirmationRevokedEvent
+): void {
+  let entity = new ApplicationConfirmationRevoked(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.proposalId = event.params.proposalId
+  entity.owner = event.params.owner
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleApplicationConfirmed(
+  event: ApplicationConfirmedEvent
+): void {
+  let entity = new ApplicationConfirmed(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.proposalId = event.params.proposalId
+  entity.owner = event.params.owner
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleApplicationExecuted(
+  event: ApplicationExecutedEvent
+): void {
+  let entity = new ApplicationExecuted(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.proposalId = event.params.proposalId
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleApplicationProposed(
+  event: ApplicationProposedEvent
+): void {
+  let entity = new ApplicationProposed(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.proposalId = event.params.proposalId
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
 
 export function handleApprovalsRequiredChanged(
   event: ApprovalsRequiredChangedEvent
@@ -57,7 +131,7 @@ export function handleConfirmationRevoked(
 }
 
 export function handleDeposit(event: DepositEvent): void {
-  let entity = new EndowmentMultiSigDeposit(
+  let entity = new CharityApplicationsDeposit(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.sender = event.params.sender
@@ -70,8 +144,23 @@ export function handleDeposit(event: DepositEvent): void {
   entity.save()
 }
 
+export function handleGasSent(event: GasSentEvent): void {
+  let entity = new GasSent(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.endowmentId = event.params.endowmentId
+  entity.member = event.params.member
+  entity.amount = event.params.amount
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
 export function handleInitialized(event: InitializedEvent): void {
-  let entity = new EndowmentMultiSigInitialized(
+  let entity = new CharityApplicationsInitialized(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.version = event.params.version
@@ -116,6 +205,21 @@ export function handleRequireExecutionChanged(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.requireExecution = event.params.requireExecution
+
+  entity.blockNumber = event.block.number
+  entity.blockTimestamp = event.block.timestamp
+  entity.transactionHash = event.transaction.hash
+
+  entity.save()
+}
+
+export function handleSeedAssetSent(event: SeedAssetSentEvent): void {
+  let entity = new SeedAssetSent(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  )
+  entity.endowmentId = event.params.endowmentId
+  entity.asset = event.params.asset
+  entity.amount = event.params.amount
 
   entity.blockNumber = event.block.number
   entity.blockTimestamp = event.block.timestamp

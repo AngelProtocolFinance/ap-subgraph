@@ -10,82 +10,78 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class AccountsContractStorageChanged extends ethereum.Event {
-  get params(): AccountsContractStorageChanged__Params {
-    return new AccountsContractStorageChanged__Params(this);
+export class AccountsContractStorageUpdated extends ethereum.Event {
+  get params(): AccountsContractStorageUpdated__Params {
+    return new AccountsContractStorageUpdated__Params(this);
   }
 }
 
-export class AccountsContractStorageChanged__Params {
-  _event: AccountsContractStorageChanged;
+export class AccountsContractStorageUpdated__Params {
+  _event: AccountsContractStorageUpdated;
 
-  constructor(event: AccountsContractStorageChanged) {
+  constructor(event: AccountsContractStorageUpdated) {
     this._event = event;
   }
 
-  get _chainName(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get _chainName(): string {
+    return this._event.parameters[0].value.toString();
   }
 
-  get _accountsContractAddress(): Bytes {
-    return this._event.parameters[1].value.toBytes();
-  }
-}
-
-export class AngelProtocolParamsChanged extends ethereum.Event {
-  get params(): AngelProtocolParamsChanged__Params {
-    return new AngelProtocolParamsChanged__Params(this);
+  get _accountsContractAddress(): string {
+    return this._event.parameters[1].value.toString();
   }
 }
 
-export class AngelProtocolParamsChanged__Params {
-  _event: AngelProtocolParamsChanged;
+export class AngelProtocolParamsUpdated extends ethereum.Event {
+  get params(): AngelProtocolParamsUpdated__Params {
+    return new AngelProtocolParamsUpdated__Params(this);
+  }
+}
 
-  constructor(event: AngelProtocolParamsChanged) {
+export class AngelProtocolParamsUpdated__Params {
+  _event: AngelProtocolParamsUpdated;
+
+  constructor(event: AngelProtocolParamsUpdated) {
     this._event = event;
   }
 }
 
-export class DeleteNetworkConnection extends ethereum.Event {
-  get params(): DeleteNetworkConnection__Params {
-    return new DeleteNetworkConnection__Params(this);
+export class ConfigUpdated extends ethereum.Event {
+  get params(): ConfigUpdated__Params {
+    return new ConfigUpdated__Params(this);
   }
 }
 
-export class DeleteNetworkConnection__Params {
-  _event: DeleteNetworkConnection;
+export class ConfigUpdated__Params {
+  _event: ConfigUpdated;
 
-  constructor(event: DeleteNetworkConnection) {
+  constructor(event: ConfigUpdated) {
+    this._event = event;
+  }
+}
+
+export class FeeSettingsUpdated extends ethereum.Event {
+  get params(): FeeSettingsUpdated__Params {
+    return new FeeSettingsUpdated__Params(this);
+  }
+}
+
+export class FeeSettingsUpdated__Params {
+  _event: FeeSettingsUpdated;
+
+  constructor(event: FeeSettingsUpdated) {
     this._event = event;
   }
 
-  get chainId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class FeeUpdated extends ethereum.Event {
-  get params(): FeeUpdated__Params {
-    return new FeeUpdated__Params(this);
-  }
-}
-
-export class FeeUpdated__Params {
-  _event: FeeUpdated;
-
-  constructor(event: FeeUpdated) {
-    this._event = event;
-  }
-
-  get _fee(): i32 {
+  get _feeType(): i32 {
     return this._event.parameters[0].value.toI32();
   }
 
-  get _rate(): BigInt {
+  get _bpsRate(): BigInt {
     return this._event.parameters[1].value.toBigInt();
   }
 
-  get _payout(): Address {
+  get _payoutAddress(): Address {
     return this._event.parameters[2].value.toAddress();
   }
 }
@@ -130,6 +126,42 @@ export class Initialized__Params {
   }
 }
 
+export class NetworkConnectionPosted extends ethereum.Event {
+  get params(): NetworkConnectionPosted__Params {
+    return new NetworkConnectionPosted__Params(this);
+  }
+}
+
+export class NetworkConnectionPosted__Params {
+  _event: NetworkConnectionPosted;
+
+  constructor(event: NetworkConnectionPosted) {
+    this._event = event;
+  }
+
+  get chainId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
+export class NetworkConnectionRemoved extends ethereum.Event {
+  get params(): NetworkConnectionRemoved__Params {
+    return new NetworkConnectionRemoved__Params(this);
+  }
+}
+
+export class NetworkConnectionRemoved__Params {
+  _event: NetworkConnectionRemoved;
+
+  constructor(event: NetworkConnectionRemoved) {
+    this._event = event;
+  }
+
+  get chainId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+}
+
 export class OwnershipTransferred extends ethereum.Event {
   get params(): OwnershipTransferred__Params {
     return new OwnershipTransferred__Params(this);
@@ -152,48 +184,30 @@ export class OwnershipTransferred__Params {
   }
 }
 
-export class PostNetworkConnection extends ethereum.Event {
-  get params(): PostNetworkConnection__Params {
-    return new PostNetworkConnection__Params(this);
+export class RebalanceParamsUpdated extends ethereum.Event {
+  get params(): RebalanceParamsUpdated__Params {
+    return new RebalanceParamsUpdated__Params(this);
   }
 }
 
-export class PostNetworkConnection__Params {
-  _event: PostNetworkConnection;
+export class RebalanceParamsUpdated__Params {
+  _event: RebalanceParamsUpdated;
 
-  constructor(event: PostNetworkConnection) {
-    this._event = event;
-  }
-
-  get chainId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class RebalanceParamsChanged extends ethereum.Event {
-  get params(): RebalanceParamsChanged__Params {
-    return new RebalanceParamsChanged__Params(this);
-  }
-}
-
-export class RebalanceParamsChanged__Params {
-  _event: RebalanceParamsChanged;
-
-  constructor(event: RebalanceParamsChanged) {
+  constructor(event: RebalanceParamsUpdated) {
     this._event = event;
   }
 }
 
-export class StrategyApprovalChanged extends ethereum.Event {
-  get params(): StrategyApprovalChanged__Params {
-    return new StrategyApprovalChanged__Params(this);
+export class StrategyApprovalUpdated extends ethereum.Event {
+  get params(): StrategyApprovalUpdated__Params {
+    return new StrategyApprovalUpdated__Params(this);
   }
 }
 
-export class StrategyApprovalChanged__Params {
-  _event: StrategyApprovalChanged;
+export class StrategyApprovalUpdated__Params {
+  _event: StrategyApprovalUpdated;
 
-  constructor(event: StrategyApprovalChanged) {
+  constructor(event: StrategyApprovalUpdated) {
     this._event = event;
   }
 
@@ -206,16 +220,16 @@ export class StrategyApprovalChanged__Params {
   }
 }
 
-export class StrategyParamsChanged extends ethereum.Event {
-  get params(): StrategyParamsChanged__Params {
-    return new StrategyParamsChanged__Params(this);
+export class StrategyParamsUpdated extends ethereum.Event {
+  get params(): StrategyParamsUpdated__Params {
+    return new StrategyParamsUpdated__Params(this);
   }
 }
 
-export class StrategyParamsChanged__Params {
-  _event: StrategyParamsChanged;
+export class StrategyParamsUpdated__Params {
+  _event: StrategyParamsUpdated;
 
-  constructor(event: StrategyParamsChanged) {
+  constructor(event: StrategyParamsUpdated) {
     this._event = event;
   }
 
@@ -236,16 +250,16 @@ export class StrategyParamsChanged__Params {
   }
 }
 
-export class TokenAcceptanceChanged extends ethereum.Event {
-  get params(): TokenAcceptanceChanged__Params {
-    return new TokenAcceptanceChanged__Params(this);
+export class TokenAcceptanceUpdated extends ethereum.Event {
+  get params(): TokenAcceptanceUpdated__Params {
+    return new TokenAcceptanceUpdated__Params(this);
   }
 }
 
-export class TokenAcceptanceChanged__Params {
-  _event: TokenAcceptanceChanged;
+export class TokenAcceptanceUpdated__Params {
+  _event: TokenAcceptanceUpdated;
 
-  constructor(event: TokenAcceptanceChanged) {
+  constructor(event: TokenAcceptanceUpdated) {
     this._event = event;
   }
 
@@ -255,20 +269,6 @@ export class TokenAcceptanceChanged__Params {
 
   get _isAccepted(): boolean {
     return this._event.parameters[1].value.toBoolean();
-  }
-}
-
-export class UpdateRegistrarConfig extends ethereum.Event {
-  get params(): UpdateRegistrarConfig__Params {
-    return new UpdateRegistrarConfig__Params(this);
-  }
-}
-
-export class UpdateRegistrarConfig__Params {
-  _event: UpdateRegistrarConfig;
-
-  constructor(event: UpdateRegistrarConfig) {
-    this._event = event;
   }
 }
 
@@ -371,126 +371,122 @@ export class Registrar__getStrategyParamsByIdResultValue0LiquidStruct extends et
 }
 
 export class Registrar__queryConfigResultValue0Struct extends ethereum.Tuple {
-  get applicationsReview(): Address {
+  get indexFundContract(): Address {
     return this[0].toAddress();
   }
 
-  get indexFundContract(): Address {
+  get accountsContract(): Address {
     return this[1].toAddress();
   }
 
-  get accountsContract(): Address {
+  get treasury(): Address {
     return this[2].toAddress();
   }
 
-  get treasury(): Address {
+  get subdaoGovContract(): Address {
     return this[3].toAddress();
   }
 
-  get subdaoGovContract(): Address {
+  get subdaoTokenContract(): Address {
     return this[4].toAddress();
   }
 
-  get subdaoTokenContract(): Address {
+  get subdaoBondingTokenContract(): Address {
     return this[5].toAddress();
   }
 
-  get subdaoBondingTokenContract(): Address {
+  get subdaoCw900Contract(): Address {
     return this[6].toAddress();
   }
 
-  get subdaoCw900Contract(): Address {
+  get subdaoDistributorContract(): Address {
     return this[7].toAddress();
   }
 
-  get subdaoDistributorContract(): Address {
+  get subdaoEmitter(): Address {
     return this[8].toAddress();
   }
 
-  get subdaoEmitter(): Address {
+  get donationMatchContract(): Address {
     return this[9].toAddress();
   }
 
-  get donationMatchContract(): Address {
+  get donationMatchCharitesContract(): Address {
     return this[10].toAddress();
   }
 
-  get donationMatchCharitesContract(): Address {
-    return this[11].toAddress();
-  }
-
   get donationMatchEmitter(): Address {
-    return this[12].toAddress();
+    return this[11].toAddress();
   }
 
   get splitToLiquid(): Registrar__queryConfigResultValue0SplitToLiquidStruct {
     return changetype<Registrar__queryConfigResultValue0SplitToLiquidStruct>(
-      this[13].toTuple()
+      this[12].toTuple()
     );
   }
 
   get haloToken(): Address {
-    return this[14].toAddress();
+    return this[13].toAddress();
   }
 
   get haloTokenLpContract(): Address {
-    return this[15].toAddress();
+    return this[14].toAddress();
   }
 
   get govContract(): Address {
-    return this[16].toAddress();
+    return this[15].toAddress();
   }
 
   get collectorShare(): BigInt {
-    return this[17].toBigInt();
+    return this[16].toBigInt();
   }
 
   get charitySharesContract(): Address {
-    return this[18].toAddress();
+    return this[17].toAddress();
   }
 
   get fundraisingContract(): Address {
-    return this[19].toAddress();
+    return this[18].toAddress();
   }
 
   get uniswapRouter(): Address {
-    return this[20].toAddress();
+    return this[19].toAddress();
   }
 
   get uniswapFactory(): Address {
-    return this[21].toAddress();
+    return this[20].toAddress();
   }
 
   get multisigFactory(): Address {
-    return this[22].toAddress();
+    return this[21].toAddress();
   }
 
   get multisigEmitter(): Address {
+    return this[22].toAddress();
+  }
+
+  get charityApplications(): Address {
     return this[23].toAddress();
   }
 
-  get charityProposal(): Address {
+  get lockedWithdrawal(): Address {
     return this[24].toAddress();
   }
 
-  get lockedWithdrawal(): Address {
+  get proxyAdmin(): Address {
     return this[25].toAddress();
   }
 
-  get proxyAdmin(): Address {
+  get usdcAddress(): Address {
     return this[26].toAddress();
   }
 
-  get usdcAddress(): Address {
+  get wMaticAddress(): Address {
     return this[27].toAddress();
   }
 
-  get wMaticAddress(): Address {
-    return this[28].toAddress();
-  }
-
   get cw900lvAddress(): Address {
-    return this[29].toAddress();
+    return this[28].toAddress();
   }
 }
 
@@ -912,7 +908,7 @@ export class Registrar extends ethereum.SmartContract {
   queryConfig(): Registrar__queryConfigResultValue0Struct {
     let result = super.call(
       "queryConfig",
-      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,address,(uint256,uint256,uint256),address,address,address,uint256,address,address,address,address,address,address,address,address,address,address,address,address))",
+      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,(uint256,uint256,uint256),address,address,address,uint256,address,address,address,address,address,address,address,address,address,address,address,address))",
       []
     );
 
@@ -926,7 +922,7 @@ export class Registrar extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "queryConfig",
-      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,address,(uint256,uint256,uint256),address,address,address,uint256,address,address,address,address,address,address,address,address,address,address,address,address))",
+      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,(uint256,uint256,uint256),address,address,address,uint256,address,address,address,address,address,address,address,address,address,address,address,address))",
       []
     );
     if (result.reverted) {
@@ -1642,132 +1638,124 @@ export class UpdateConfigCallDetailsStruct extends ethereum.Tuple {
     return this[0].toAddress();
   }
 
-  get approved_charities(): Array<string> {
-    return this[1].toStringArray();
-  }
-
   get splitMax(): BigInt {
-    return this[2].toBigInt();
+    return this[1].toBigInt();
   }
 
   get splitMin(): BigInt {
-    return this[3].toBigInt();
+    return this[2].toBigInt();
   }
 
   get splitDefault(): BigInt {
-    return this[4].toBigInt();
+    return this[3].toBigInt();
   }
 
   get collectorShare(): BigInt {
-    return this[5].toBigInt();
+    return this[4].toBigInt();
   }
 
   get indexFundContract(): Address {
-    return this[6].toAddress();
+    return this[5].toAddress();
   }
 
   get govContract(): Address {
-    return this[7].toAddress();
+    return this[6].toAddress();
   }
 
   get treasury(): Address {
-    return this[8].toAddress();
+    return this[7].toAddress();
   }
 
   get donationMatchCharitesContract(): Address {
-    return this[9].toAddress();
+    return this[8].toAddress();
   }
 
   get donationMatchEmitter(): Address {
-    return this[10].toAddress();
+    return this[9].toAddress();
   }
 
   get haloToken(): Address {
-    return this[11].toAddress();
+    return this[10].toAddress();
   }
 
   get haloTokenLpContract(): Address {
-    return this[12].toAddress();
+    return this[11].toAddress();
   }
 
   get charitySharesContract(): Address {
-    return this[13].toAddress();
+    return this[12].toAddress();
   }
 
   get fundraisingContract(): Address {
-    return this[14].toAddress();
-  }
-
-  get applicationsReview(): Address {
-    return this[15].toAddress();
+    return this[13].toAddress();
   }
 
   get uniswapRouter(): Address {
-    return this[16].toAddress();
+    return this[14].toAddress();
   }
 
   get uniswapFactory(): Address {
-    return this[17].toAddress();
+    return this[15].toAddress();
   }
 
   get multisigFactory(): Address {
-    return this[18].toAddress();
+    return this[16].toAddress();
   }
 
   get multisigEmitter(): Address {
-    return this[19].toAddress();
+    return this[17].toAddress();
   }
 
-  get charityProposal(): Address {
-    return this[20].toAddress();
+  get charityApplications(): Address {
+    return this[18].toAddress();
   }
 
   get lockedWithdrawal(): Address {
-    return this[21].toAddress();
+    return this[19].toAddress();
   }
 
   get proxyAdmin(): Address {
-    return this[22].toAddress();
+    return this[20].toAddress();
   }
 
   get usdcAddress(): Address {
-    return this[23].toAddress();
+    return this[21].toAddress();
   }
 
   get wMaticAddress(): Address {
-    return this[24].toAddress();
+    return this[22].toAddress();
   }
 
   get subdaoGovContract(): Address {
-    return this[25].toAddress();
+    return this[23].toAddress();
   }
 
   get subdaoTokenContract(): Address {
-    return this[26].toAddress();
+    return this[24].toAddress();
   }
 
   get subdaoBondingTokenContract(): Address {
-    return this[27].toAddress();
+    return this[25].toAddress();
   }
 
   get subdaoCw900Contract(): Address {
-    return this[28].toAddress();
+    return this[26].toAddress();
   }
 
   get subdaoDistributorContract(): Address {
-    return this[29].toAddress();
+    return this[27].toAddress();
   }
 
   get subdaoEmitter(): Address {
-    return this[30].toAddress();
+    return this[28].toAddress();
   }
 
   get donationMatchContract(): Address {
-    return this[31].toAddress();
+    return this[29].toAddress();
   }
 
   get cw900lvAddress(): Address {
-    return this[32].toAddress();
+    return this[30].toAddress();
   }
 }
 

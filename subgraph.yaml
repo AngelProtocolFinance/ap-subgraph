@@ -3,6 +3,61 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
+    name: Accounts
+    network: mumbai
+    source:
+      address: "0xc2bA254F7De519ef72C4f69Aa4843e89B6F8483d"
+      abi: Accounts
+      startBlock: 37000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Endowment
+        - EndowmentTokenLocked
+        - EndowmentTokenLiquid
+        - EndowmentTokenAllowanceLocked
+        - EndowmentTokenAllowanceLiquid
+        - EndowmentDepositTransaction
+        - EndowmentWithdrawTransaction
+        - EndowmentTokenSwap
+        - EndowmentMetadata
+        - BeneficiaryData
+        - SplitDetails
+        - SettingsPermission
+        - SettingsController
+        - FeeSetting
+      abis:
+        - name: Accounts
+          file: ./abis/Accounts.json
+      eventHandlers:
+        - event: AllowanceRemoved(address,address,address)
+          handler: handleAllowanceRemoved
+        - event: AllowanceUpdated(address,address,address,uint256)
+          handler: handleAllowanceUpdated
+        - event: ConfigUpdated()
+          handler: handleConfigUpdated
+        - event: DaoContractCreated(uint32,address)
+          handler: handleDaoContractCreated
+        - event: DonationDeposited(uint256,address,uint256)
+          handler: handleDonationDeposited
+        - event: DonationMatchCreated(uint256,address)
+          handler: handleDonationMatchCreated
+        - event: DonationWithdrawn(uint256,address,address,uint256)
+          handler: handleDonationWithdrawn
+        - event: EndowmentCreated(uint256)
+          handler: handleEndowmentCreated
+        - event: EndowmentSettingUpdated(uint256,string)
+          handler: handleEndowmentSettingUpdated
+        - event: EndowmentUpdated(uint256)
+          handler: handleEndowmentUpdated
+        - event: OwnerUpdated(address)
+          handler: handleOwnerUpdated
+        - event: TokenSwapped(uint256,uint8,address,uint256,address,uint256)
+          handler: handleTokenSwapped
+      file: ./src/accounts.ts
+  - kind: ethereum
     name: APTeamMultiSig
     network: mumbai
     source:
@@ -14,43 +69,35 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - ApprovalsRequiredChanged
-        - ConfirmationRevoked
-        - APTeamMultiSigDeposit
-        - APTeamMultiSigInitialized
-        - OwnerAdded
-        - OwnerRemoved
-        - RequireExecutionChanged
-        - TransactionConfirmed
-        - TransactionExecuted
-        - TransactionExpiryChanged
-        - TransactionSubmitted
+        - User
+        - MultiSig
+        - MultiSigOwner
+        - MultiSigTransaction
+        - TransactionConfirmation
       abis:
         - name: APTeamMultiSig
           file: ./abis/APTeamMultiSig.json
       eventHandlers:
-        - event: ApprovalsRequiredChanged(uint256)
-          handler: handleApprovalsRequiredChanged
-        - event: ConfirmationRevoked(address,uint256)
-          handler: handleConfirmationRevoked
-        - event: Deposit(address,uint256)
-          handler: handleDeposit
         - event: Initialized(uint8)
           handler: handleInitialized
+        - event: ApprovalsRequiredChanged(uint256)
+          handler: handleApprovalsRequiredChanged
+        - event: RequireExecutionChanged(bool)
+          handler: handleRequireExecutionChanged
+        - event: ExpiryChanged(uint256)
+          handler: handleExpiryChanged
         - event: OwnerAdded(address)
           handler: handleOwnerAdded
         - event: OwnerRemoved(address)
           handler: handleOwnerRemoved
-        - event: RequireExecutionChanged(bool)
-          handler: handleRequireExecutionChanged
+        - event: TransactionSubmitted(address,uint256)
+          handler: handleTransactionSubmitted
         - event: TransactionConfirmed(address,uint256)
           handler: handleTransactionConfirmed
         - event: TransactionExecuted(uint256)
           handler: handleTransactionExecuted
-        - event: TransactionExpiryChanged(uint256)
-          handler: handleTransactionExpiryChanged
-        - event: TransactionSubmitted(address,uint256)
-          handler: handleTransactionSubmitted
+        - event: TransactionConfirmationRevoked(address,uint256)
+          handler: handleConfirmationRevoked
       file: ./src/ap-team-multi-sig.ts
   - kind: ethereum
     name: EndowmentMultiSigFactory
@@ -82,115 +129,6 @@ dataSources:
           handler: handleProxyAdminUpdated
       file: ./src/endowment-multi-sig-factory.ts
   - kind: ethereum
-    name: Registrar
-    network: mumbai
-    source:
-      address: "0x982B2Ce3a8D014Af81F0F7122f3E634F3E1aFbee"
-      abi: Registrar
-      startBlock: 37000000
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - AccountsContractStorageUpdated
-        - AngelProtocolParamsUpdated
-        - ConfigUpdated
-        - FeeSettingsUpdated
-        - GasFeeUpdated
-        - RegistrarInitialized
-        - NetworkConnectionPosted
-        - NetworkConnectionRemoved
-        - RegistrarOwnershipTransferred
-        - RebalanceParamsUpdated
-        - StrategyApprovalUpdated
-        - StrategyParamsUpdated
-        - TokenAcceptanceUpdated
-      abis:
-        - name: Registrar
-          file: ./abis/Registrar.json
-      eventHandlers:
-        - event: AccountsContractStorageUpdated(string,string)
-          handler: handleAccountsContractStorageUpdated
-        - event: AngelProtocolParamsUpdated()
-          handler: handleAngelProtocolParamsUpdated
-        - event: ConfigUpdated()
-          handler: handleConfigUpdated
-        - event: FeeSettingsUpdated(uint8,uint256,address)
-          handler: handleFeeSettingsUpdated
-        - event: GasFeeUpdated(address,uint256)
-          handler: handleGasFeeUpdated
-        - event: Initialized(uint8)
-          handler: handleInitialized
-        - event: NetworkConnectionPosted(uint256)
-          handler: handleNetworkConnectionPosted
-        - event: NetworkConnectionRemoved(uint256)
-          handler: handleNetworkConnectionRemoved
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
-        - event: RebalanceParamsUpdated()
-          handler: handleRebalanceParamsUpdated
-        - event: StrategyApprovalUpdated(bytes4,uint8)
-          handler: handleStrategyApprovalUpdated
-        - event: StrategyParamsUpdated(bytes4,address,address,uint8)
-          handler: handleStrategyParamsUpdated
-        - event: TokenAcceptanceUpdated(address,bool)
-          handler: handleTokenAcceptanceUpdated
-      file: ./src/registrar.ts
-  - kind: ethereum
-    name: Accounts
-    network: mumbai
-    source:
-      address: "0xc2bA254F7De519ef72C4f69Aa4843e89B6F8483d"
-      abi: Accounts
-      startBlock: 37000000
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - AllowanceRemoved
-        - AllowanceUpdated
-        - AccountsConfigUpdated
-        - DaoContractCreated
-        - DonationDeposited
-        - DonationMatchCreated
-        - DonationWithdrawn
-        - EndowmentCreated
-        - EndowmentSettingUpdated
-        - EndowmentUpdated
-        - OwnerUpdated
-        - TokenSwapped
-      abis:
-        - name: Accounts
-          file: ./abis/Accounts.json
-      eventHandlers:
-        - event: AllowanceRemoved(address,address,address)
-          handler: handleAllowanceRemoved
-        - event: AllowanceUpdated(address,address,address,uint256)
-          handler: handleAllowanceUpdated
-        - event: ConfigUpdated()
-          handler: handleConfigUpdated
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated
-        - event: DonationDeposited(uint256,address,uint256)
-          handler: handleDonationDeposited
-        - event: DonationMatchCreated(uint256,address)
-          handler: handleDonationMatchCreated
-        - event: DonationWithdrawn(uint256,address,address,uint256)
-          handler: handleDonationWithdrawn
-        - event: EndowmentCreated(uint256)
-          handler: handleEndowmentCreated
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated
-        - event: EndowmentUpdated(uint256)
-          handler: handleEndowmentUpdated
-        - event: OwnerUpdated(address)
-          handler: handleOwnerUpdated
-        - event: TokenSwapped(uint256,uint8,address,uint256,address,uint256)
-          handler: handleTokenSwapped
-      file: ./src/accounts.ts
-  - kind: ethereum
     name: CharityApplications
     network: mumbai
     source:
@@ -202,27 +140,38 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - ApplicationConfirmationRevoked
-        - ApplicationConfirmed
-        - ApplicationExecuted
-        - ApplicationProposed
-        - CharityApplicationsApprovalsRequiredChanged
-        - CharityApplicationsConfirmationRevoked
-        - CharityApplicationsDeposit
-        - GasSent
-        - CharityApplicationsInitialized
-        - CharityApplicationsOwnerAdded
-        - CharityApplicationsOwnerRemoved
-        - CharityApplicationsRequireExecutionChanged
-        - SeedAssetSent
-        - CharityApplicationsTransactionConfirmed
-        - CharityApplicationsTransactionExecuted
-        - CharityApplicationsTransactionExpiryChanged
-        - CharityApplicationsTransactionSubmitted
+        - User
+        - MultiSig
+        - MultiSigOwner
+        - MultiSigTransaction
+        - TransactionConfirmation
+        - ApplicationsMultisig
+        - ApplicationProposal
+        - ApplicationConfirmation
       abis:
         - name: CharityApplications
           file: ./abis/CharityApplications.json
       eventHandlers:
+        - event: Initialized(uint8)
+          handler: handleInitialized
+        - event: ApprovalsRequiredChanged(uint256)
+          handler: handleApprovalsRequiredChanged
+        - event: RequireExecutionChanged(bool)
+          handler: handleRequireExecutionChanged
+        - event: ExpiryChanged(uint256)
+          handler: handleExpiryChanged
+        - event: OwnerAdded(address)
+          handler: handleOwnerAdded
+        - event: OwnerRemoved(address)
+          handler: handleOwnerRemoved
+        - event: TransactionSubmitted(address,uint256)
+          handler: handleTransactionSubmitted
+        - event: TransactionConfirmed(address,uint256)
+          handler: handleTransactionConfirmed
+        - event: TransactionExecuted(uint256)
+          handler: handleTransactionExecuted
+        - event: TransactionConfirmationRevoked(address,uint256)
+          handler: handleConfirmationRevoked
         - event: ApplicationConfirmationRevoked(uint256,address)
           handler: handleApplicationConfirmationRevoked
         - event: ApplicationConfirmed(uint256,address)
@@ -231,127 +180,7 @@ dataSources:
           handler: handleApplicationExecuted
         - event: ApplicationProposed(uint256)
           handler: handleApplicationProposed
-        - event: ApprovalsRequiredChanged(uint256)
-          handler: handleApprovalsRequiredChanged
-        - event: ConfirmationRevoked(address,uint256)
-          handler: handleConfirmationRevoked
-        - event: Deposit(address,uint256)
-          handler: handleDeposit
-        - event: GasSent(uint256,address,uint256)
-          handler: handleGasSent
-        - event: Initialized(uint8)
-          handler: handleInitialized
-        - event: OwnerAdded(address)
-          handler: handleOwnerAdded
-        - event: OwnerRemoved(address)
-          handler: handleOwnerRemoved
-        - event: RequireExecutionChanged(bool)
-          handler: handleRequireExecutionChanged
-        - event: SeedAssetSent(uint256,address,uint256)
-          handler: handleSeedAssetSent
-        - event: TransactionConfirmed(address,uint256)
-          handler: handleTransactionConfirmed
-        - event: TransactionExecuted(uint256)
-          handler: handleTransactionExecuted
-        - event: TransactionExpiryChanged(uint256)
-          handler: handleTransactionExpiryChanged
-        - event: TransactionSubmitted(address,uint256)
-          handler: handleTransactionSubmitted
       file: ./src/charity-applications.ts
-  - kind: ethereum
-    name: IndexFund
-    network: mumbai
-    source:
-      address: "0xd3e8AC29422D8C180E89405879C5C6766e9528C8"
-      abi: IndexFund
-      startBlock: 37000000
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - ActiveFundUpdated
-        - IndexFundConfigUpdated
-        - DonationMessagesUpdated
-        - IndexFundCreated
-        - IndexFundRemoved
-        - IndexFundInitialized
-        - MemberRemoved
-        - MembersUpdated
-        - IndexFundOwnerUpdated
-        - RegistrarUpdated
-        - StateUpdated
-      abis:
-        - name: IndexFund
-          file: ./abis/IndexFund.json
-      eventHandlers:
-        - event: ActiveFundUpdated(uint256)
-          handler: handleActiveFundUpdated
-        - event: ConfigUpdated()
-          handler: handleConfigUpdated
-        - event: DonationMessagesUpdated(uint256)
-          handler: handleDonationMessagesUpdated
-        - event: IndexFundCreated(uint256)
-          handler: handleIndexFundCreated
-        - event: IndexFundRemoved(uint256)
-          handler: handleIndexFundRemoved
-        - event: Initialized(uint8)
-          handler: handleInitialized
-        - event: MemberRemoved(uint256,uint32)
-          handler: handleMemberRemoved
-        - event: MembersUpdated(uint256,uint32[])
-          handler: handleMembersUpdated
-        - event: OwnerUpdated(address)
-          handler: handleOwnerUpdated
-        - event: RegistrarUpdated(address)
-          handler: handleRegistrarUpdated
-        - event: StateUpdated()
-          handler: handleStateUpdated
-      file: ./src/index-fund.ts
-  - kind: ethereum
-    name: Router
-    network: mumbai
-    source:
-      address: "0x06bA67bcA8e8Ccfbcd48BC52ccd744f212F0D662"
-      abi: Router
-      startBlock: 37000000
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - Deposit
-        - ErrorBytesLogged
-        - ErrorLogged
-        - Initialized
-        - OwnershipTransferred
-        - Redeem
-        - Refund
-        - RewardsHarvested
-        - Transfer
-      abis:
-        - name: Router
-          file: ./abis/Router.json
-      eventHandlers:
-        - event: Deposit((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8))
-          handler: handleDeposit
-        - event: ErrorBytesLogged((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),bytes)
-          handler: handleErrorBytesLogged
-        - event: ErrorLogged((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),string)
-          handler: handleErrorLogged
-        - event: Initialized(uint8)
-          handler: handleInitialized
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
-        - event: Redeem((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),uint256)
-          handler: handleRedeem
-        - event: Refund((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),uint256)
-          handler: handleRefund
-        - event: RewardsHarvested((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8))
-          handler: handleRewardsHarvested
-        - event: Transfer((string,bytes4,bytes4,uint32[],address,uint256,uint256,uint8),uint256)
-          handler: handleTransfer
-      file: ./src/router.ts
 templates:
   - kind: ethereum
     name: EndowmentMultiSig
@@ -363,41 +192,33 @@ templates:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - EndowmentMultiSigApprovalsRequiredChanged
-        - EndowmentMultiSigConfirmationRevoked
-        - EndowmentMultiSigDeposit
-        - EndowmentMultiSigInitialized
-        - EndowmentMultiSigOwnerAdded
-        - EndowmentMultiSigOwnerRemoved
-        - EndowmentMultiSigRequireExecutionChanged
-        - EndowmentMultiSigTransactionConfirmed
-        - EndowmentMultiSigTransactionExecuted
-        - EndowmentMultiSigTransactionExpiryChanged
-        - EndowmentMultiSigTransactionSubmitted
+        - User
+        - MultiSig
+        - MultiSigOwner
+        - MultiSigTransaction
+        - TransactionConfirmation
       abis:
         - name: EndowmentMultiSig
           file: ./abis/EndowmentMultiSig.json
       eventHandlers:
-        - event: ApprovalsRequiredChanged(uint256)
-          handler: handleApprovalsRequiredChanged
-        - event: ConfirmationRevoked(address,uint256)
-          handler: handleConfirmationRevoked
-        - event: Deposit(address,uint256)
-          handler: handleDeposit
         - event: Initialized(uint8)
           handler: handleInitialized
+        - event: ApprovalsRequiredChanged(uint256)
+          handler: handleApprovalsRequiredChanged
+        - event: RequireExecutionChanged(bool)
+          handler: handleRequireExecutionChanged
+        - event: ExpiryChanged(uint256)
+          handler: handleExpiryChanged
         - event: OwnerAdded(address)
           handler: handleOwnerAdded
         - event: OwnerRemoved(address)
           handler: handleOwnerRemoved
-        - event: RequireExecutionChanged(bool)
-          handler: handleRequireExecutionChanged
+        - event: TransactionSubmitted(address,uint256)
+          handler: handleTransactionSubmitted
         - event: TransactionConfirmed(address,uint256)
           handler: handleTransactionConfirmed
         - event: TransactionExecuted(uint256)
           handler: handleTransactionExecuted
-        - event: TransactionExpiryChanged(uint256)
-          handler: handleTransactionExpiryChanged
-        - event: TransactionSubmitted(address,uint256)
-          handler: handleTransactionSubmitted
+        - event: TransactionConfirmationRevoked(address,uint256)
+          handler: handleConfirmationRevoked
       file: ./src/endowment-multi-sig.ts

@@ -1,9 +1,5 @@
 {
   "mumbai": {
-    "Router": {
-      "address": "0x06bA67bcA8e8Ccfbcd48BC52ccd744f212F0D662",
-      "startBlock": 37000000
-    },
     "APTeamMultiSig": {
       "address": "0x8669Fd38E434C0724834F4b995B85bD50831E7c7",
       "startBlock": 37000000
@@ -12,20 +8,12 @@
       "address": "0x0d7B9bCE00a01b525181013383F82d35D079F98d",
       "startBlock": 37000000
     },
-    "Registrar": {
-      "address": "0x982B2Ce3a8D014Af81F0F7122f3E634F3E1aFbee",
-      "startBlock": 37000000
-    },
     "Accounts": {
       "address": "0xc2bA254F7De519ef72C4f69Aa4843e89B6F8483d",
       "startBlock": 37000000
     },
     "CharityApplications": {
       "address": "0x824F03DdEB9a7cd6852AA156392e358ACC79924b",
-      "startBlock": 37000000
-    },
-    "IndexFund": {
-      "address": "0xd3e8AC29422D8C180E89405879C5C6766e9528C8",
       "startBlock": 37000000
     }
   }

@@ -1,100 +1,129 @@
-type ExampleEntity @entity {
-  id: Bytes!
-  count: BigInt!
-  action_destinationChain: String! # string
-  action_strategyId: Bytes! # bytes4
-}
-type ApprovalsRequiredChanged @entity(immutable: true) {
-  id: Bytes!
-  approvalsRequired: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+# ~~~~~~~~~~~~~~~~~
+# ~~~~~ ENUMS ~~~~~
+# ~~~~~~~~~~~~~~~~~
+enum ApplicationProposalStatus {
+  Pending
+  Approved
+  Rejected
 }
 
-type ConfirmationRevoked @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+enum AccountType {
+  Locked
+  Liquid
 }
 
-type APTeamMultiSigDeposit @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+enum EndowmentType {
+  Charity
+  Normal
 }
 
-type APTeamMultiSigInitialized @entity(immutable: true) {
-  id: Bytes!
-  version: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+enum Tier {
+  None
+  Level1
+  Level2
+  Level3
 }
 
-type OwnerAdded @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+enum FeeTypes {
+  Default
+  Harvest
+  WithdrawCharity
+  WithdrawNormal
+  EarlyLockedWithdrawCharity
+  EarlyLockedWithdrawNormal
 }
 
-type OwnerRemoved @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+enum DelegateAction {
+  Set
+  Revoke
 }
 
-type RequireExecutionChanged @entity(immutable: true) {
-  id: Bytes!
-  requireExecution: Boolean! # bool
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+enum MultiSigType {
+  ApTeam
+  Applications
+  Endowment
+  Generic
 }
 
-type TransactionConfirmed @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+# ~~~~~~~~~~~~~~~~
+# ~~~ ENTITIES ~~~
+# ~~~~~~~~~~~~~~~~
+type Token @entity(immutable: true) {
+  id: Bytes! # set as contract address
 }
 
-type TransactionExecuted @entity(immutable: true) {
-  id: Bytes!
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type User @entity(immutable: true) {
+  id: Bytes! # set as wallet/contract address
+  multiSigs: [MultiSig]! @derivedFrom("owner")
+  applications: [ApplicationProposal]! @derivedFrom("proposer")
+  allowancesLocked: [EndowmentTokenLockedAllowance]! @derivedFrom("address")
+  allowancesLiquid: [EndowmentTokenLiquidAllowance]! @derivedFrom("address")
 }
 
-type TransactionExpiryChanged @entity(immutable: true) {
-  id: Bytes!
-  transactionExpiry: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type MultiSig @entity {
+  id: Bytes! # proxy contract address
+  owners: [MultiSigOwner!]! @derivedFrom(field: "multiSig")
+  transactions: [MultiSigTransaction]! @derivedFrom(field: "multiSig")
+  transactionExpiry: BigInt!
+  requireExecution: Boolean!
+  approvalsRequired: BigInt!
+  multiSigType: MultiSigType!
+  applicationsMultiSig: ApplicationsMultiSig
+  endowmentMultiSig: Int
 }
 
-type TransactionSubmitted @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type MultiSigOwner @entity(immutable: true) {
+  id: String! # set as MultiSig.id.concat(User.id)
+  multiSig: Multisig!
+  owner: User!
 }
+
+type MultiSigTransaction @entity {
+  id: String! # set as MutiSig.id.concat(Transaction.id)
+  transactionId: BigInt!
+  multiSig: MultiSig!
+  proposer: User!
+  executed: Boolean!
+  expiry: BigInt!
+  blockTimestamp: BigInt!
+  confirmations: [TransactionConfirmation!]! @derivedFrom(field: "transaction")
+}
+
+type TransactionConfirmation @entity {
+  id String! # MultiSigTransaction.id.concat(User.id)
+  transaction: MultiSigTransaction!
+  owner: User!
+  confirmed: Boolean!
+}
+
+type ApplicationsMultisig @entity {
+  id: Bytes! # set as MutiSig.id
+  proposals: [ApplicationProposal]! @derivedFrom("multiSig")
+  seedSplitToLiquid: BigInt!
+  gasAmount: BigInt!
+  seedAsset: Bytes!
+  seedAmount: BigInt!
+}
+
+type ApplicationProposal @entity {
+  id: String! # Proposal transaction hash
+  multiSig: ApplicationsMultisig!
+  charityName: String!
+  proposer: User!
+  executed: Boolean!
+  expiry: BigInt!
+  blockTimestamp: BigInt!
+  confirmations: [ApplicationConfirmation]! @derivedFrom(field: "proposal")
+}
+
+type ApplicationConfirmation @entity {
+  id String! # MultiSig.id.concat(TranactionHash.concat(User.id))
+  proposal: ApplicationProposal!
+  owner: User!
+  confirmed: Boolean!
+}
+
+### Endowment MultiSig Factory
 type ContractInstantiated @entity(immutable: true) {
   id: Bytes!
   sender: Bytes! # address
@@ -128,680 +157,149 @@ type ProxyAdminUpdated @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
-type EndowmentMultiSigApprovalsRequiredChanged @entity(immutable: true) {
-  id: Bytes!
-  approvalsRequired: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+
+### Accounts - Endowment
+type Endowment@entity(immutable: true) {
+  id: String! # Endowment ID
+  endowmentType: EndowmentType!
+  metadata: EndowmentMetadata!
+  balancesLocked: [EndowmentTokenLocked]! @derivedFrom(field: "endowment")
+  balancesLiquid: [EndowmentTokenLiquid]! @derivedFrom(field: "endowment")
+  allowancesLocked: [EndowmentTokenAllowanceLocked]! @derivedFrom(field: "endowmentToken")
+  allowancesLiquid: [EndowmentTokenAllowanceLiquid]! @derivedFrom(field: "endowmentToken")
+  deposits: [EndowmentDepositTransaction]! @derivedFrom(field: "endowment")
+  withdrawals: [EndowmentWithdrawTransaction]! @derivedFrom(field: "endowment")
+  swaps: [EndowmentSwapTransaction]! @derivedFrom("endowment")
 }
 
-type EndowmentMultiSigConfirmationRevoked @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type EndowmentTokenLocked @entity {
+  id: String! # set as Token.id.concat(Endowment.id)`
+  endowment: Endowment!
+  token: Token!
+  amount: BigInt!
 }
 
-type EndowmentMultiSigDeposit @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type EndowmentTokenLiquid @entity {
+  id: String! # set as Token.id.concat(Endowment.id)`
+  endowment: Endowment!
+  token: Bytes!
+  amount: BigInt!
 }
 
-type EndowmentMultiSigInitialized @entity(immutable: true) {
-  id: Bytes!
-  version: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type EndowmentTokenAllowanceLocked @entity {
+  id: String! # set as Token.id.concat(Endowment.id)`
+  endowmentToken: EndowmentTokenLocked!
+  address: User!
+  amount: BigInt!
 }
 
-type EndowmentMultiSigOwnerAdded @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type EndowmentTokenAllowanceLiquid @entity {
+  id: String! # set as Token.id.concat(Endowment.id)`
+  endowmentToken: EndowmentTokenLiquid!
+  address: User!
+  amount: BigInt!
 }
 
-type EndowmentMultiSigOwnerRemoved @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  blockNumber: BigInt!
+type EndowmentDepositTransaction @entity(immutable: true) {
+  id: Bytes! # transaction hash
+  endowment: Endowment!
+  token: String!
+  lockedAmount: BigInt!
+  liquidAmount: BigInt!
   blockTimestamp: BigInt!
-  transactionHash: Bytes!
 }
 
-type EndowmentMultiSigRequireExecutionChanged @entity(immutable: true) {
-  id: Bytes!
-  requireExecution: Boolean! # bool
-  blockNumber: BigInt!
+type EndowmentWithdrawTransaction @entity(immutable: true) {
+  id: Bytes! # transaction hash
+  endowment: Endowment!
+  beneficiary: BeneficiaryData!
+  token: String!
+  lockedAmount: BigInt!
+  liquidAmount: BigInt!
   blockTimestamp: BigInt!
-  transactionHash: Bytes!
 }
 
-type EndowmentMultiSigTransactionConfirmed @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentMultiSigTransactionExecuted @entity(immutable: true) {
-  id: Bytes!
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentMultiSigTransactionExpiryChanged @entity(immutable: true) {
-  id: Bytes!
-  transactionExpiry: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentMultiSigTransactionSubmitted @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-type AccountsContractStorageUpdated @entity(immutable: true) {
-  id: Bytes!
-  _chainName: String! # string
-  _accountsContractAddress: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AngelProtocolParamsUpdated @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ConfigUpdated @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type FeeSettingsUpdated @entity(immutable: true) {
-  id: Bytes!
-  _feeType: Int! # uint8
-  _bpsRate: BigInt! # uint256
-  _payoutAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type GasFeeUpdated @entity(immutable: true) {
-  id: Bytes!
-  _tokenAddr: Bytes! # address
-  _gasFee: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RegistrarInitialized @entity(immutable: true) {
-  id: Bytes!
-  version: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NetworkConnectionPosted @entity(immutable: true) {
-  id: Bytes!
-  chainId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type NetworkConnectionRemoved @entity(immutable: true) {
-  id: Bytes!
-  chainId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RegistrarOwnershipTransferred @entity(immutable: true) {
-  id: Bytes!
-  previousOwner: Bytes! # address
-  newOwner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RebalanceParamsUpdated @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type StrategyApprovalUpdated @entity(immutable: true) {
-  id: Bytes!
-  _strategyId: Bytes! # bytes4
-  _approvalState: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type StrategyParamsUpdated @entity(immutable: true) {
-  id: Bytes!
-  _strategyId: Bytes! # bytes4
-  _lockAddr: Bytes! # address
-  _liqAddr: Bytes! # address
-  _approvalState: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type TokenAcceptanceUpdated @entity(immutable: true) {
-  id: Bytes!
-  _tokenAddr: Bytes! # address
-  _isAccepted: Boolean! # bool
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-type AllowanceRemoved @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AllowanceUpdated @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  spender: Bytes! # address
-  tokenAddress: Bytes! # address
-  allowance: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type AccountsConfigUpdated @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DaoContractCreated @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint32
-  daoAddress: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationDeposited @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint256
-  tokenAddress: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMatchCreated @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint256
-  donationMatchContract: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationWithdrawn @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint256
-  recipient: Bytes! # address
-  tokenAddress: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentCreated @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentSettingUpdated @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint256
-  setting: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentUpdated @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type OwnerUpdated @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type TokenSwapped @entity(immutable: true) {
-  id: Bytes!
-  endowId: BigInt! # uint256
-  accountType: Int! # uint8
+type EndowmentTokenSwap @entity(immutable: true) {
+  id: Bytes! # use `${transactionHash}`
+  endowment: Endowment!
+  accountType: AccountType!
   tokenIn: Bytes! # address
   amountIn: BigInt! # uint256
   tokenOut: Bytes! # address
   amountOut: BigInt! # uint256
-  blockNumber: BigInt!
   blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-type ApplicationConfirmationRevoked @entity(immutable: true) {
-  id: Bytes!
-  proposalId: BigInt! # uint256
-  owner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
 }
 
-type ApplicationConfirmed @entity(immutable: true) {
-  id: Bytes!
-  proposalId: BigInt! # uint256
-  owner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type EndowmentMetadata @entity {
+  id: String! # Endowment ID
+  owner: Bytes!
+  name: String!
+  sdgs: [BigInt]!
+  tier: Tier!
+  logo: String!
+  image: String!
+  maturityTime: BigInt!
+  rebalance: RebalanceParams!
+  pendingRedemptions: BigInt!
+  proposalLink: BigInt!
+  multiSig: MultiSig!
+  dao: Bytes!
+  daoToken: Bytes!
+  donationMatchActive: Boolean!
+  donationMatchContract: Bytes!
+  allowlistedBeneficiaries: [User]!
+  allowlistedContributors: [User]!
+  maturityAllowlist: [User]!
+  earlyLockedWithdrawFee: FeeSetting!
+  withdrawFee: FeeSetting!
+  depositFee: FeeSetting!
+  balanceFee: FeeSetting!
+  settingsController: SettingsController!
+  ignoreUserSplits: Boolean!
+  splitToLiquid: SplitDetails!
+  parent: Endowment
+  referralId: Endowment
 }
 
-type ApplicationExecuted @entity(immutable: true) {
-  id: Bytes!
-  proposalId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type BeneficiaryData @entity {
+  endowId: Int
+  fundId: BigInt
+  addr: Bytes
 }
 
-type ApplicationProposed @entity(immutable: true) {
-  id: Bytes!
-  proposalId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type SplitDetails @entity {
+  max: BigInt!
+  min: BigInt!
+  defaultSplit: BigInt!
 }
 
-type CharityApplicationsApprovalsRequiredChanged @entity(immutable: true) {
-  id: Bytes!
-  approvalsRequired: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type SettingsPermission @entity {
+  locked: Boolean!
+  delegate_addr: Bytes!
+  delegate_expires: BigInt!
 }
 
-type CharityApplicationsConfirmationRevoked @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type SettingsController @entity {
+  acceptedTokens: SettingsPermission!
+  lockedInvestmentManagement: SettingsPermission!
+  liquidInvestmentManagement: SettingsPermission!
+  allowlistedBeneficiaries: SettingsPermission!
+  allowlistedContributors: SettingsPermission!
+  maturityAllowlist: SettingsPermission!
+  maturityTime: SettingsPermission!
+  earlyLockedWithdrawFee: SettingsPermission!
+  withdrawFee: SettingsPermission!
+  depositFee: SettingsPermission!
+  balanceFee: SettingsPermission!
+  name: SettingsPermission!
+  image: SettingsPermission!
+  logo: SettingsPermission!
+  sdgs: SettingsPermission!
+  splitToLiquid: SettingsPermission!
+  ignoreUserSplits: SettingsPermission!
 }
 
-type CharityApplicationsDeposit @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type GasSent @entity(immutable: true) {
-  id: Bytes!
-  endowmentId: BigInt! # uint256
-  member: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CharityApplicationsInitialized @entity(immutable: true) {
-  id: Bytes!
-  version: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CharityApplicationsOwnerAdded @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CharityApplicationsOwnerRemoved @entity(immutable: true) {
-  id: Bytes!
-  owner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CharityApplicationsRequireExecutionChanged @entity(immutable: true) {
-  id: Bytes!
-  requireExecution: Boolean! # bool
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type SeedAssetSent @entity(immutable: true) {
-  id: Bytes!
-  endowmentId: BigInt! # uint256
-  asset: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CharityApplicationsTransactionConfirmed @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CharityApplicationsTransactionExecuted @entity(immutable: true) {
-  id: Bytes!
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CharityApplicationsTransactionExpiryChanged @entity(immutable: true) {
-  id: Bytes!
-  transactionExpiry: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type CharityApplicationsTransactionSubmitted @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes! # address
-  transactionId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-type ActiveFundUpdated @entity(immutable: true) {
-  id: Bytes!
-  fundId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type IndexFundConfigUpdated @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type DonationMessagesUpdated @entity(immutable: true) {
-  id: Bytes!
-  fundId: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type IndexFundCreated @entity(immutable: true) {
-  id: Bytes!
-  IndexFund_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type IndexFundRemoved @entity(immutable: true) {
-  id: Bytes!
-  IndexFund_id: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type IndexFundInitialized @entity(immutable: true) {
-  id: Bytes!
-  version: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type MemberRemoved @entity(immutable: true) {
-  id: Bytes!
-  fundId: BigInt! # uint256
-  memberId: BigInt! # uint32
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type MembersUpdated @entity(immutable: true) {
-  id: Bytes!
-  fundId: BigInt! # uint256
-  members: [BigInt!]! # uint32[]
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type IndexFundOwnerUpdated @entity(immutable: true) {
-  id: Bytes!
-  newOwner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RegistrarUpdated @entity(immutable: true) {
-  id: Bytes!
-  newRegistrar: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type StateUpdated @entity(immutable: true) {
-  id: Bytes!
-
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-type Deposit @entity(immutable: true) {
-  id: Bytes!
-  action_destinationChain: String! # string
-  action_strategyId: Bytes! # bytes4
-  action_selector: Bytes! # bytes4
-  action_accountIds: [BigInt!]! # uint32[]
-  action_token: Bytes! # address
-  action_lockAmt: BigInt! # uint256
-  action_liqAmt: BigInt! # uint256
-  action_status: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ErrorBytesLogged @entity(immutable: true) {
-  id: Bytes!
-  action_destinationChain: String! # string
-  action_strategyId: Bytes! # bytes4
-  action_selector: Bytes! # bytes4
-  action_accountIds: [BigInt!]! # uint32[]
-  action_token: Bytes! # address
-  action_lockAmt: BigInt! # uint256
-  action_liqAmt: BigInt! # uint256
-  action_status: Int! # uint8
-  data: Bytes! # bytes
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ErrorLogged @entity(immutable: true) {
-  id: Bytes!
-  action_destinationChain: String! # string
-  action_strategyId: Bytes! # bytes4
-  action_selector: Bytes! # bytes4
-  action_accountIds: [BigInt!]! # uint32[]
-  action_token: Bytes! # address
-  action_lockAmt: BigInt! # uint256
-  action_liqAmt: BigInt! # uint256
-  action_status: Int! # uint8
-  message: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Initialized @entity(immutable: true) {
-  id: Bytes!
-  version: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type OwnershipTransferred @entity(immutable: true) {
-  id: Bytes!
-  previousOwner: Bytes! # address
-  newOwner: Bytes! # address
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Redeem @entity(immutable: true) {
-  id: Bytes!
-  action_destinationChain: String! # string
-  action_strategyId: Bytes! # bytes4
-  action_selector: Bytes! # bytes4
-  action_accountIds: [BigInt!]! # uint32[]
-  action_token: Bytes! # address
-  action_lockAmt: BigInt! # uint256
-  action_liqAmt: BigInt! # uint256
-  action_status: Int! # uint8
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Refund @entity(immutable: true) {
-  id: Bytes!
-  action_destinationChain: String! # string
-  action_strategyId: Bytes! # bytes4
-  action_selector: Bytes! # bytes4
-  action_accountIds: [BigInt!]! # uint32[]
-  action_token: Bytes! # address
-  action_lockAmt: BigInt! # uint256
-  action_liqAmt: BigInt! # uint256
-  action_status: Int! # uint8
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type RewardsHarvested @entity(immutable: true) {
-  id: Bytes!
-  action_destinationChain: String! # string
-  action_strategyId: Bytes! # bytes4
-  action_selector: Bytes! # bytes4
-  action_accountIds: [BigInt!]! # uint32[]
-  action_token: Bytes! # address
-  action_lockAmt: BigInt! # uint256
-  action_liqAmt: BigInt! # uint256
-  action_status: Int! # uint8
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Transfer @entity(immutable: true) {
-  id: Bytes!
-  action_destinationChain: String! # string
-  action_strategyId: Bytes! # bytes4
-  action_selector: Bytes! # bytes4
-  action_accountIds: [BigInt!]! # uint32[]
-  action_token: Bytes! # address
-  action_lockAmt: BigInt! # uint256
-  action_liqAmt: BigInt! # uint256
-  action_status: Int! # uint8
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+type FeeSetting @entity {
+  payoutAddress: Bytes!
+  bps: BigInt!
 }

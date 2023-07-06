@@ -56,15 +56,13 @@ type User @entity(immutable: true) {
 }
 
 type MultiSig @entity {
-  id: Bytes! # proxy contract address
+  id: Bytes!
   owners: [MultiSigOwner!]! @derivedFrom(field: "multiSig")
   transactions: [MultiSigTransaction]! @derivedFrom(field: "multiSig")
   transactionExpiry: BigInt!
   requireExecution: Boolean!
   approvalsRequired: BigInt!
   multiSigType: MultiSigType!
-  applicationsMultiSig: ApplicationsMultiSig
-  endowmentMultiSig: Int
 }
 
 type MultiSigOwner @entity(immutable: true) {
@@ -155,7 +153,7 @@ type ProxyAdminUpdated @entity(immutable: true) {
 
 ### Accounts - Endowment
 type Endowment@entity(immutable: true) {
-  id: String! # Endowment ID
+  id: Bytes! # Endowment ID as Hex
   endowmentType: EndowmentType!
   balancesLocked: [EndowmentTokenLocked]! @derivedFrom(field: "endowment")
   balancesLiquid: [EndowmentTokenLiquid]! @derivedFrom(field: "endowment")

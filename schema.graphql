@@ -48,16 +48,11 @@ enum MultiSigType {
 # ~~~~~~~~~~~~~~~~
 # ~~~ ENTITIES ~~~
 # ~~~~~~~~~~~~~~~~
-type Token @entity(immutable: true) {
-  id: Bytes! # set as contract address
-}
-
 type User @entity(immutable: true) {
   id: Bytes! # set as wallet/contract address
   multiSigs: [MultiSig]! @derivedFrom("owner")
-  applications: [ApplicationProposal]! @derivedFrom("proposer")
-  allowancesLocked: [EndowmentTokenLockedAllowance]! @derivedFrom("address")
-  allowancesLiquid: [EndowmentTokenLiquidAllowance]! @derivedFrom("address")
+  applicationProposals: [ApplicationProposal]! @derivedFrom("proposer")
+  tokenAllowances: [TokenAllowanceSpender]! @derivedFrom("spender")
 }
 
 type MultiSig @entity {
@@ -126,8 +121,8 @@ type ApplicationConfirmation @entity {
 ### Endowment MultiSig Factory
 type ContractInstantiated @entity(immutable: true) {
   id: Bytes!
-  sender: Bytes! # address
-  instantiation: Bytes! # address
+  sender: Bytes!
+  instantiation: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -135,7 +130,7 @@ type ContractInstantiated @entity(immutable: true) {
 
 type ImplementationUpdated @entity(immutable: true) {
   id: Bytes!
-  implementationAddress: Bytes! # address
+  implementationAddress: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -143,8 +138,8 @@ type ImplementationUpdated @entity(immutable: true) {
 
 type EndowmentMultiSigFactoryOwnershipTransferred @entity(immutable: true) {
   id: Bytes!
-  previousOwner: Bytes! # address
-  newOwner: Bytes! # address
+  previousOwner: Bytes!
+  newOwner: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -152,7 +147,7 @@ type EndowmentMultiSigFactoryOwnershipTransferred @entity(immutable: true) {
 
 type ProxyAdminUpdated @entity(immutable: true) {
   id: Bytes!
-  admin: Bytes! # address
+  admin: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
@@ -162,41 +157,34 @@ type ProxyAdminUpdated @entity(immutable: true) {
 type Endowment@entity(immutable: true) {
   id: String! # Endowment ID
   endowmentType: EndowmentType!
-  metadata: EndowmentMetadata!
   balancesLocked: [EndowmentTokenLocked]! @derivedFrom(field: "endowment")
   balancesLiquid: [EndowmentTokenLiquid]! @derivedFrom(field: "endowment")
-  allowancesLocked: [EndowmentTokenAllowanceLocked]! @derivedFrom(field: "endowmentToken")
-  allowancesLiquid: [EndowmentTokenAllowanceLiquid]! @derivedFrom(field: "endowmentToken")
+  tokenAllowances: [TokenAllowance]! @derivedFrom(field: "endowmentToken")
   deposits: [EndowmentDepositTransaction]! @derivedFrom(field: "endowment")
   withdrawals: [EndowmentWithdrawTransaction]! @derivedFrom(field: "endowment")
   swaps: [EndowmentSwapTransaction]! @derivedFrom("endowment")
 }
 
 type EndowmentTokenLocked @entity {
-  id: String! # set as Token.id.concat(Endowment.id)`
-  endowment: Endowment!
-  token: Token!
-  amount: BigInt!
-}
-
-type EndowmentTokenLiquid @entity {
-  id: String! # set as Token.id.concat(Endowment.id)`
+  id: String! # set as Endowment.id.concat(Token contract addr)`
   endowment: Endowment!
   token: Bytes!
   amount: BigInt!
 }
 
-type EndowmentTokenAllowanceLocked @entity {
-  id: String! # set as Token.id.concat(Endowment.id)`
-  endowmentToken: EndowmentTokenLocked!
-  address: User!
+type EndowmentTokenLiquid @entity {
+  id: String! # set as Endowment.id.concat(Token contract addr)`
+  endowment: Endowment!
+  token: Bytes!
   amount: BigInt!
+  allowanceOutstanding: BigInt!
+  allowanceSpenders: [TokenAllowanceSpender]! @derivedFrom("token")
 }
 
-type EndowmentTokenAllowanceLiquid @entity {
-  id: String! # set as Token.id.concat(Endowment.id)`
-  endowmentToken: EndowmentTokenLiquid!
-  address: User!
+type EndowmentTokenAllowanceSpender @entity {
+  id: String! # set as EndowmenTokenLiquid.id.concat(User.id)`
+  token: EndowmentTokenLiquid!
+  spender: User!
   amount: BigInt!
 }
 
@@ -204,102 +192,29 @@ type EndowmentDepositTransaction @entity(immutable: true) {
   id: Bytes! # transaction hash
   endowment: Endowment!
   token: String!
-  lockedAmount: BigInt!
-  liquidAmount: BigInt!
+  amountLocked: BigInt!
+  amountLiquid: BigInt!
   blockTimestamp: BigInt!
 }
 
 type EndowmentWithdrawTransaction @entity(immutable: true) {
   id: Bytes! # transaction hash
   endowment: Endowment!
-  beneficiary: BeneficiaryData!
+  accountType: AccountType!
   token: String!
-  lockedAmount: BigInt!
-  liquidAmount: BigInt!
+  amount: BigInt!
+  beneficiaryEndowId: Int
+  beneficiaryAddr: Bytes
   blockTimestamp: BigInt!
 }
 
-type EndowmentTokenSwap @entity(immutable: true) {
-  id: Bytes! # use `${transactionHash}`
+type EndowmentSwapTransaction @entity(immutable: true) {
+  id: Bytes! # transaction Hash
   endowment: Endowment!
   accountType: AccountType!
-  tokenIn: Bytes! # address
-  amountIn: BigInt! # uint256
-  tokenOut: Bytes! # address
-  amountOut: BigInt! # uint256
+  tokenIn: Bytes!
+  amountIn: BigInt!
+  tokenOut: Bytes!
+  amountOut: BigInt!
   blockTimestamp: BigInt!
-}
-
-type EndowmentMetadata @entity {
-  id: String! # Endowment ID
-  owner: Bytes!
-  name: String!
-  sdgs: [BigInt]!
-  tier: Tier!
-  logo: String!
-  image: String!
-  maturityTime: BigInt!
-  rebalance: RebalanceParams!
-  pendingRedemptions: BigInt!
-  proposalLink: BigInt!
-  multiSig: MultiSig!
-  dao: Bytes!
-  daoToken: Bytes!
-  donationMatchActive: Boolean!
-  donationMatchContract: Bytes!
-  allowlistedBeneficiaries: [User]!
-  allowlistedContributors: [User]!
-  maturityAllowlist: [User]!
-  earlyLockedWithdrawFee: FeeSetting!
-  withdrawFee: FeeSetting!
-  depositFee: FeeSetting!
-  balanceFee: FeeSetting!
-  settingsController: SettingsController!
-  ignoreUserSplits: Boolean!
-  splitToLiquid: SplitDetails!
-  parent: Endowment
-  referralId: Endowment
-}
-
-type BeneficiaryData @entity {
-  endowId: Int
-  fundId: BigInt
-  addr: Bytes
-}
-
-type SplitDetails @entity {
-  max: BigInt!
-  min: BigInt!
-  defaultSplit: BigInt!
-}
-
-type SettingsPermission @entity {
-  locked: Boolean!
-  delegate_addr: Bytes!
-  delegate_expires: BigInt!
-}
-
-type SettingsController @entity {
-  acceptedTokens: SettingsPermission!
-  lockedInvestmentManagement: SettingsPermission!
-  liquidInvestmentManagement: SettingsPermission!
-  allowlistedBeneficiaries: SettingsPermission!
-  allowlistedContributors: SettingsPermission!
-  maturityAllowlist: SettingsPermission!
-  maturityTime: SettingsPermission!
-  earlyLockedWithdrawFee: SettingsPermission!
-  withdrawFee: SettingsPermission!
-  depositFee: SettingsPermission!
-  balanceFee: SettingsPermission!
-  name: SettingsPermission!
-  image: SettingsPermission!
-  logo: SettingsPermission!
-  sdgs: SettingsPermission!
-  splitToLiquid: SettingsPermission!
-  ignoreUserSplits: SettingsPermission!
-}
-
-type FeeSetting @entity {
-  payoutAddress: Bytes!
-  bps: BigInt!
 }

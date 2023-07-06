@@ -68,13 +68,12 @@ export function handleOwnerAdded(event: OwnerAddedEvent): void {
   let ms = MultiSig.load(event.params.msAddress);
   let msoId = ms.id.concatI32(event.params.owner.toI32();
   let mso = MultiSigOwner.load(msoId);
-  if (mso) {
-    // throw error
+  if (!mso) {
+    let mso = new MultiSigOwner(msoId)
+    mso.multiSig = ms;
+    mso.owner = event.params.owner;
+    mso.save();
   }
-  let mso = new MultiSigOwner(msoId)
-  mso.multiSig = ms;
-  mso.owner = event.params.owner;
-  mso.save();
 }
 
 export function handleOwnerRemoved(event: OwnerRemovedEvent): void {

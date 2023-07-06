@@ -1,205 +1,150 @@
 import {
-  AllowanceRemoved as AllowanceRemovedEvent,
-  AllowanceUpdated as AllowanceUpdatedEvent,
-  ConfigUpdated as ConfigUpdatedEvent,
-  DaoContractCreated as DaoContractCreatedEvent,
-  DonationDeposited as DonationDepositedEvent,
-  DonationMatchCreated as DonationMatchCreatedEvent,
-  DonationWithdrawn as DonationWithdrawnEvent,
   EndowmentCreated as EndowmentCreatedEvent,
-  EndowmentSettingUpdated as EndowmentSettingUpdatedEvent,
-  EndowmentUpdated as EndowmentUpdatedEvent,
-  OwnerUpdated as OwnerUpdatedEvent,
+  AllowanceSpent as AllowanceSpentEvent,
+  AllowanceUpdated as AllowanceUpdatedEvent,
+  EndowmentDeposit as EndowmentDepositEvent,
+  EndowmentWithdraw as EndowmentWithdrawEvent,
   TokenSwapped as TokenSwappedEvent
-} from "../generated/Accounts/Accounts"
+ } from "../generated/Accounts/Accounts";
 import {
-  AllowanceRemoved,
-  AllowanceUpdated,
-  ConfigUpdated,
-  DaoContractCreated,
-  DonationDeposited,
-  DonationMatchCreated,
-  DonationWithdrawn,
-  EndowmentCreated,
-  EndowmentSettingUpdated,
-  EndowmentUpdated,
-  OwnerUpdated,
-  TokenSwapped
-} from "../generated/schema"
+  Endowment,
+  EndowmentTokenLocked,
+  EndowmentTokenLiquid,
+  EndowmentTokenAllowanceSpender,
+  EndowmentDepositTransaction,
+  EndowmentWithdrawTransaction,
+  EndowmentSwapTransaction,
+} from "../generated/schema";
 
-export function handleAllowanceRemoved(event: AllowanceRemovedEvent): void {
-  let entity = new AllowanceRemoved(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.sender = event.params.sender
-  entity.spender = event.params.spender
-  entity.tokenAddress = event.params.tokenAddress
+export function handleEndowmentCreated(event: EndowmentCreatedEvent): void {
+  let endow = new Endowment(event.params.endowId);
+  endow.endowType = event.params.endowType;
+  endow.save();
+}
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+export function handleEndowmentDeposit(event: EndowmentDepositEvent): void {
+  let endow = Endowment.load(event.params.endowId);
+  // save deposit tx record
+  let deposit = new EndowmentDepositTransaction(event.transaction.hash);
+  deposit.endowment = endow;
+  deposit.token = event.params.tokenAddress;
+  deposit.amountLocked = event.params.amountLocked;
+  deposit.amountLiquid = event.params.amountLiquid;
+  deposit.blockTimestamp = event.block.timestamp;
+  deposit.save();
 
-  entity.save()
+  // update the locked and liquid Endowment Token Balances
+  if (event.params.amountLocked > 0) {
+    let token = EndowmentTokenLocked.load(event.params.endowId.concat(event.params.tokenAddress));
+    if (!token) {
+      token = new EndowmentTokenLocked(event.params.endowId.concat(event.params.tokenAddress));
+      token.token = event.params.tokenAddress;
+      token.amount = event.params.amountLocked;
+    } else {
+      token.amount += event.params.amountLocked;
+    }
+    token.save();
+  }
+  if (event.params.amountLiquid > 0) {
+    let token = EndowmentTokenLiquid.load(event.params.endowId.concat(event.params.tokenAddress));
+    if (!token) {
+      token = new EndowmentTokenLiquid(event.params.endowId.concat(event.params.tokenAddress));
+      token.token = event.params.tokenAddress;
+      token.amount = event.params.amountLiquid;
+      token.allowanceOutstanding = 0;
+    } else {
+      token.amount += event.params.amountLiquid;
+    }
+    token.save();
+  }
+}
+
+export function handleEndowmentWithdraw(event: EndowmentWithdrawEvent): void {
+  let endow = Endowment.load(event.params.endowId);
+  // save withdraw tx record
+  let withdraw = new EndowmentWithdrawTransaction(event.transaction.hash);
+  withdraw.endowment = endow;
+  withdraw.accountType = event.params.accountType;
+  withdraw.token = event.params.tokenAddress;
+  withdraw.amount = event.params.amount;
+  withdraw.beneficiaryEndowId = event.params.beneficiaryEndowId;
+  withdraw.beneficiaryAddr = event.params.beneficiaryAddr;
+  withdraw.blockTimestamp = event.block.timestamp;
+  withdraw.save();
+  // update the Endowment Token Balance
+  let token;
+  if (event.params.accountType == AccountType.Locked) {
+    token = EndowmentTokenLocked.load(event.params.endowId.concat(event.params.tokenAddress));
+  } else {
+    token = EndowmentTokenLiquid.load(event.params.endowId.concat(event.params.tokenAddress));
+    token.amount -= event.params.amount;
+  }
+  token.save();
+}
+
+export function handleAllowanceSpent(event: AllowanceSpentEvent): void {
+  let token = EndowmentTokenLiquid.load(event.params.endowId.concat(event.params.tokenAddress));
+  token.allowanceOutstanding -= amount;
+  token.save();
+  let spender = EndowmentTokenAllowanceSpender.load(event.params.endowId.concat(event.params.tokenAddress).concat(event.params.spender));
+  spender.amount -= amount;
+  spender.save();
 }
 
 export function handleAllowanceUpdated(event: AllowanceUpdatedEvent): void {
-  let entity = new AllowanceUpdated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.sender = event.params.sender
-  entity.spender = event.params.spender
-  entity.tokenAddress = event.params.tokenAddress
-  entity.allowance = event.params.allowance
+  // update the spender's allownance to the new balance
+  let spender = EndowmentTokenAllowanceSpender.load(event.params.endowId.concat(event.params.tokenAddress).concat(event.params.spender));
+  spender.amount = amount;
+  spender.save();
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleConfigUpdated(event: ConfigUpdatedEvent): void {
-  let entity = new ConfigUpdated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleDaoContractCreated(event: DaoContractCreatedEvent): void {
-  let entity = new DaoContractCreated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.endowId = event.params.endowId
-  entity.daoAddress = event.params.daoAddress
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleDonationDeposited(event: DonationDepositedEvent): void {
-  let entity = new DonationDeposited(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.endowId = event.params.endowId
-  entity.tokenAddress = event.params.tokenAddress
-  entity.amount = event.params.amount
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleDonationMatchCreated(
-  event: DonationMatchCreatedEvent
-): void {
-  let entity = new DonationMatchCreated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.endowId = event.params.endowId
-  entity.donationMatchContract = event.params.donationMatchContract
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleDonationWithdrawn(event: DonationWithdrawnEvent): void {
-  let entity = new DonationWithdrawn(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.endowId = event.params.endowId
-  entity.recipient = event.params.recipient
-  entity.tokenAddress = event.params.tokenAddress
-  entity.amount = event.params.amount
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleEndowmentCreated(event: EndowmentCreatedEvent): void {
-  let entity = new EndowmentCreated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.endowId = event.params.endowId
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleEndowmentSettingUpdated(
-  event: EndowmentSettingUpdatedEvent
-): void {
-  let entity = new EndowmentSettingUpdated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.endowId = event.params.endowId
-  entity.setting = event.params.setting
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleEndowmentUpdated(event: EndowmentUpdatedEvent): void {
-  let entity = new EndowmentUpdated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.endowId = event.params.endowId
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleOwnerUpdated(event: OwnerUpdatedEvent): void {
-  let entity = new OwnerUpdated(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.owner = event.params.owner
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  // adjust the token's outstanding allowance and balance amount depending on if add/reduce spender's balance
+  let token = EndowmentTokenLiquid.load(event.params.endowId.concat(event.params.tokenAddress));
+  if (added > 0) {
+    token.allowanceOutstanding += added;
+    token.amount -= added;
+    spender.amount = amount;
+  } else if (deducted > 0) {
+    token.allowanceOutstanding -= deducted;
+    token.amount += deducted;
+  }
+  token.save();
 }
 
 export function handleTokenSwapped(event: TokenSwappedEvent): void {
-  let entity = new TokenSwapped(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.endowId = event.params.endowId
-  entity.accountType = event.params.accountType
-  entity.tokenIn = event.params.tokenIn
-  entity.amountIn = event.params.amountIn
-  entity.tokenOut = event.params.tokenOut
-  entity.amountOut = event.params.amountOut
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  let endow = Endowment.load(event.params.endowId);
+  // save swap tx record
+  let swap = new EndowmentSwapTransaction(event.transaction.hash);
+  swap.endowment = endow;
+  swap.accountType = event.params.accountType;
+  swap.tokenIn = event.params.tokenIn;
+  swap.amountIn: = event.params.amountIn;
+  swap.tokenOut = event.params.tokenOut;
+  swap.amountOut: = event.params.amountOut;
+  swap.blockTimestamp = event.block.timestamp;
+  swap.save();
+  // update the involved Endowment Token Balances
+  let tokenIn, tokenOut;
+  if (event.params.accountType == AccountType.Locked) {
+    tokenIn = EndowmentTokenLocked.load(event.params.endowId.concat(event.params.tokenIn));
+    tokenOut = EndowmentTokenLocked.load(event.params.endowId.concat(event.params.tokenOut));
+    if (!tokenOut) {
+      tokenOut = new EndowmentTokenLocked(event.params.endowId.concat(event.params.tokenOut));
+      tokenOut.endowment = endow;
+      tokenOut.token = event.params.tokenOut;
+    }
+  } else {
+    tokenIn = EndowmentTokenLiquid.load(event.params.endowId.concat(event.params.tokenIn));
+    tokenOut = EndowmentTokenLiquid.load(event.params.endowId.concat(event.params.tokenOut));
+    if (!tokenOut) {
+      tokenOut = new EndowmentTokenLocked(event.params.endowId.concat(event.params.tokenOut));
+      tokenOut.endowment = endow;
+      tokenOut.token = event.params.tokenOut;
+    }
+  }
+  // update token in amount (decrease)
+  tokenIn.amount -= event.params.amountIn;
+  tokenIn.save();
+  // update token out amount (increase)
+  tokenOut.amount += event.params.amountOut;
+  tokenOut.save();
 }

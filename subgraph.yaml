@@ -14,46 +14,28 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
+        - User
         - Endowment
         - EndowmentTokenLocked
         - EndowmentTokenLiquid
-        - EndowmentTokenAllowanceLocked
-        - EndowmentTokenAllowanceLiquid
+        - EndowmentTokenAllowanceSpender
         - EndowmentDepositTransaction
         - EndowmentWithdrawTransaction
-        - EndowmentTokenSwap
-        - EndowmentMetadata
-        - BeneficiaryData
-        - SplitDetails
-        - SettingsPermission
-        - SettingsController
-        - FeeSetting
+        - EndowmentSwapTransaction
       abis:
         - name: Accounts
           file: ./abis/Accounts.json
       eventHandlers:
-        - event: AllowanceRemoved(address,address,address)
-          handler: handleAllowanceRemoved
-        - event: AllowanceUpdated(address,address,address,uint256)
-          handler: handleAllowanceUpdated
-        - event: ConfigUpdated()
-          handler: handleConfigUpdated
-        - event: DaoContractCreated(uint32,address)
-          handler: handleDaoContractCreated
-        - event: DonationDeposited(uint256,address,uint256)
-          handler: handleDonationDeposited
-        - event: DonationMatchCreated(uint256,address)
-          handler: handleDonationMatchCreated
-        - event: DonationWithdrawn(uint256,address,address,uint256)
-          handler: handleDonationWithdrawn
         - event: EndowmentCreated(uint256)
           handler: handleEndowmentCreated
-        - event: EndowmentSettingUpdated(uint256,string)
-          handler: handleEndowmentSettingUpdated
-        - event: EndowmentUpdated(uint256)
-          handler: handleEndowmentUpdated
-        - event: OwnerUpdated(address)
-          handler: handleOwnerUpdated
+        - event: AllowanceUpdated(uint32,address,address,uint256)
+          handler: handleAllowanceUpdated
+        - event: AllowanceSpent(uint32,address,address,uint256)
+          handler: handleAllowanceSpent
+        - event: EndowmentDeposit(uint256,address,uint256)
+          handler: handleEndowmentDeposit
+        - event: EndowmentWithdraw(uint256,address,address,uint256)
+          handler: handleEndowmentWithdraw
         - event: TokenSwapped(uint256,uint8,address,uint256,address,uint256)
           handler: handleTokenSwapped
       file: ./src/accounts.ts

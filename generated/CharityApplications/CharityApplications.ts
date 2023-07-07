@@ -108,73 +108,21 @@ export class ApprovalsRequiredChanged__Params {
   }
 }
 
-export class ConfirmationRevoked extends ethereum.Event {
-  get params(): ConfirmationRevoked__Params {
-    return new ConfirmationRevoked__Params(this);
+export class ExpiryChanged extends ethereum.Event {
+  get params(): ExpiryChanged__Params {
+    return new ExpiryChanged__Params(this);
   }
 }
 
-export class ConfirmationRevoked__Params {
-  _event: ConfirmationRevoked;
+export class ExpiryChanged__Params {
+  _event: ExpiryChanged;
 
-  constructor(event: ConfirmationRevoked) {
+  constructor(event: ExpiryChanged) {
     this._event = event;
   }
 
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get transactionId(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class Deposit extends ethereum.Event {
-  get params(): Deposit__Params {
-    return new Deposit__Params(this);
-  }
-}
-
-export class Deposit__Params {
-  _event: Deposit;
-
-  constructor(event: Deposit) {
-    this._event = event;
-  }
-
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-}
-
-export class GasSent extends ethereum.Event {
-  get params(): GasSent__Params {
-    return new GasSent__Params(this);
-  }
-}
-
-export class GasSent__Params {
-  _event: GasSent;
-
-  constructor(event: GasSent) {
-    this._event = event;
-  }
-
-  get endowmentId(): BigInt {
+  get transactionExpiry(): BigInt {
     return this._event.parameters[0].value.toBigInt();
-  }
-
-  get member(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -193,6 +141,36 @@ export class Initialized__Params {
 
   get version(): i32 {
     return this._event.parameters[0].value.toI32();
+  }
+}
+
+export class Initialized1 extends ethereum.Event {
+  get params(): Initialized1__Params {
+    return new Initialized1__Params(this);
+  }
+}
+
+export class Initialized1__Params {
+  _event: Initialized1;
+
+  constructor(event: Initialized1) {
+    this._event = event;
+  }
+
+  get owners(): Array<Address> {
+    return this._event.parameters[0].value.toAddressArray();
+  }
+
+  get approvalsRequired(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get requireExecution(): boolean {
+    return this._event.parameters[2].value.toBoolean();
+  }
+
+  get transactionExpiry(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
@@ -250,29 +228,25 @@ export class RequireExecutionChanged__Params {
   }
 }
 
-export class SeedAssetSent extends ethereum.Event {
-  get params(): SeedAssetSent__Params {
-    return new SeedAssetSent__Params(this);
+export class TransactionConfirmationRevoked extends ethereum.Event {
+  get params(): TransactionConfirmationRevoked__Params {
+    return new TransactionConfirmationRevoked__Params(this);
   }
 }
 
-export class SeedAssetSent__Params {
-  _event: SeedAssetSent;
+export class TransactionConfirmationRevoked__Params {
+  _event: TransactionConfirmationRevoked;
 
-  constructor(event: SeedAssetSent) {
+  constructor(event: TransactionConfirmationRevoked) {
     this._event = event;
   }
 
-  get endowmentId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+  get sender(): Address {
+    return this._event.parameters[0].value.toAddress();
   }
 
-  get asset(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+  get transactionId(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
   }
 }
 
@@ -312,24 +286,6 @@ export class TransactionExecuted__Params {
   }
 
   get transactionId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class TransactionExpiryChanged extends ethereum.Event {
-  get params(): TransactionExpiryChanged__Params {
-    return new TransactionExpiryChanged__Params(this);
-  }
-}
-
-export class TransactionExpiryChanged__Params {
-  _event: TransactionExpiryChanged;
-
-  constructor(event: TransactionExpiryChanged) {
-    this._event = event;
-  }
-
-  get transactionExpiry(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
 }
@@ -1396,6 +1352,66 @@ export class CharityApplications extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  getProposalConfirmationCount(proposalId: BigInt): BigInt {
+    let result = super.call(
+      "getProposalConfirmationCount",
+      "getProposalConfirmationCount(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(proposalId)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getProposalConfirmationCount(
+    proposalId: BigInt
+  ): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getProposalConfirmationCount",
+      "getProposalConfirmationCount(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(proposalId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getProposalConfirmationStatus(
+    proposalId: BigInt,
+    ownerAddr: Address
+  ): boolean {
+    let result = super.call(
+      "getProposalConfirmationStatus",
+      "getProposalConfirmationStatus(uint256,address):(bool)",
+      [
+        ethereum.Value.fromUnsignedBigInt(proposalId),
+        ethereum.Value.fromAddress(ownerAddr)
+      ]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_getProposalConfirmationStatus(
+    proposalId: BigInt,
+    ownerAddr: Address
+  ): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "getProposalConfirmationStatus",
+      "getProposalConfirmationStatus(uint256,address):(bool)",
+      [
+        ethereum.Value.fromUnsignedBigInt(proposalId),
+        ethereum.Value.fromAddress(ownerAddr)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   isConfirmed(transactionId: BigInt): boolean {
     let result = super.call("isConfirmed", "isConfirmed(uint256):(bool)", [
       ethereum.Value.fromUnsignedBigInt(transactionId)
@@ -1432,6 +1448,29 @@ export class CharityApplications extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  proposalConfirmations(param0: BigInt): BigInt {
+    let result = super.call(
+      "proposalConfirmations",
+      "proposalConfirmations(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_proposalConfirmations(param0: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "proposalConfirmations",
+      "proposalConfirmations(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   proposals(param0: BigInt): CharityApplications__proposalsResult {

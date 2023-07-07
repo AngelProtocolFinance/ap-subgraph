@@ -26,15 +26,15 @@ dataSources:
         - name: Accounts
           file: ./abis/Accounts.json
       eventHandlers:
-        - event: EndowmentCreated(uint256)
+        - event: EndowmentCreated(uint256,uint8)
           handler: handleEndowmentCreated
-        - event: AllowanceUpdated(uint32,address,address,uint256)
+        - event: AllowanceUpdated(uint256,address,address,uint256,uint256,uint256)
           handler: handleAllowanceUpdated
-        - event: AllowanceSpent(uint32,address,address,uint256)
+        - event: AllowanceSpent(uint256,address,address,uint256)
           handler: handleAllowanceSpent
-        - event: EndowmentDeposit(uint256,address,uint256)
+        - event: EndowmentDeposit(uint256,address,uint256,uint256)
           handler: handleEndowmentDeposit
-        - event: EndowmentWithdraw(uint256,address,address,uint256)
+        - event: EndowmentWithdraw(uint256,address,uint256,uint8,address,uint32)
           handler: handleEndowmentWithdraw
         - event: TokenSwapped(uint256,uint8,address,uint256,address,uint256)
           handler: handleTokenSwapped

@@ -10,21 +10,21 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class AllowanceRemoved extends ethereum.Event {
-  get params(): AllowanceRemoved__Params {
-    return new AllowanceRemoved__Params(this);
+export class AllowanceSpent extends ethereum.Event {
+  get params(): AllowanceSpent__Params {
+    return new AllowanceSpent__Params(this);
   }
 }
 
-export class AllowanceRemoved__Params {
-  _event: AllowanceRemoved;
+export class AllowanceSpent__Params {
+  _event: AllowanceSpent;
 
-  constructor(event: AllowanceRemoved) {
+  constructor(event: AllowanceSpent) {
     this._event = event;
   }
 
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
+  get endowId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 
   get spender(): Address {
@@ -33,6 +33,10 @@ export class AllowanceRemoved__Params {
 
   get tokenAddress(): Address {
     return this._event.parameters[2].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
@@ -49,8 +53,8 @@ export class AllowanceUpdated__Params {
     this._event = event;
   }
 
-  get sender(): Address {
-    return this._event.parameters[0].value.toAddress();
+  get endowId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
   }
 
   get spender(): Address {
@@ -61,122 +65,16 @@ export class AllowanceUpdated__Params {
     return this._event.parameters[2].value.toAddress();
   }
 
-  get allowance(): BigInt {
+  get newBalance(): BigInt {
     return this._event.parameters[3].value.toBigInt();
   }
-}
 
-export class ConfigUpdated extends ethereum.Event {
-  get params(): ConfigUpdated__Params {
-    return new ConfigUpdated__Params(this);
-  }
-}
-
-export class ConfigUpdated__Params {
-  _event: ConfigUpdated;
-
-  constructor(event: ConfigUpdated) {
-    this._event = event;
-  }
-}
-
-export class DaoContractCreated extends ethereum.Event {
-  get params(): DaoContractCreated__Params {
-    return new DaoContractCreated__Params(this);
-  }
-}
-
-export class DaoContractCreated__Params {
-  _event: DaoContractCreated;
-
-  constructor(event: DaoContractCreated) {
-    this._event = event;
+  get added(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
   }
 
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited extends ethereum.Event {
-  get params(): DonationDeposited__Params {
-    return new DonationDeposited__Params(this);
-  }
-}
-
-export class DonationDeposited__Params {
-  _event: DonationDeposited;
-
-  constructor(event: DonationDeposited) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
-export class DonationMatchCreated extends ethereum.Event {
-  get params(): DonationMatchCreated__Params {
-    return new DonationMatchCreated__Params(this);
-  }
-}
-
-export class DonationMatchCreated__Params {
-  _event: DonationMatchCreated;
-
-  constructor(event: DonationMatchCreated) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get donationMatchContract(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn extends ethereum.Event {
-  get params(): DonationWithdrawn__Params {
-    return new DonationWithdrawn__Params(this);
-  }
-}
-
-export class DonationWithdrawn__Params {
-  _event: DonationWithdrawn;
-
-  constructor(event: DonationWithdrawn) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+  get deducted(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
   }
 }
 
@@ -196,18 +94,22 @@ export class EndowmentCreated__Params {
   get endowId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
-}
 
-export class EndowmentSettingUpdated extends ethereum.Event {
-  get params(): EndowmentSettingUpdated__Params {
-    return new EndowmentSettingUpdated__Params(this);
+  get endowType(): i32 {
+    return this._event.parameters[1].value.toI32();
   }
 }
 
-export class EndowmentSettingUpdated__Params {
-  _event: EndowmentSettingUpdated;
+export class EndowmentDeposit extends ethereum.Event {
+  get params(): EndowmentDeposit__Params {
+    return new EndowmentDeposit__Params(this);
+  }
+}
 
-  constructor(event: EndowmentSettingUpdated) {
+export class EndowmentDeposit__Params {
+  _event: EndowmentDeposit;
+
+  constructor(event: EndowmentDeposit) {
     this._event = event;
   }
 
@@ -215,44 +117,54 @@ export class EndowmentSettingUpdated__Params {
     return this._event.parameters[0].value.toBigInt();
   }
 
-  get setting(): string {
-    return this._event.parameters[1].value.toString();
+  get tokenAddress(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get amountLocked(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get amountLiquid(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
-export class EndowmentUpdated extends ethereum.Event {
-  get params(): EndowmentUpdated__Params {
-    return new EndowmentUpdated__Params(this);
+export class EndowmentWithdraw extends ethereum.Event {
+  get params(): EndowmentWithdraw__Params {
+    return new EndowmentWithdraw__Params(this);
   }
 }
 
-export class EndowmentUpdated__Params {
-  _event: EndowmentUpdated;
+export class EndowmentWithdraw__Params {
+  _event: EndowmentWithdraw;
 
-  constructor(event: EndowmentUpdated) {
+  constructor(event: EndowmentWithdraw) {
     this._event = event;
   }
 
   get endowId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
-}
 
-export class OwnerUpdated extends ethereum.Event {
-  get params(): OwnerUpdated__Params {
-    return new OwnerUpdated__Params(this);
-  }
-}
-
-export class OwnerUpdated__Params {
-  _event: OwnerUpdated;
-
-  constructor(event: OwnerUpdated) {
-    this._event = event;
+  get tokenAddress(): Address {
+    return this._event.parameters[1].value.toAddress();
   }
 
-  get owner(): Address {
-    return this._event.parameters[0].value.toAddress();
+  get amount(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get accountType(): i32 {
+    return this._event.parameters[3].value.toI32();
+  }
+
+  get beneficiaryAddress(): Address {
+    return this._event.parameters[4].value.toAddress();
+  }
+
+  get beneficiaryEndowId(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
   }
 }
 
@@ -3129,20 +3041,16 @@ export class ManageAllowancesCall__Inputs {
     return this._call.inputValues[0].value.toBigInt();
   }
 
-  get action(): i32 {
-    return this._call.inputValues[1].value.toI32();
-  }
-
   get spender(): Address {
-    return this._call.inputValues[2].value.toAddress();
+    return this._call.inputValues[1].value.toAddress();
   }
 
   get token(): Address {
-    return this._call.inputValues[3].value.toAddress();
+    return this._call.inputValues[2].value.toAddress();
   }
 
   get amount(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
+    return this._call.inputValues[3].value.toBigInt();
   }
 }
 

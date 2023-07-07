@@ -50,9 +50,9 @@ enum MultiSigType {
 # ~~~~~~~~~~~~~~~~
 type User @entity(immutable: true) {
   id: Bytes! # set as wallet/contract address
-  multiSigs: [MultiSig]! @derivedFrom("owner")
-  applicationProposals: [ApplicationProposal]! @derivedFrom("proposer")
-  tokenAllowances: [TokenAllowanceSpender]! @derivedFrom("spender")
+  multiSigs: [MultiSigOwner]! @derivedFrom(field: "owner")
+  applicationProposals: [ApplicationProposal]! @derivedFrom(field: "proposer")
+  tokenAllowances: [EndowmentTokenAllowanceSpender]! @derivedFrom(field: "spender")
 }
 
 type MultiSig @entity {
@@ -66,13 +66,13 @@ type MultiSig @entity {
 }
 
 type MultiSigOwner @entity(immutable: true) {
-  id: String! # set as MultiSig.id.concat(User.id)
-  multiSig: Multisig!
+  id: Bytes! # set as MultiSig.id.concat(User.id)
+  multiSig: MultiSig!
   owner: User!
 }
 
 type MultiSigTransaction @entity {
-  id: String! # set as MutiSig.id.concat(Transaction.id)
+  id: Bytes! # set as MutiSig.id.concat(Transaction.id)
   transactionId: BigInt!
   multiSig: MultiSig!
   proposer: User!
@@ -83,15 +83,15 @@ type MultiSigTransaction @entity {
 }
 
 type TransactionConfirmation @entity {
-  id String! # MultiSigTransaction.id.concat(User.id)
+  id: Bytes! # MultiSigTransaction.id.concat(User.id)
   transaction: MultiSigTransaction!
   owner: User!
   confirmed: Boolean!
 }
 
-type ApplicationsMultisig @entity {
+type ApplicationsMultiSig @entity {
   id: Bytes! # set as MutiSig.id
-  proposals: [ApplicationProposal]! @derivedFrom("multiSig")
+  proposals: [ApplicationProposal]! @derivedFrom(field: "multiSig")
   seedSplitToLiquid: BigInt!
   gasAmount: BigInt!
   seedAsset: Bytes!
@@ -100,7 +100,7 @@ type ApplicationsMultisig @entity {
 
 type ApplicationProposal @entity {
   id: String! # Proposal transaction hash
-  multiSig: ApplicationsMultisig!
+  multiSig: ApplicationsMultiSig!
   charityName: String!
   proposer: User!
   executed: Boolean!
@@ -110,7 +110,7 @@ type ApplicationProposal @entity {
 }
 
 type ApplicationConfirmation @entity {
-  id String! # MultiSig.id.concat(TranactionHash.concat(User.id))
+  id: String! # MultiSig.id.concat(TranactionHash.concat(User.id))
   proposal: ApplicationProposal!
   owner: User!
   confirmed: Boolean!
@@ -153,30 +153,29 @@ type ProxyAdminUpdated @entity(immutable: true) {
 
 ### Accounts - Endowment
 type Endowment@entity(immutable: true) {
-  id: Bytes! # Endowment ID as Hex
+  id: String! # Endowment ID as string
   endowmentType: EndowmentType!
   balancesLocked: [EndowmentTokenLocked]! @derivedFrom(field: "endowment")
   balancesLiquid: [EndowmentTokenLiquid]! @derivedFrom(field: "endowment")
-  tokenAllowances: [TokenAllowance]! @derivedFrom(field: "endowmentToken")
   deposits: [EndowmentDepositTransaction]! @derivedFrom(field: "endowment")
   withdrawals: [EndowmentWithdrawTransaction]! @derivedFrom(field: "endowment")
-  swaps: [EndowmentSwapTransaction]! @derivedFrom("endowment")
+  swaps: [EndowmentSwapTransaction]! @derivedFrom(field: "endowment")
 }
 
 type EndowmentTokenLocked @entity {
   id: String! # set as Endowment.id.concat(Token contract addr)`
   endowment: Endowment!
-  token: Bytes!
+  token: String!
   amount: BigInt!
 }
 
 type EndowmentTokenLiquid @entity {
   id: String! # set as Endowment.id.concat(Token contract addr)`
   endowment: Endowment!
-  token: Bytes!
+  token: String!
   amount: BigInt!
   allowanceOutstanding: BigInt!
-  allowanceSpenders: [TokenAllowanceSpender]! @derivedFrom("token")
+  allowanceSpenders: [EndowmentTokenAllowanceSpender]! @derivedFrom(field: "token")
 }
 
 type EndowmentTokenAllowanceSpender @entity {
@@ -187,7 +186,7 @@ type EndowmentTokenAllowanceSpender @entity {
 }
 
 type EndowmentDepositTransaction @entity(immutable: true) {
-  id: Bytes! # transaction hash
+  id: String! # transaction hash
   endowment: Endowment!
   token: String!
   amountLocked: BigInt!
@@ -196,23 +195,23 @@ type EndowmentDepositTransaction @entity(immutable: true) {
 }
 
 type EndowmentWithdrawTransaction @entity(immutable: true) {
-  id: Bytes! # transaction hash
+  id: String! # transaction hash
   endowment: Endowment!
   accountType: AccountType!
   token: String!
   amount: BigInt!
   beneficiaryEndowId: Int
-  beneficiaryAddr: Bytes
+  beneficiaryAddr: String
   blockTimestamp: BigInt!
 }
 
 type EndowmentSwapTransaction @entity(immutable: true) {
-  id: Bytes! # transaction Hash
+  id: String! # transaction Hash
   endowment: Endowment!
   accountType: AccountType!
-  tokenIn: Bytes!
+  tokenIn: String!
   amountIn: BigInt!
-  tokenOut: Bytes!
+  tokenOut: String!
   amountOut: BigInt!
   blockTimestamp: BigInt!
 }

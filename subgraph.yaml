@@ -60,56 +60,29 @@ dataSources:
         - name: APTeamMultiSig
           file: ./abis/APTeamMultiSig.json
       eventHandlers:
-        - event: Initialized(uint8)
-          handler: handleInitialized
-        - event: ApprovalsRequiredChanged(uint256)
+        - event: InitializedMultiSig(address,address[],uint256,bool,uint256)
+          handler: handleInitializedMultiSig
+        - event: ApprovalsRequiredChanged(address,uint256)
           handler: handleApprovalsRequiredChanged
-        - event: RequireExecutionChanged(bool)
+        - event: RequireExecutionChanged(address,bool)
           handler: handleRequireExecutionChanged
-        - event: ExpiryChanged(uint256)
+        - event: ExpiryChanged(address,uint256)
           handler: handleExpiryChanged
-        - event: OwnerAdded(address)
-          handler: handleOwnerAdded
-        - event: OwnerRemoved(address)
-          handler: handleOwnerRemoved
-        - event: TransactionSubmitted(address,uint256)
+        - event: OwnersAdded(address,address[])
+          handler: handleOwnersAdded
+        - event: OwnersRemoved(address,address[])
+          handler: handleOwnersRemoved
+        - event: OwnerReplaced(address,address,address)
+          handler: handleOwnerReplaced
+        - event: TransactionSubmitted(address,address,uint256)
           handler: handleTransactionSubmitted
-        - event: TransactionConfirmed(address,uint256)
+        - event: TransactionConfirmed(address,address,uint256)
           handler: handleTransactionConfirmed
-        - event: TransactionExecuted(uint256)
+        - event: TransactionExecuted(address,uint256)
           handler: handleTransactionExecuted
-        - event: TransactionConfirmationRevoked(address,uint256)
-          handler: handleConfirmationRevoked
+        - event: TransactionConfirmationRevoked(address,address,uint256)
+          handler: handleTransactionConfirmationRevoked
       file: ./src/ap-team-multi-sig.ts
-  - kind: ethereum
-    name: EndowmentMultiSigFactory
-    network: mumbai
-    source:
-      address: "0x0d7B9bCE00a01b525181013383F82d35D079F98d"
-      abi: EndowmentMultiSigFactory
-      startBlock: 37000000
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.7
-      language: wasm/assemblyscript
-      entities:
-        - ContractInstantiated
-        - ImplementationUpdated
-        - EndowmentMultiSigFactoryOwnershipTransferred
-        - ProxyAdminUpdated
-      abis:
-        - name: EndowmentMultiSigFactory
-          file: ./abis/EndowmentMultiSigFactory.json
-      eventHandlers:
-        - event: ContractInstantiated(address,address)
-          handler: handleContractInstantiated
-        - event: ImplementationUpdated(address)
-          handler: handleImplementationUpdated
-        - event: OwnershipTransferred(indexed address,indexed address)
-          handler: handleOwnershipTransferred
-        - event: ProxyAdminUpdated(address)
-          handler: handleProxyAdminUpdated
-      file: ./src/endowment-multi-sig-factory.ts
   - kind: ethereum
     name: CharityApplications
     network: mumbai
@@ -127,48 +100,48 @@ dataSources:
         - MultiSigOwner
         - MultiSigTransaction
         - TransactionConfirmation
-        - ApplicationsMultisig
         - ApplicationProposal
         - ApplicationConfirmation
       abis:
         - name: CharityApplications
           file: ./abis/CharityApplications.json
       eventHandlers:
-        - event: Initialized(uint8)
-          handler: handleInitialized
-        - event: ApprovalsRequiredChanged(uint256)
+        - event: InitializedMultiSig(address,address[],uint256,bool,uint256)
+          handler: handleInitializedMultiSig
+        - event: ApprovalsRequiredChanged(address,uint256)
           handler: handleApprovalsRequiredChanged
-        - event: RequireExecutionChanged(bool)
+        - event: RequireExecutionChanged(address,bool)
           handler: handleRequireExecutionChanged
-        - event: ExpiryChanged(uint256)
+        - event: ExpiryChanged(address,uint256)
           handler: handleExpiryChanged
-        - event: OwnerAdded(address)
-          handler: handleOwnerAdded
-        - event: OwnerRemoved(address)
-          handler: handleOwnerRemoved
-        - event: TransactionSubmitted(address,uint256)
+        - event: OwnersAdded(address,address[])
+          handler: handleOwnersAdded
+        - event: OwnersRemoved(address,address[])
+          handler: handleOwnersRemoved
+        - event: OwnerReplaced(address,address,address)
+          handler: handleOwnerReplaced
+        - event: TransactionSubmitted(address,address,uint256)
           handler: handleTransactionSubmitted
-        - event: TransactionConfirmed(address,uint256)
+        - event: TransactionConfirmed(address,address,uint256)
           handler: handleTransactionConfirmed
-        - event: TransactionExecuted(uint256)
+        - event: TransactionExecuted(address,uint256)
           handler: handleTransactionExecuted
-        - event: TransactionConfirmationRevoked(address,uint256)
-          handler: handleConfirmationRevoked
-        - event: ApplicationConfirmationRevoked(uint256,address)
+        - event: TransactionConfirmationRevoked(address,address,uint256)
+          handler: handleTransactionConfirmationRevoked
+        - event: ApplicationConfirmationRevoked(address,uint256,address)
           handler: handleApplicationConfirmationRevoked
-        - event: ApplicationConfirmed(uint256,address)
+        - event: ApplicationConfirmed(address,uint256,address)
           handler: handleApplicationConfirmed
-        - event: ApplicationExecuted(uint256)
+        - event: ApplicationExecuted(address,uint256)
           handler: handleApplicationExecuted
-        - event: ApplicationProposed(uint256)
+        - event: ApplicationProposed(address,uint256,address,string,uint256,bool)
           handler: handleApplicationProposed
       file: ./src/charity-applications.ts
-templates:
   - kind: ethereum
-    name: EndowmentMultiSig
+    name: EndowmentMultiSigEmitter
     network: mumbai
     source:
-      abi: EndowmentMultiSig
+      abi: EndowmentMultiSigEmitter
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -180,27 +153,27 @@ templates:
         - MultiSigTransaction
         - TransactionConfirmation
       abis:
-        - name: EndowmentMultiSig
-          file: ./abis/EndowmentMultiSig.json
+        - name: EndowmentMultiSigEmitter
+          file: ./abis/EndowmentMultiSigEmitter.json
       eventHandlers:
-        - event: Initialized(uint8)
-          handler: handleInitialized
-        - event: ApprovalsRequiredChanged(uint256)
-          handler: handleApprovalsRequiredChanged
-        - event: RequireExecutionChanged(bool)
+        - event: EndowmentMultisigCreated(address,uint256,address,address[],uint256,bool,uint256)
+          handler: handleEndowmentMultisigCreated
+        - event: ApprovalsRequirementChanged(uint256,uint256)
+          handler: handleApprovalsRequirementChanged
+        - event: RequireExecutionChanged(uint256,bool)
           handler: handleRequireExecutionChanged
-        - event: ExpiryChanged(uint256)
+        - event: ExpiryChanged(uint256,uint256)
           handler: handleExpiryChanged
-        - event: OwnerAdded(address)
-          handler: handleOwnerAdded
-        - event: OwnerRemoved(address)
-          handler: handleOwnerRemoved
-        - event: TransactionSubmitted(address,uint256)
+        - event: OwnersAdded(uint256,address[])
+          handler: handleOwnersAdded
+        - event: OwnersRemoved(uint256,address[])
+          handler: handleOwnersRemoved
+        - event: TransactionSubmitted(uint256,address,uint256)
           handler: handleTransactionSubmitted
-        - event: TransactionConfirmed(address,uint256)
+        - event: TransactionConfirmed(uint256,address,uint256)
           handler: handleTransactionConfirmed
-        - event: TransactionExecuted(uint256)
+        - event: TransactionExecuted(uint256,uint256)
           handler: handleTransactionExecuted
-        - event: TransactionConfirmationRevoked(address,uint256)
-          handler: handleConfirmationRevoked
+        - event: TransactionConfirmationRevoked(uint256,address,uint256)
+          handler: handleTransactionConfirmationRevoked
       file: ./src/endowment-multi-sig.ts

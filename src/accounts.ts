@@ -1,4 +1,4 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { BigInt } from "@graphprotocol/graph-ts"
 import {
   EndowmentCreated as EndowmentCreatedEvent,
   AllowanceSpent as AllowanceSpentEvent,
@@ -81,12 +81,14 @@ export function handleEndowmentWithdraw(event: EndowmentWithdrawEvent): void {
     // check if AccountType is "Locked" first
     if (event.params.accountType == 0) {
       let token = EndowmentTokenLocked.load(event.params.endowId.toString() + event.params.tokenAddress.toHex())
-      token.save()
+      if (token != null) token.save()
     // fall back to "Liquid" AccountType
     } else {
       let token = EndowmentTokenLiquid.load(event.params.endowId.toString() + event.params.tokenAddress.toHex())
-      token.amount -= event.params.amount
-      token.save()
+      if (token != null) {
+        token.amount -= event.params.amount
+        token.save()
+      }
     }
   }
 }
@@ -166,9 +168,11 @@ export function handleTokenSwapped(event: TokenSwappedEvent): void {
       if (tokenIn) {
         let tokenOut = EndowmentTokenLiquid.load(event.params.endowId.toString() + event.params.tokenOut.toHex())
         if (tokenOut == null) {
-          tokenOut = new EndowmentTokenLocked(event.params.endowId.toString() + event.params.tokenOut.toHex())
-          tokenOut.endowment = endow.id
-          tokenOut.token = event.params.tokenOut.toHex()
+          tokenOut = new EndowmentTokenLiquid(event.params.endowId.toString() + event.params.tokenOut.toHex())
+          if (tokenOut != null) {
+            tokenOut.endowment = endow.id
+            tokenOut.token = event.params.tokenOut.toHex()
+          }
         }
         // update token in amount (decrease)
         tokenIn.amount -= event.params.amountIn

@@ -1,12 +1,6 @@
 # ~~~~~~~~~~~~~~~~~
 # ~~~~~ ENUMS ~~~~~
 # ~~~~~~~~~~~~~~~~~
-enum ApplicationProposalStatus {
-  Pending
-  Approved
-  Rejected
-}
-
 enum AccountType {
   Locked
   Liquid
@@ -17,62 +11,34 @@ enum EndowmentType {
   Normal
 }
 
-enum Tier {
-  None
-  Level1
-  Level2
-  Level3
-}
-
-enum FeeTypes {
-  Default
-  Harvest
-  WithdrawCharity
-  WithdrawNormal
-  EarlyLockedWithdrawCharity
-  EarlyLockedWithdrawNormal
-}
-
-enum DelegateAction {
-  Set
-  Revoke
-}
-
-enum MultiSigType {
-  ApTeam
-  Applications
-  Endowment
-  Generic
-}
-
 # ~~~~~~~~~~~~~~~~
 # ~~~ ENTITIES ~~~
 # ~~~~~~~~~~~~~~~~
 type User @entity(immutable: true) {
-  id: Bytes! # set as wallet/contract address
+  id: String! # set as wallet/contract address
   multiSigs: [MultiSigOwner]! @derivedFrom(field: "owner")
   applicationProposals: [ApplicationProposal]! @derivedFrom(field: "proposer")
   tokenAllowances: [EndowmentTokenAllowanceSpender]! @derivedFrom(field: "spender")
 }
 
 type MultiSig @entity {
-  id: Bytes!
+  id: String!
   owners: [MultiSigOwner!]! @derivedFrom(field: "multiSig")
   transactions: [MultiSigTransaction]! @derivedFrom(field: "multiSig")
   transactionExpiry: BigInt!
   requireExecution: Boolean!
   approvalsRequired: BigInt!
-  multiSigType: MultiSigType!
 }
 
-type MultiSigOwner @entity(immutable: true) {
-  id: Bytes! # set as MultiSig.id.concat(User.id)
+type MultiSigOwner @entity {
+  id: String! # set as MultiSig.id.concat(User.id)
   multiSig: MultiSig!
   owner: User!
+  active: Boolean!
 }
 
 type MultiSigTransaction @entity {
-  id: Bytes! # set as MutiSig.id.concat(Transaction.id)
+  id: String! # set as MutiSig.id.concat(Transaction.id)
   transactionId: BigInt!
   multiSig: MultiSig!
   proposer: User!
@@ -83,24 +49,24 @@ type MultiSigTransaction @entity {
 }
 
 type TransactionConfirmation @entity {
-  id: Bytes! # MultiSigTransaction.id.concat(User.id)
+  id: String! # MultiSigTransaction.id.concat(User.id)
   transaction: MultiSigTransaction!
   owner: User!
   confirmed: Boolean!
 }
 
-type ApplicationsMultiSig @entity {
-  id: Bytes! # set as MutiSig.id
-  proposals: [ApplicationProposal]! @derivedFrom(field: "multiSig")
-  seedSplitToLiquid: BigInt!
-  gasAmount: BigInt!
-  seedAsset: Bytes!
-  seedAmount: BigInt!
-}
+# type ApplicationsMultiSig @entity {
+#   id: String! # set as MutiSig.id
+#   proposals: [ApplicationProposal]! @derivedFrom(field: "multiSig")
+#   seedSplitToLiquid: BigInt!
+#   gasAmount: BigInt!
+#   seedAsset: String!
+#   seedAmount: BigInt!
+# }
 
 type ApplicationProposal @entity {
-  id: String! # Proposal transaction hash
-  multiSig: ApplicationsMultiSig!
+  id: String! # set as (Applications Multisig Address + Proposal ID)
+  multiSig: MultiSig!
   charityName: String!
   proposer: User!
   executed: Boolean!
@@ -110,45 +76,10 @@ type ApplicationProposal @entity {
 }
 
 type ApplicationConfirmation @entity {
-  id: String! # MultiSig.id.concat(TranactionHash.concat(User.id))
+  id: String! # set as (Applications Multisig Address + Proposal ID + User Addr)
   proposal: ApplicationProposal!
   owner: User!
   confirmed: Boolean!
-}
-
-### Endowment MultiSig Factory
-type ContractInstantiated @entity(immutable: true) {
-  id: Bytes!
-  sender: Bytes!
-  instantiation: Bytes!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ImplementationUpdated @entity(immutable: true) {
-  id: Bytes!
-  implementationAddress: Bytes!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type EndowmentMultiSigFactoryOwnershipTransferred @entity(immutable: true) {
-  id: Bytes!
-  previousOwner: Bytes!
-  newOwner: Bytes!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type ProxyAdminUpdated @entity(immutable: true) {
-  id: Bytes!
-  admin: Bytes!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
 }
 
 ### Accounts - Endowment

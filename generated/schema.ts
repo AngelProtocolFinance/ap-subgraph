@@ -130,6 +130,14 @@ export class MultiSig extends Entity {
     );
   }
 
+  get applicationProposals(): ApplicationProposalLoader {
+    return new ApplicationProposalLoader(
+      "MultiSig",
+      this.get("id")!.toString(),
+      "applicationProposals"
+    );
+  }
+
   get transactionExpiry(): BigInt {
     let value = this.get("transactionExpiry");
     if (!value || value.kind == ValueKind.NULL) {

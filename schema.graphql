@@ -24,7 +24,8 @@ type User @entity(immutable: true) {
 type MultiSig @entity {
   id: String!
   owners: [MultiSigOwner!]! @derivedFrom(field: "multiSig")
-  transactions: [MultiSigTransaction]! @derivedFrom(field: "multiSig")
+  transactions: [MultiSigTransaction!]! @derivedFrom(field: "multiSig")
+  applicationProposals: [ApplicationProposal!]! @derivedFrom(field: "multiSig")
   transactionExpiry: BigInt!
   requireExecution: Boolean!
   approvalsRequired: BigInt!
@@ -54,15 +55,6 @@ type TransactionConfirmation @entity {
   owner: User!
   confirmed: Boolean!
 }
-
-# type ApplicationsMultiSig @entity {
-#   id: String! # set as MutiSig.id
-#   proposals: [ApplicationProposal]! @derivedFrom(field: "multiSig")
-#   seedSplitToLiquid: BigInt!
-#   gasAmount: BigInt!
-#   seedAsset: String!
-#   seedAmount: BigInt!
-# }
 
 type ApplicationProposal @entity {
   id: String! # set as (Applications Multisig Address + Proposal ID)

@@ -82,14 +82,30 @@ export function handleEndowmentWithdraw(event: EndowmentWithdrawEvent): void {
     // check if AccountType is "Locked" first
     let endowTokenId = event.params.endowId.toString() + event.params.tokenAddress.toHex()
     if (event.params.accountType == 0) {
-      let token = EndowmentTokenLocked.load(endowTokenId)
-      if (token != null) token.save()
+      let tokenLocked = EndowmentTokenLocked.load(endowTokenId)
+      if (tokenLocked != null) {
+        tokenLocked.amount -= event.params.amount
+        tokenLocked.save()
+        // increment the Liquid token by an equivalent amount, since withdrawals go from Locked >> Liquid
+        let tokenLiquid = EndowmentTokenLiquid.load(endowTokenId)
+        if (tokenLiquid != null) {
+          tokenLiquid.amount += event.params.amount
+          tokenLiquid.save()
+        } else {
+          // create new Liquid Token entity and set the starting balance amount
+          tokenLiquid = new EndowmentTokenLiquid(endowTokenId)
+          tokenLiquid.token = event.params.tokenAddress.toHex()
+          tokenLiquid.amount = event.params.amount
+          tokenLiquid.allowanceOutstanding = BigInt.fromI32(0)
+          tokenLiquid.save()
+        }
+      }
     // fall back to "Liquid" AccountType
     } else {
-      let token = EndowmentTokenLiquid.load(endowTokenId)
-      if (token != null) {
-        token.amount -= event.params.amount
-        token.save()
+      let tokenLiquid = EndowmentTokenLiquid.load(endowTokenId)
+      if (tokenLiquid != null) {
+        tokenLiquid.amount -= event.params.amount
+        tokenLiquid.save()
       }
     }
   }

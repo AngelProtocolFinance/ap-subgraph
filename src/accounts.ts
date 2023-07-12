@@ -36,11 +36,11 @@ export function handleEndowmentDeposit(event: EndowmentDepositEvent): void {
     deposit.save()
 
     // update the locked and liquid Endowment Token Balances
+    let endowTokenId = event.params.endowId.toString() + event.params.tokenAddress.toHex()
     if (event.params.amountLocked > BigInt.fromI32(0)) {
-      let endowTokenId = event.params.endowId.toString() + event.params.tokenAddress.toHex();
       let token = EndowmentTokenLocked.load(endowTokenId)
       if (!token) {
-        token = new EndowmentTokenLocked(endowTokenId);
+        token = new EndowmentTokenLocked(endowTokenId)
         token.token = event.params.tokenAddress.toHex()
         token.amount = event.params.amountLocked
       } else {
@@ -138,8 +138,8 @@ export function handleTokenSwapped(event: TokenSwappedEvent): void {
   let endow = Endowment.load(event.params.endowId.toString())
 
   if(endow != null && event.params.tokenIn && event.params.tokenOut) {
-    let tokenInId = event.params.endowId.toString() + event.params.tokenIn.toHex();
-    let tokenOutId = event.params.endowId.toString() + event.params.tokenOut.toHex();
+    let tokenInId = event.params.endowId.toString() + event.params.tokenIn.toHex()
+    let tokenOutId = event.params.endowId.toString() + event.params.tokenOut.toHex()
     // save swap tx record
     let swap = new EndowmentSwapTransaction(event.transaction.hash.toHex())
     swap.endowment = endow.id

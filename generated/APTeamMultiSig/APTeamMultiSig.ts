@@ -23,51 +23,33 @@ export class ApprovalsRequiredChanged__Params {
     this._event = event;
   }
 
-  get approvalsRequired(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class ConfirmationRevoked extends ethereum.Event {
-  get params(): ConfirmationRevoked__Params {
-    return new ConfirmationRevoked__Params(this);
-  }
-}
-
-export class ConfirmationRevoked__Params {
-  _event: ConfirmationRevoked;
-
-  constructor(event: ConfirmationRevoked) {
-    this._event = event;
-  }
-
-  get sender(): Address {
+  get msAddress(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get transactionId(): BigInt {
+  get approvalsRequired(): BigInt {
     return this._event.parameters[1].value.toBigInt();
   }
 }
 
-export class Deposit extends ethereum.Event {
-  get params(): Deposit__Params {
-    return new Deposit__Params(this);
+export class ExpiryChanged extends ethereum.Event {
+  get params(): ExpiryChanged__Params {
+    return new ExpiryChanged__Params(this);
   }
 }
 
-export class Deposit__Params {
-  _event: Deposit;
+export class ExpiryChanged__Params {
+  _event: ExpiryChanged;
 
-  constructor(event: Deposit) {
+  constructor(event: ExpiryChanged) {
     this._event = event;
   }
 
-  get sender(): Address {
+  get msAddress(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
-  get amount(): BigInt {
+  get transactionExpiry(): BigInt {
     return this._event.parameters[1].value.toBigInt();
   }
 }
@@ -90,39 +72,107 @@ export class Initialized__Params {
   }
 }
 
-export class OwnerAdded extends ethereum.Event {
-  get params(): OwnerAdded__Params {
-    return new OwnerAdded__Params(this);
+export class InitializedMultiSig extends ethereum.Event {
+  get params(): InitializedMultiSig__Params {
+    return new InitializedMultiSig__Params(this);
   }
 }
 
-export class OwnerAdded__Params {
-  _event: OwnerAdded;
+export class InitializedMultiSig__Params {
+  _event: InitializedMultiSig;
 
-  constructor(event: OwnerAdded) {
+  constructor(event: InitializedMultiSig) {
     this._event = event;
   }
 
-  get owner(): Address {
+  get msAddress(): Address {
     return this._event.parameters[0].value.toAddress();
   }
-}
 
-export class OwnerRemoved extends ethereum.Event {
-  get params(): OwnerRemoved__Params {
-    return new OwnerRemoved__Params(this);
+  get owners(): Array<Address> {
+    return this._event.parameters[1].value.toAddressArray();
+  }
+
+  get approvalsRequired(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get requireExecution(): boolean {
+    return this._event.parameters[3].value.toBoolean();
+  }
+
+  get transactionExpiry(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
   }
 }
 
-export class OwnerRemoved__Params {
-  _event: OwnerRemoved;
+export class OwnerReplaced extends ethereum.Event {
+  get params(): OwnerReplaced__Params {
+    return new OwnerReplaced__Params(this);
+  }
+}
 
-  constructor(event: OwnerRemoved) {
+export class OwnerReplaced__Params {
+  _event: OwnerReplaced;
+
+  constructor(event: OwnerReplaced) {
     this._event = event;
   }
 
-  get owner(): Address {
+  get msAddress(): Address {
     return this._event.parameters[0].value.toAddress();
+  }
+
+  get currOwner(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get newOwner(): Address {
+    return this._event.parameters[2].value.toAddress();
+  }
+}
+
+export class OwnersAdded extends ethereum.Event {
+  get params(): OwnersAdded__Params {
+    return new OwnersAdded__Params(this);
+  }
+}
+
+export class OwnersAdded__Params {
+  _event: OwnersAdded;
+
+  constructor(event: OwnersAdded) {
+    this._event = event;
+  }
+
+  get msAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get owners(): Array<Address> {
+    return this._event.parameters[1].value.toAddressArray();
+  }
+}
+
+export class OwnersRemoved extends ethereum.Event {
+  get params(): OwnersRemoved__Params {
+    return new OwnersRemoved__Params(this);
+  }
+}
+
+export class OwnersRemoved__Params {
+  _event: OwnersRemoved;
+
+  constructor(event: OwnersRemoved) {
+    this._event = event;
+  }
+
+  get msAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get owners(): Array<Address> {
+    return this._event.parameters[1].value.toAddressArray();
   }
 }
 
@@ -139,8 +189,38 @@ export class RequireExecutionChanged__Params {
     this._event = event;
   }
 
+  get msAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
   get requireExecution(): boolean {
-    return this._event.parameters[0].value.toBoolean();
+    return this._event.parameters[1].value.toBoolean();
+  }
+}
+
+export class TransactionConfirmationRevoked extends ethereum.Event {
+  get params(): TransactionConfirmationRevoked__Params {
+    return new TransactionConfirmationRevoked__Params(this);
+  }
+}
+
+export class TransactionConfirmationRevoked__Params {
+  _event: TransactionConfirmationRevoked;
+
+  constructor(event: TransactionConfirmationRevoked) {
+    this._event = event;
+  }
+
+  get msAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get sender(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get transactionId(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -157,12 +237,16 @@ export class TransactionConfirmed__Params {
     this._event = event;
   }
 
-  get sender(): Address {
+  get msAddress(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
+  get sender(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
   get transactionId(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -179,26 +263,12 @@ export class TransactionExecuted__Params {
     this._event = event;
   }
 
+  get msAddress(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
   get transactionId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class TransactionExpiryChanged extends ethereum.Event {
-  get params(): TransactionExpiryChanged__Params {
-    return new TransactionExpiryChanged__Params(this);
-  }
-}
-
-export class TransactionExpiryChanged__Params {
-  _event: TransactionExpiryChanged;
-
-  constructor(event: TransactionExpiryChanged) {
-    this._event = event;
-  }
-
-  get transactionExpiry(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+    return this._event.parameters[1].value.toBigInt();
   }
 }
 
@@ -215,12 +285,16 @@ export class TransactionSubmitted__Params {
     this._event = event;
   }
 
-  get sender(): Address {
+  get msAddress(): Address {
     return this._event.parameters[0].value.toAddress();
   }
 
+  get sender(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
   get transactionId(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 

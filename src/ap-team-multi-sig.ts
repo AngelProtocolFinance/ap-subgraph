@@ -44,7 +44,7 @@ export function handleInitializedMultiSig(event: InitializedMultiSigEvent): void
   }
 }
 
-export function approvalsRequiredChanged(
+export function handleApprovalsRequiredChanged(
   event: ApprovalsRequiredChangedEvent
 ): void {
   let ms = MultiSig.load(event.params.msAddress.toString())

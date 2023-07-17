@@ -128,13 +128,13 @@ dataSources:
           handler: handleTransactionExecuted
         - event: TransactionConfirmationRevoked(address,address,uint256)
           handler: handleTransactionConfirmationRevoked
-        - event: ApplicationConfirmationRevoked(address,uint256,address)
+        - event: ApplicationConfirmationRevoked(uint256,address)
           handler: handleApplicationConfirmationRevoked
-        - event: ApplicationConfirmed(address,uint256,address)
+        - event: ApplicationConfirmed(uint256,address)
           handler: handleApplicationConfirmed
-        - event: ApplicationExecuted(address,uint256)
+        - event: ApplicationExecuted(uint256)
           handler: handleApplicationExecuted
-        - event: ApplicationProposed(address,uint256,address,string,uint256,bool)
+        - event: ApplicationProposed(uint256)
           handler: handleApplicationProposed
       file: ./src/charity-applications.ts
   - kind: ethereum

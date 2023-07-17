@@ -18,7 +18,6 @@ import {
 } from "../generated/CharityApplications/CharityApplications"
 import {
   ApplicationProposal,
-  ApplicationConfirmation,
   MultiSig,
   MultiSigOwner,
   MultiSigTransaction,
@@ -149,7 +148,7 @@ export function handleTransactionSubmitted(
       tx.transactionId = event.params.transactionId
       tx.proposer = event.params.sender.toHex()
       tx.executed = (ms.approvalsRequired < BigInt.fromI32(1) || ms.requireExecution) ? false : true
-      tx.expiry = event.block.timestamp + ms.transactionExpiry
+      tx.expiry = event.block.timestamp.plus(ms.transactionExpiry)
       tx.blockTimestamp = event.block.timestamp
       tx.save()
     }
@@ -203,17 +202,9 @@ export function handleTransactionExecuted(
 export function handleApplicationProposed(
   event: ApplicationProposedEvent
 ): void {
-  let appMultiSig = MultiSig.load(event.params.msAddress.toHex())
-  if (appMultiSig != null) {
-    let proposal = new ApplicationProposal(event.params.msAddress.toHex() + event.params.proposalId.toString())
-    proposal.multiSig = appMultiSig.id
-    proposal.charityName = event.params.charityName
-    proposal.proposer = event.params.proposer.toHex()
-    proposal.executed = event.params.executed
-    proposal.expiry = event.params.expiry
-    proposal.blockTimestamp = event.block.timestamp
-    proposal.save()
-  }
+  let proposal = new ApplicationProposal(event.params.proposalId.toString())
+  proposal.blockTimestamp = event.block.timestamp
+  proposal.save()
 }
 
 export function handleApplicationConfirmed(
@@ -223,7 +214,7 @@ export function handleApplicationConfirmed(
   if (user == null) {
     user = new User(event.params.owner.toHex())
   }
-  let proposalId = event.params.msAddress.toHex() + event.params.proposalId.toString()
+  let proposalId = event.params.proposalId.toString()
   let proposal = new ApplicationProposal(proposalId)
   if (proposal != null) {
     let confId = proposalId + event.params.owner.toHex()
@@ -241,7 +232,7 @@ export function handleApplicationConfirmed(
 export function handleApplicationConfirmationRevoked(
   event: ApplicationConfirmationRevokedEvent
 ): void {
-  let proposalId = event.params.msAddress.toHex() + event.params.proposalId.toString()
+  let proposalId = event.params.proposalId.toString()
   let proposal = new ApplicationProposal(proposalId)
   if (proposal != null) {
     let confId = proposalId + event.params.owner.toHex()
@@ -256,7 +247,7 @@ export function handleApplicationConfirmationRevoked(
 export function handleApplicationExecuted(
   event: ApplicationExecutedEvent
 ): void {
-  let proposalId = event.params.msAddress.toHex() + event.params.proposalId.toString()
+  let proposalId = event.params.proposalId.toString()
   let proposal = new ApplicationProposal(proposalId)
   if (proposal != null) {
     proposal.executed = true

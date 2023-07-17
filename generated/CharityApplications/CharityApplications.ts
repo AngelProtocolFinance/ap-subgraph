@@ -23,16 +23,12 @@ export class ApplicationConfirmationRevoked__Params {
     this._event = event;
   }
 
-  get msAddress(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
   get proposalId(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+    return this._event.parameters[0].value.toBigInt();
   }
 
   get owner(): Address {
-    return this._event.parameters[2].value.toAddress();
+    return this._event.parameters[1].value.toAddress();
   }
 }
 
@@ -49,16 +45,12 @@ export class ApplicationConfirmed__Params {
     this._event = event;
   }
 
-  get msAddress(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
   get proposalId(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+    return this._event.parameters[0].value.toBigInt();
   }
 
   get owner(): Address {
-    return this._event.parameters[2].value.toAddress();
+    return this._event.parameters[1].value.toAddress();
   }
 }
 
@@ -75,12 +67,8 @@ export class ApplicationExecuted__Params {
     this._event = event;
   }
 
-  get msAddress(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
   get proposalId(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
+    return this._event.parameters[0].value.toBigInt();
   }
 }
 
@@ -97,28 +85,8 @@ export class ApplicationProposed__Params {
     this._event = event;
   }
 
-  get msAddress(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
   get proposalId(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-
-  get proposer(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get charityName(): string {
-    return this._event.parameters[3].value.toString();
-  }
-
-  get expiry(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
-  }
-
-  get executed(): boolean {
-    return this._event.parameters[5].value.toBoolean();
+    return this._event.parameters[0].value.toBigInt();
   }
 }
 
@@ -163,6 +131,32 @@ export class ExpiryChanged__Params {
 
   get transactionExpiry(): BigInt {
     return this._event.parameters[1].value.toBigInt();
+  }
+}
+
+export class GasSent extends ethereum.Event {
+  get params(): GasSent__Params {
+    return new GasSent__Params(this);
+  }
+}
+
+export class GasSent__Params {
+  _event: GasSent;
+
+  constructor(event: GasSent) {
+    this._event = event;
+  }
+
+  get endowmentId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get member(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -307,6 +301,32 @@ export class RequireExecutionChanged__Params {
 
   get requireExecution(): boolean {
     return this._event.parameters[1].value.toBoolean();
+  }
+}
+
+export class SeedAssetSent extends ethereum.Event {
+  get params(): SeedAssetSent__Params {
+    return new SeedAssetSent__Params(this);
+  }
+}
+
+export class SeedAssetSent__Params {
+  _event: SeedAssetSent;
+
+  constructor(event: SeedAssetSent) {
+    this._event = event;
+  }
+
+  get endowmentId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get asset(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 

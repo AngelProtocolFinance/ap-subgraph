@@ -146,7 +146,7 @@ export function handleTransactionSubmitted(
       tx.transactionId = event.params.transactionId
       tx.proposer = event.params.owner.toHex()
       tx.executed = (ms.approvalsRequired < BigInt.fromI32(1) || ms.requireExecution) ? false : true
-      tx.expiry = event.block.timestamp + ms.transactionExpiry
+      tx.expiry = event.block.timestamp.plus(ms.transactionExpiry)
       tx.blockTimestamp = event.block.timestamp
       tx.save()
     }

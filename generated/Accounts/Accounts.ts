@@ -1337,34 +1337,30 @@ export class Accounts__queryConfigResultConfigStruct extends ethereum.Tuple {
     return this[1].toString();
   }
 
+  get networkName(): string {
+    return this[2].toString();
+  }
+
   get registrarContract(): Address {
-    return this[2].toAddress();
+    return this[3].toAddress();
   }
 
   get nextAccountId(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get maxGeneralCategoryId(): BigInt {
     return this[4].toBigInt();
   }
 
+  get maxGeneralCategoryId(): BigInt {
+    return this[5].toBigInt();
+  }
+
   get subDao(): Address {
-    return this[5].toAddress();
-  }
-
-  get gateway(): Address {
     return this[6].toAddress();
-  }
-
-  get gasReceiver(): Address {
-    return this[7].toAddress();
   }
 
   get earlyLockedWithdrawFee(): Accounts__queryConfigResultConfigEarlyLockedWithdrawFeeStruct {
     return changetype<
       Accounts__queryConfigResultConfigEarlyLockedWithdrawFeeStruct
-    >(this[8].toTuple());
+    >(this[7].toTuple());
   }
 }
 
@@ -2199,7 +2195,7 @@ export class Accounts extends ethereum.SmartContract {
   queryConfig(): Accounts__queryConfigResultConfigStruct {
     let result = super.call(
       "queryConfig",
-      "queryConfig():((address,string,address,uint256,uint256,address,address,address,(address,uint256)))",
+      "queryConfig():((address,string,string,address,uint256,uint256,address,(address,uint256)))",
       []
     );
 
@@ -2213,7 +2209,7 @@ export class Accounts extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "queryConfig",
-      "queryConfig():((address,string,address,uint256,uint256,address,address,address,(address,uint256)))",
+      "queryConfig():((address,string,string,address,uint256,uint256,address,(address,uint256)))",
       []
     );
     if (result.reverted) {

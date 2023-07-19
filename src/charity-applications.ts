@@ -17,6 +17,7 @@ import {
   ApplicationProposed as ApplicationProposedEvent,
 } from "../generated/CharityApplications/CharityApplications"
 import {
+  ApplicationConfirmation,
   ApplicationProposal,
   MultiSig,
   MultiSigOwner,
@@ -202,9 +203,15 @@ export function handleTransactionExecuted(
 export function handleApplicationProposed(
   event: ApplicationProposedEvent
 ): void {
-  let proposal = new ApplicationProposal(event.params.proposalId.toString())
-  proposal.blockTimestamp = event.block.timestamp
-  proposal.save()
+  let appMultiSig = MultiSig.load(event.params.msAddress.toHex())
+  if (appMultiSig != null) {
+    let proposal = new ApplicationProposal(event.params.proposalId.toString())
+    proposal.multiSig = appMultiSig.id
+    proposal.proposer = event.params.proposer.toHex()
+    proposal.executed = false
+    proposal.blockTimestamp = event.block.timestamp
+    proposal.save()
+  }
 }
 
 export function handleApplicationConfirmed(
@@ -218,10 +225,10 @@ export function handleApplicationConfirmed(
   let proposal = new ApplicationProposal(proposalId)
   if (proposal != null) {
     let confId = proposalId + event.params.owner.toHex()
-    let txConf = TransactionConfirmation.load(confId)
+    let txConf = ApplicationConfirmation.load(confId)
     if (txConf == null) {
-      txConf = new TransactionConfirmation(confId)
-      txConf.transaction = proposal.id
+      txConf = new ApplicationConfirmation(confId)
+      txConf.proposal = proposal.id
       txConf.owner = user.id
     }
     txConf.confirmed = true

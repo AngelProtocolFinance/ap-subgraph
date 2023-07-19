@@ -58,24 +58,10 @@ type TransactionConfirmation @entity {
 
 type ApplicationProposal @entity {
   id: String! # set as (Applications Multisig Address + Proposal ID)
-  multiSig: MultiSig!
-  charityName: String!
-  proposer: User!
-  executed: Boolean!
-  expiry: BigInt!
-  blockTimestamp: BigInt!
-  confirmations: [ApplicationConfirmation]! @derivedFrom(field: "proposal")
-}
-
-type ApplicationConfirmation @entity {
-  id: String! # set as (Applications Multisig Address + Proposal ID + User Addr)
-  proposal: ApplicationProposal!
-  owner: User!
-  confirmed: Boolean!
 }
 
 ### Accounts - Endowment
-type Endowment@entity(immutable: true) {
+type Endowment @entity(immutable: true) {
   id: String! # Endowment ID as string
   endowmentType: EndowmentType!
   balancesLocked: [EndowmentTokenLocked]! @derivedFrom(field: "endowment")

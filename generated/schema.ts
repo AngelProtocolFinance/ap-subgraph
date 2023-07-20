@@ -130,14 +130,6 @@ export class MultiSig extends Entity {
     );
   }
 
-  get applicationProposals(): ApplicationProposalLoader {
-    return new ApplicationProposalLoader(
-      "MultiSig",
-      this.get("id")!.toString(),
-      "applicationProposals"
-    );
-  }
-
   get transactionExpiry(): BigInt {
     let value = this.get("transactionExpiry");
     if (!value || value.kind == ValueKind.NULL) {
@@ -516,19 +508,6 @@ export class ApplicationProposal extends Entity {
 
   set id(value: string) {
     this.set("id", Value.fromString(value));
-  }
-
-  get multiSig(): string {
-    let value = this.get("multiSig");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set multiSig(value: string) {
-    this.set("multiSig", Value.fromString(value));
   }
 
   get executed(): boolean {

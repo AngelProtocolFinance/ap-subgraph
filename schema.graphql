@@ -25,7 +25,6 @@ type MultiSig @entity {
   id: String!
   owners: [MultiSigOwner!]! @derivedFrom(field: "multiSig")
   transactions: [MultiSigTransaction!]! @derivedFrom(field: "multiSig")
-  applicationProposals: [ApplicationProposal!]! @derivedFrom(field: "multiSig")
   transactionExpiry: BigInt!
   requireExecution: Boolean!
   approvalsRequired: BigInt!
@@ -58,7 +57,6 @@ type TransactionConfirmation @entity {
 
 type ApplicationProposal @entity {
   id: String! # Proposal ID
-  multiSig: MultiSig!
   executed: Boolean!
   charityName: String!
   proposer: User!

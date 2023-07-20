@@ -96,6 +96,10 @@ export class ApplicationProposed__Params {
   get proposer(): Address {
     return this._event.parameters[2].value.toAddress();
   }
+
+  get charityName(): string {
+    return this._event.parameters[3].value.toString();
+  }
 }
 
 export class ApprovalsRequiredChanged extends ethereum.Event {

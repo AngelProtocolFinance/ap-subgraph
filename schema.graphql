@@ -60,7 +60,9 @@ type ApplicationProposal @entity {
   id: String! # Proposal ID
   multiSig: MultiSig!
   executed: Boolean!
+  charityName: String!
   proposer: User!
+  expiry: BigInt!
   blockTimestamp: BigInt!
   confirmations: [ApplicationConfirmation]! @derivedFrom(field: "proposal")
 }

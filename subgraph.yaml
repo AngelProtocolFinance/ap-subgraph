@@ -134,7 +134,7 @@ dataSources:
           handler: handleApplicationConfirmed
         - event: ApplicationExecuted(uint256)
           handler: handleApplicationExecuted
-        - event: ApplicationProposed(address,uint256,address)
+        - event: ApplicationProposed(address,uint256,address,string)
           handler: handleApplicationProposed
       file: ./src/charity-applications.ts
   - kind: ethereum

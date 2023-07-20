@@ -207,8 +207,10 @@ export function handleApplicationProposed(
   if (appMultiSig != null) {
     let proposal = new ApplicationProposal(event.params.proposalId.toString())
     proposal.multiSig = appMultiSig.id
+    proposal.charityName = event.params.charityName
     proposal.proposer = event.params.proposer.toHex()
     proposal.executed = false
+    proposal.expiry = event.block.timestamp.plus(appMultiSig.transactionExpiry)
     proposal.blockTimestamp = event.block.timestamp
     proposal.save()
   }

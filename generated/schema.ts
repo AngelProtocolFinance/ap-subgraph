@@ -544,6 +544,19 @@ export class ApplicationProposal extends Entity {
     this.set("executed", Value.fromBoolean(value));
   }
 
+  get charityName(): string {
+    let value = this.get("charityName");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set charityName(value: string) {
+    this.set("charityName", Value.fromString(value));
+  }
+
   get proposer(): string {
     let value = this.get("proposer");
     if (!value || value.kind == ValueKind.NULL) {
@@ -555,6 +568,19 @@ export class ApplicationProposal extends Entity {
 
   set proposer(value: string) {
     this.set("proposer", Value.fromString(value));
+  }
+
+  get expiry(): BigInt {
+    let value = this.get("expiry");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set expiry(value: BigInt) {
+    this.set("expiry", Value.fromBigInt(value));
   }
 
   get blockTimestamp(): BigInt {

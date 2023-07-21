@@ -15,6 +15,7 @@ import {
   EndowmentDepositTransaction,
   EndowmentWithdrawTransaction,
   EndowmentSwapTransaction,
+  User,
 } from "../generated/schema"
 
 export function handleEndowmentCreated(event: EndowmentCreatedEvent): void {
@@ -41,6 +42,7 @@ export function handleEndowmentDeposit(event: EndowmentDepositEvent): void {
       let token = EndowmentTokenLocked.load(endowTokenId)
       if (!token) {
         token = new EndowmentTokenLocked(endowTokenId)
+        token.endowment = endow.id
         token.token = event.params.tokenAddress.toHex()
         token.amount = event.params.amountLocked
       } else {
@@ -52,6 +54,7 @@ export function handleEndowmentDeposit(event: EndowmentDepositEvent): void {
       let token = EndowmentTokenLiquid.load(endowTokenId)
       if (!token) {
         token = new EndowmentTokenLiquid(endowTokenId)
+        token.endowment = endow.id
         token.token = event.params.tokenAddress.toHex()
         token.amount = event.params.amountLiquid
         token.allowanceOutstanding = BigInt.fromI32(0)
@@ -94,6 +97,7 @@ export function handleEndowmentWithdraw(event: EndowmentWithdrawEvent): void {
         } else {
           // create new Liquid Token entity and set the starting balance amount
           tokenLiquid = new EndowmentTokenLiquid(endowTokenId)
+          tokenLiquid.endowment = endow.id
           tokenLiquid.token = event.params.tokenAddress.toHex()
           tokenLiquid.amount = event.params.amount
           tokenLiquid.allowanceOutstanding = BigInt.fromI32(0)
@@ -128,25 +132,30 @@ export function handleAllowanceUpdated(event: AllowanceUpdatedEvent): void {
   let endowTokenId = event.params.endowId.toString() + event.params.tokenAddress.toHex()
   let token = EndowmentTokenLiquid.load(endowTokenId)
   if (token != null) {
-    // update the spender's allowance to the new balance
-    let spenderId = endowTokenId + event.params.spender.toHex()
-    let spender = EndowmentTokenAllowanceSpender.load(spenderId)
-    if (spender == null) {
-      // setup new EndowmentTokenAllowanceSpender
-      spender = new EndowmentTokenAllowanceSpender(spenderId)
-    } 
-    spender.amount = event.params.newBalance
-    spender.save()
-
-    // adjust the token's outstanding allowance and balance amount depending on if add/reduce spender's balance
-    if (event.params.added > BigInt.fromI32(0)) {
-      token.allowanceOutstanding = token.allowanceOutstanding.plus(event.params.added)
-      token.amount = token.amount.minus(event.params.added)
-    } else if (event.params.deducted > BigInt.fromI32(0)) {
-      token.allowanceOutstanding = token.allowanceOutstanding.minus(event.params.deducted)
-      token.amount = token.amount.plus(event.params.deducted)
+    let user = User.load(event.params.spender.toHex())
+    if (user != null) {
+      // update the spender's allowance to the new balance
+      let spenderId = endowTokenId + event.params.spender.toHex()
+      let spender = EndowmentTokenAllowanceSpender.load(spenderId)
+      if (spender == null) {
+        // setup new EndowmentTokenAllowanceSpender
+        spender = new EndowmentTokenAllowanceSpender(spenderId)
+        spender.token = token.id
+        spender.spender = user.id
+      } 
+      spender.amount = event.params.newBalance
+      spender.save()
+      
+      // adjust the token's outstanding allowance and balance amount depending on if add/reduce spender's balance
+      if (event.params.added > BigInt.fromI32(0)) {
+        token.allowanceOutstanding = token.allowanceOutstanding.plus(event.params.added)
+        token.amount = token.amount.minus(event.params.added)
+      } else if (event.params.deducted > BigInt.fromI32(0)) {
+        token.allowanceOutstanding = token.allowanceOutstanding.minus(event.params.deducted)
+        token.amount = token.amount.plus(event.params.deducted)
+      }
+      token.save()
     }
-    token.save()
   }
 }
 
@@ -192,10 +201,9 @@ export function handleTokenSwapped(event: TokenSwappedEvent): void {
         let tokenOut = EndowmentTokenLiquid.load(tokenOutId)
         if (tokenOut == null) {
           tokenOut = new EndowmentTokenLiquid(tokenOutId)
-          if (tokenOut != null) {
-            tokenOut.endowment = endow.id
-            tokenOut.token = event.params.tokenOut.toHex()
-          }
+          tokenOut.endowment = endow.id
+          tokenOut.token = event.params.tokenOut.toHex()
+          tokenOut.allowanceOutstanding = BigInt.fromI32(0)
         }
         // update token in amount (decrease)
         tokenIn.amount = tokenIn.amount.minus(event.params.amountIn)

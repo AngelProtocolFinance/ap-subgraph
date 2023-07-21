@@ -142,14 +142,13 @@ export function handleTransactionSubmitted(
   const ms = MultiSig.load(event.params.msAddress.toString())
   if (ms != null) {
     let tx = new MultiSigTransaction(event.params.msAddress.toString() + event.params.transactionId.toString())
-    if (tx != null) {
-      tx.transactionId = event.params.transactionId
-      tx.proposer = event.params.sender.toHex()
-      tx.executed = (ms.approvalsRequired < BigInt.fromI32(1) || ms.requireExecution) ? false : true
-      tx.expiry = event.block.timestamp.plus(ms.transactionExpiry)
-      tx.blockTimestamp = event.block.timestamp
-      tx.save()
-    }
+    tx.transactionId = event.params.transactionId
+    tx.multiSig = ms.id
+    tx.proposer = event.params.sender.toHex()
+    tx.executed = (ms.approvalsRequired < BigInt.fromI32(1) || ms.requireExecution) ? false : true
+    tx.expiry = event.block.timestamp.plus(ms.transactionExpiry)
+    tx.blockTimestamp = event.block.timestamp
+    tx.save()
   }
 }
 

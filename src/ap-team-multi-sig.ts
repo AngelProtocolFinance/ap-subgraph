@@ -153,14 +153,15 @@ export function handleTransactionConfirmed(
   const tx = MultiSigTransaction.load(ms.id.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
   const user = User.load(event.params.sender)
   if (tx != null && user != null) {
-    let txConf = TransactionConfirmation.load(tx.id.concat(event.params.sender))
-    if (txConf != null) {
-      txConf = new TransactionConfirmation(tx.id.concat(event.params.sender))
+    const txConfId = tx.id.concat(event.params.sender)
+    let txConf = TransactionConfirmation.load(txConfId)
+    if (txConf == null) {
+      txConf = new TransactionConfirmation(txConfId)
       txConf.transaction = tx.id
       txConf.owner = user.id
-      txConf.confirmed = true
-      txConf.save()
     }
+    txConf.confirmed = true
+    txConf.save()
   }
 }
 

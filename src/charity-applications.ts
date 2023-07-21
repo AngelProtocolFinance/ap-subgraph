@@ -156,13 +156,13 @@ export function handleTransactionConfirmed(
   const user = User.load(event.params.sender)
   if (tx != null && user != null) {
     let txConf = TransactionConfirmation.load(tx.id.concat(event.params.sender))
-    if (txConf != null) {
+    if (txConf == null) {
       txConf = new TransactionConfirmation(tx.id.concat(event.params.sender))
       txConf.transaction = tx.id
       txConf.owner = user.id
-      txConf.confirmed = true
-      txConf.save()
     }
+    txConf.confirmed = true
+    txConf.save()
   }
 }
 

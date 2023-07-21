@@ -28,27 +28,25 @@ import {
 
 export function handleInitializedMultiSig(event: InitializedMultiSigEvent): void {
   let ms = new MultiSig(event.params.msAddress.toString())
-  if (ms != null) {
-    ms.transactionExpiry = event.params.transactionExpiry
-    ms.requireExecution = event.params.requireExecution
-    ms.approvalsRequired = event.params.approvalsRequired
-    ms.save()
+  ms.transactionExpiry = event.params.transactionExpiry
+  ms.requireExecution = event.params.requireExecution
+  ms.approvalsRequired = event.params.approvalsRequired
+  ms.save()
 
-    for (let i = 0; i < event.params.owners.length - 1; i++) {
-      // look up User or create a new one if dne
-      const owner = event.params.owners[i].toString()
-      let user = User.load(owner)
-      if (user == null) {
-        user = new User(owner)
-        user.save()
-      }
-      let msoId = event.params.msAddress.toString() + owner
-      let mso = new MultiSigOwner(msoId)
-      mso.multiSig = ms.id
-      mso.owner = user.id
-      mso.active = true
-      mso.save()
+  for (let i = 0; i < event.params.owners.length - 1; i++) {
+    // look up User or create a new one if dne
+    const owner = event.params.owners[i].toString()
+    let user = User.load(owner)
+    if (user == null) {
+      user = new User(owner)
+      user.save()
     }
+    let msoId = event.params.msAddress.toString() + owner
+    let mso = new MultiSigOwner(msoId)
+    mso.multiSig = ms.id
+    mso.owner = user.id
+    mso.active = true
+    mso.save()
   }
 }
 
@@ -216,7 +214,7 @@ export function handleApplicationConfirmed(
     user = new User(event.params.owner.toHex())
   }
   let proposalId = event.params.proposalId.toString()
-  let proposal = new ApplicationProposal(proposalId)
+  let proposal = ApplicationProposal.load(proposalId)
   if (proposal != null) {
     let confId = proposalId + event.params.owner.toHex()
     let txConf = ApplicationConfirmation.load(confId)
@@ -234,7 +232,7 @@ export function handleApplicationConfirmationRevoked(
   event: ApplicationConfirmationRevokedEvent
 ): void {
   let proposalId = event.params.proposalId.toString()
-  let proposal = new ApplicationProposal(proposalId)
+  let proposal = ApplicationProposal.load(proposalId)
   if (proposal != null) {
     let confId = proposalId + event.params.owner.toHex()
     let txConf = TransactionConfirmation.load(confId)
@@ -249,7 +247,7 @@ export function handleApplicationExecuted(
   event: ApplicationExecutedEvent
 ): void {
   let proposalId = event.params.proposalId.toString()
-  let proposal = new ApplicationProposal(proposalId)
+  let proposal = ApplicationProposal.load(proposalId)
   if (proposal != null) {
     proposal.executed = true
     proposal.save()

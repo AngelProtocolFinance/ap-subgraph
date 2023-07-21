@@ -22,26 +22,24 @@ import {
 
 export function handleInitializedMultiSig(event: InitializedMultiSigEvent): void {
   let ms = new MultiSig(event.params.msAddress.toString())
-  if (ms != null) {
-    ms.transactionExpiry = event.params.transactionExpiry
-    ms.requireExecution = event.params.requireExecution
-    ms.approvalsRequired = event.params.approvalsRequired
-    ms.save()
-    for (let i = 0; i < event.params.owners.length - 1; i++) {
-      // look up User or create a new one if dne
-      const owner = event.params.owners[i].toString()
-      let user = User.load(owner)
-      if (user == null) {
-        user = new User(owner)
-        user.save()
-      }
-      let msoId = event.params.msAddress.toString() + owner
-      let mso = new MultiSigOwner(msoId)
-      mso.multiSig = ms.id
-      mso.owner = user.id
-      mso.active = true
-      mso.save()
+  ms.transactionExpiry = event.params.transactionExpiry
+  ms.requireExecution = event.params.requireExecution
+  ms.approvalsRequired = event.params.approvalsRequired
+  ms.save()
+  for (let i = 0; i < event.params.owners.length - 1; i++) {
+    // look up User or create a new one if dne
+    const owner = event.params.owners[i].toString()
+    let user = User.load(owner)
+    if (user == null) {
+      user = new User(owner)
+      user.save()
     }
+    let msoId = event.params.msAddress.toString() + owner
+    let mso = new MultiSigOwner(msoId)
+    mso.multiSig = ms.id
+    mso.owner = user.id
+    mso.active = true
+    mso.save()
   }
 }
 

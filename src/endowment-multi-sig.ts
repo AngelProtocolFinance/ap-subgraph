@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, Bytes } from "@graphprotocol/graph-ts"
 import {
   EndowmentMultisigCreated as EndowmentMultisigCreatedEvent,
   ApprovalsRequirementChanged as ApprovalsRequirementChangedEvent,
@@ -21,7 +21,7 @@ import {
 } from "../generated/schema"
 
 export function handleEndowmentMultisigCreated(event: EndowmentMultisigCreatedEvent): void {
-  let ms = new MultiSig(event.params.endowmentId.toString())
+  let ms = new MultiSig(Bytes.fromUTF8(event.params.endowmentId.toString()))
   if (ms != null) {
     ms.transactionExpiry = event.params.transactionExpiry
     ms.requireExecution = event.params.requireExecution
@@ -31,14 +31,13 @@ export function handleEndowmentMultisigCreated(event: EndowmentMultisigCreatedEv
 
   for (let i = 0; i < event.params.owners.length - 1; i++) {
     // look up User or create a new one if dne
-    const owner = event.params.owners[i].toHex()
+    const owner = event.params.owners[i]
     let user = User.load(owner)
     if (user == null) {
       user = new User(owner)
       user.save()
     }
-    let msoId = event.params.endowmentId.toString() + owner
-    let mso = new MultiSigOwner(msoId)
+    let mso = new MultiSigOwner(ms.id.concat(owner))
     mso.multiSig = ms.id
     mso.owner = user.id
     mso.active = true
@@ -49,7 +48,7 @@ export function handleEndowmentMultisigCreated(event: EndowmentMultisigCreatedEv
 export function handleApprovalsRequirementChanged(
   event: ApprovalsRequirementChangedEvent
 ): void {
-  let ms = MultiSig.load(event.params.endowmentId.toString())
+  let ms = MultiSig.load(Bytes.fromUTF8(event.params.endowmentId.toString()))
   if (ms != null) {
     ms.approvalsRequired = event.params.approvalsRequired
     ms.save()
@@ -59,7 +58,7 @@ export function handleApprovalsRequirementChanged(
 export function handleRequireExecutionChanged(
   event: RequireExecutionChangedEvent
 ): void {
-  let ms = MultiSig.load(event.params.endowmentId.toString())
+  let ms = MultiSig.load(Bytes.fromUTF8(event.params.endowmentId.toString()))
   if (ms != null) {
     ms.requireExecution = event.params.requireExecution
     ms.save()
@@ -69,7 +68,7 @@ export function handleRequireExecutionChanged(
 export function handleExpiryChanged(
   event: ExpiryChangedEvent
 ): void {
-  let ms = MultiSig.load(event.params.endowmentId.toString())
+  let ms = MultiSig.load(Bytes.fromUTF8(event.params.endowmentId.toString()))
   if (ms != null) {
     ms.transactionExpiry = event.params.transactionExpiry
     ms.save()
@@ -77,11 +76,11 @@ export function handleExpiryChanged(
 }
 
 export function handleOwnersAdded(event: OwnersAddedEvent): void {
-  let ms = MultiSig.load(event.params.endowmentId.toString())
+  let ms = MultiSig.load(Bytes.fromUTF8(event.params.endowmentId.toString()))
   if (ms != null) {
     for (let i = 0; i < event.params.owners.length - 1; i++) {
-      const owner = event.params.owners[i].toHex()
-      const msoId = event.params.endowmentId.toString() + owner
+      const owner = event.params.owners[i]
+      const msoId = ms.id.concat(owner)
       let mso = MultiSigOwner.load(msoId)
       if (mso == null) {
         mso = new MultiSigOwner(msoId)
@@ -95,12 +94,11 @@ export function handleOwnersAdded(event: OwnersAddedEvent): void {
 }
 
 export function handleOwnersRemoved(event: OwnersRemovedEvent): void {
-  let ms = MultiSig.load(event.params.endowmentId.toString())
+  let ms = MultiSig.load(Bytes.fromUTF8(event.params.endowmentId.toString()))
   if (ms != null) {
     for (let i = 0; i < event.params.owners.length - 1; i++) {
-      const owner = event.params.owners[i].toHex()
-      const msoId = event.params.endowmentId.toString() + owner
-      let mso = MultiSigOwner.load(msoId)
+      const owner = event.params.owners[i]
+      let mso = MultiSigOwner.load(ms.id.concat(owner))
       if (mso != null) {
         mso.active = false
         mso.save()
@@ -110,10 +108,10 @@ export function handleOwnersRemoved(event: OwnersRemovedEvent): void {
 }
 
 export function handleOwnerReplaced(event: OwnerReplacedEvent): void {
-  let ms = MultiSig.load(event.params.endowmentId.toString())
+  let ms = MultiSig.load(Bytes.fromUTF8(event.params.endowmentId.toString()))
   if (ms != null) {
-    const oldMsoId = event.params.endowmentId.toString() + event.params.currOwner.toHex()
-    const newMsoId = event.params.endowmentId.toString() + event.params.newOwner.toHex()
+    const oldMsoId = ms.id.concat(event.params.currOwner)
+    const newMsoId = ms.id.concat(event.params.newOwner)
     let oldOwner = MultiSigOwner.load(oldMsoId)
     if (oldOwner != null) {
       oldOwner.active = false
@@ -133,12 +131,12 @@ export function handleOwnerReplaced(event: OwnerReplacedEvent): void {
 export function handleTransactionSubmitted(
   event: TransactionSubmittedEvent
 ): void {
-  const ms = MultiSig.load(event.params.endowmentId.toString())
+  const ms = MultiSig.load(Bytes.fromUTF8(event.params.endowmentId.toString()))
   if (ms != null) {
-    let tx = new MultiSigTransaction(event.params.endowmentId.toString() + event.params.transactionId.toString())
+    let tx = new MultiSigTransaction(ms.id.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
     tx.transactionId = event.params.transactionId
     tx.multiSig = ms.id
-    tx.proposer = event.params.owner.toHex()
+    tx.proposer = event.params.owner
     tx.executed = (ms.approvalsRequired < BigInt.fromI32(1) || ms.requireExecution) ? false : true
     tx.expiry = event.block.timestamp.plus(ms.transactionExpiry)
     tx.blockTimestamp = event.block.timestamp
@@ -149,12 +147,16 @@ export function handleTransactionSubmitted(
 export function handleTransactionConfirmed(
   event: TransactionConfirmedEvent
 ): void {
-  const tx = MultiSigTransaction.load(event.params.endowmentId.toString() + event.params.transactionId.toString())
-  const user = User.load(event.params.owner.toHex())
+  const ms = MultiSig.load(Bytes.fromUTF8(event.params.endowmentId.toString()))
+  if (ms == null) {
+    return
+  }
+  let tx = new MultiSigTransaction(ms.id.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
+  const user = User.load(event.params.owner)
   if (tx != null && user != null) {
-    let txConf = TransactionConfirmation.load(event.params.endowmentId.toString() + event.params.transactionId.toString() + event.params.owner.toHex())
+    let txConf = TransactionConfirmation.load(tx.id.concat(event.params.owner))
     if (txConf != null) {
-      txConf = new TransactionConfirmation(event.params.endowmentId.toString() + event.params.transactionId.toString() + event.params.owner.toHex())
+      txConf = new TransactionConfirmation(tx.id.concat(event.params.owner))
       txConf.transaction = tx.id
       txConf.owner = user.id
       txConf.confirmed = true
@@ -166,9 +168,13 @@ export function handleTransactionConfirmed(
 export function handleTransactionConfirmationRevoked(
   event: TransactionConfirmationRevokedEvent
 ): void {
-  const tx = MultiSigTransaction.load(event.params.endowmentId.toString() + event.params.transactionId.toString())
+  const ms = MultiSig.load(Bytes.fromUTF8(event.params.endowmentId.toString()))
+  if (ms == null) {
+    return
+  }
+  const tx = new MultiSigTransaction(ms.id.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
   if (tx != null) {
-    let txConf = TransactionConfirmation.load(event.params.endowmentId.toString() + event.params.transactionId.toString() + event.params.owner.toHex())
+    let txConf = TransactionConfirmation.load(tx.id.concat(event.params.owner))
     if (txConf != null) {
       txConf.confirmed = false
       txConf.save()
@@ -179,7 +185,11 @@ export function handleTransactionConfirmationRevoked(
 export function handleTransactionExecuted(
   event: TransactionExecutedEvent
 ): void {
-  let tx = MultiSigTransaction.load(event.params.endowmentId.toString() + event.params.transactionId.toString())
+  const ms = MultiSig.load(Bytes.fromUTF8(event.params.endowmentId.toString()))
+  if (ms == null) {
+    return
+  }
+  const tx = new MultiSigTransaction(ms.id.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
   if (tx != null) {
     tx.executed = true
     tx.save()

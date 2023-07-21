@@ -1,20 +1,20 @@
 {
   "mumbai": {
     "APTeamMultiSig": {
-      "address": "0x8669Fd38E434C0724834F4b995B85bD50831E7c7",
-      "startBlock": 37000000
+      "address": "0xeA2B4CD932f5Cecea867D8794206c5D51A13a516",
+      "startBlock": 37910000
     },
-    "EndowmentMultiSigFactory": {
-      "address": "0x0d7B9bCE00a01b525181013383F82d35D079F98d",
-      "startBlock": 37000000
+    "EndowmentMultiSigEmitter": {
+      "address": "0x8a87385765871bD85d96B7675A3F1Fb663146E4d",
+      "startBlock": 38000000
     },
     "Accounts": {
-      "address": "0xc2bA254F7De519ef72C4f69Aa4843e89B6F8483d",
-      "startBlock": 37000000
+      "address": "0xE2e48880d780c4Fa36655EC9014DBbdA1164C0cA",
+      "startBlock": 37910000
     },
     "CharityApplications": {
-      "address": "0x824F03DdEB9a7cd6852AA156392e358ACC79924b",
-      "startBlock": 37000000
+      "address": "0x3769916a8c97FFf1C48DE49b03181578576aFdF1",
+      "startBlock": 37910000
     }
   }
 }

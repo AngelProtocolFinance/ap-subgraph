@@ -130,14 +130,6 @@ export class MultiSig extends Entity {
     );
   }
 
-  get applicationProposals(): ApplicationProposalLoader {
-    return new ApplicationProposalLoader(
-      "MultiSig",
-      this.get("id")!.toString(),
-      "applicationProposals"
-    );
-  }
-
   get transactionExpiry(): BigInt {
     let value = this.get("transactionExpiry");
     if (!value || value.kind == ValueKind.NULL) {
@@ -518,17 +510,17 @@ export class ApplicationProposal extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get multiSig(): string {
-    let value = this.get("multiSig");
+  get executed(): boolean {
+    let value = this.get("executed");
     if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
+      return false;
     } else {
-      return value.toString();
+      return value.toBoolean();
     }
   }
 
-  set multiSig(value: string) {
-    this.set("multiSig", Value.fromString(value));
+  set executed(value: boolean) {
+    this.set("executed", Value.fromBoolean(value));
   }
 
   get charityName(): string {
@@ -555,19 +547,6 @@ export class ApplicationProposal extends Entity {
 
   set proposer(value: string) {
     this.set("proposer", Value.fromString(value));
-  }
-
-  get executed(): boolean {
-    let value = this.get("executed");
-    if (!value || value.kind == ValueKind.NULL) {
-      return false;
-    } else {
-      return value.toBoolean();
-    }
-  }
-
-  set executed(value: boolean) {
-    this.set("executed", Value.fromBoolean(value));
   }
 
   get expiry(): BigInt {

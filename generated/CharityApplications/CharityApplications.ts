@@ -88,6 +88,18 @@ export class ApplicationProposed__Params {
   get proposalId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
+
+  get proposer(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get charityName(): string {
+    return this._event.parameters[2].value.toString();
+  }
+
+  get expiry(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
 }
 
 export class ApprovalsRequiredChanged extends ethereum.Event {

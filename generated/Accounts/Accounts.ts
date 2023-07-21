@@ -1337,34 +1337,30 @@ export class Accounts__queryConfigResultConfigStruct extends ethereum.Tuple {
     return this[1].toString();
   }
 
+  get networkName(): string {
+    return this[2].toString();
+  }
+
   get registrarContract(): Address {
-    return this[2].toAddress();
+    return this[3].toAddress();
   }
 
   get nextAccountId(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get maxGeneralCategoryId(): BigInt {
     return this[4].toBigInt();
   }
 
+  get maxGeneralCategoryId(): BigInt {
+    return this[5].toBigInt();
+  }
+
   get subDao(): Address {
-    return this[5].toAddress();
-  }
-
-  get gateway(): Address {
     return this[6].toAddress();
-  }
-
-  get gasReceiver(): Address {
-    return this[7].toAddress();
   }
 
   get earlyLockedWithdrawFee(): Accounts__queryConfigResultConfigEarlyLockedWithdrawFeeStruct {
     return changetype<
       Accounts__queryConfigResultConfigEarlyLockedWithdrawFeeStruct
-    >(this[8].toTuple());
+    >(this[7].toTuple());
   }
 }
 
@@ -2199,7 +2195,7 @@ export class Accounts extends ethereum.SmartContract {
   queryConfig(): Accounts__queryConfigResultConfigStruct {
     let result = super.call(
       "queryConfig",
-      "queryConfig():((address,string,address,uint256,uint256,address,address,address,(address,uint256)))",
+      "queryConfig():((address,string,string,address,uint256,uint256,address,(address,uint256)))",
       []
     );
 
@@ -2213,7 +2209,7 @@ export class Accounts extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "queryConfig",
-      "queryConfig():((address,string,address,uint256,uint256,address,address,address,(address,uint256)))",
+      "queryConfig():((address,string,string,address,uint256,uint256,address,(address,uint256)))",
       []
     );
     if (result.reverted) {
@@ -3251,20 +3247,20 @@ export class CreateEndowmentCallDetailsSplitToLiquidStruct extends ethereum.Tupl
   }
 }
 
-export class DepositDonationMatchErC20Call extends ethereum.Call {
-  get inputs(): DepositDonationMatchErC20Call__Inputs {
-    return new DepositDonationMatchErC20Call__Inputs(this);
+export class DepositDonationMatchERC20Call extends ethereum.Call {
+  get inputs(): DepositDonationMatchERC20Call__Inputs {
+    return new DepositDonationMatchERC20Call__Inputs(this);
   }
 
-  get outputs(): DepositDonationMatchErC20Call__Outputs {
-    return new DepositDonationMatchErC20Call__Outputs(this);
+  get outputs(): DepositDonationMatchERC20Call__Outputs {
+    return new DepositDonationMatchERC20Call__Outputs(this);
   }
 }
 
-export class DepositDonationMatchErC20Call__Inputs {
-  _call: DepositDonationMatchErC20Call;
+export class DepositDonationMatchERC20Call__Inputs {
+  _call: DepositDonationMatchERC20Call;
 
-  constructor(call: DepositDonationMatchErC20Call) {
+  constructor(call: DepositDonationMatchERC20Call) {
     this._call = call;
   }
 
@@ -3281,10 +3277,10 @@ export class DepositDonationMatchErC20Call__Inputs {
   }
 }
 
-export class DepositDonationMatchErC20Call__Outputs {
-  _call: DepositDonationMatchErC20Call;
+export class DepositDonationMatchERC20Call__Outputs {
+  _call: DepositDonationMatchERC20Call;
 
-  constructor(call: DepositDonationMatchErC20Call) {
+  constructor(call: DepositDonationMatchERC20Call) {
     this._call = call;
   }
 }
@@ -3586,6 +3582,68 @@ export class SetupDaoCallDetailsTokenDataVeBondingTypeDataStruct extends ethereu
 
   get power(): BigInt {
     return this[3].toBigInt();
+  }
+}
+
+export class SetupDonationMatchCall extends ethereum.Call {
+  get inputs(): SetupDonationMatchCall__Inputs {
+    return new SetupDonationMatchCall__Inputs(this);
+  }
+
+  get outputs(): SetupDonationMatchCall__Outputs {
+    return new SetupDonationMatchCall__Outputs(this);
+  }
+}
+
+export class SetupDonationMatchCall__Inputs {
+  _call: SetupDonationMatchCall;
+
+  constructor(call: SetupDonationMatchCall) {
+    this._call = call;
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get details(): SetupDonationMatchCallDetailsStruct {
+    return changetype<SetupDonationMatchCallDetailsStruct>(
+      this._call.inputValues[1].value.toTuple()
+    );
+  }
+}
+
+export class SetupDonationMatchCall__Outputs {
+  _call: SetupDonationMatchCall;
+
+  constructor(call: SetupDonationMatchCall) {
+    this._call = call;
+  }
+}
+
+export class SetupDonationMatchCallDetailsStruct extends ethereum.Tuple {
+  get enumData(): i32 {
+    return this[0].toI32();
+  }
+
+  get data(): SetupDonationMatchCallDetailsDataStruct {
+    return changetype<SetupDonationMatchCallDetailsDataStruct>(
+      this[1].toTuple()
+    );
+  }
+}
+
+export class SetupDonationMatchCallDetailsDataStruct extends ethereum.Tuple {
+  get reserveToken(): Address {
+    return this[0].toAddress();
+  }
+
+  get uniswapFactory(): Address {
+    return this[1].toAddress();
+  }
+
+  get poolFee(): i32 {
+    return this[2].toI32();
   }
 }
 
@@ -4878,5 +4936,43 @@ export class WithdrawCallTokensStruct extends ethereum.Tuple {
 
   get amnt(): BigInt {
     return this[1].toBigInt();
+  }
+}
+
+export class WithdrawDonationMatchERC20Call extends ethereum.Call {
+  get inputs(): WithdrawDonationMatchERC20Call__Inputs {
+    return new WithdrawDonationMatchERC20Call__Inputs(this);
+  }
+
+  get outputs(): WithdrawDonationMatchERC20Call__Outputs {
+    return new WithdrawDonationMatchERC20Call__Outputs(this);
+  }
+}
+
+export class WithdrawDonationMatchERC20Call__Inputs {
+  _call: WithdrawDonationMatchERC20Call;
+
+  constructor(call: WithdrawDonationMatchERC20Call) {
+    this._call = call;
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get recipient(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
+}
+
+export class WithdrawDonationMatchERC20Call__Outputs {
+  _call: WithdrawDonationMatchERC20Call;
+
+  constructor(call: WithdrawDonationMatchERC20Call) {
+    this._call = call;
   }
 }

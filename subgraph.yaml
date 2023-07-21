@@ -134,14 +134,16 @@ dataSources:
           handler: handleApplicationConfirmed
         - event: ApplicationExecuted(uint256)
           handler: handleApplicationExecuted
-        - event: ApplicationProposed(uint256)
+        - event: ApplicationProposed(uint256,address,string,uint256)
           handler: handleApplicationProposed
       file: ./src/charity-applications.ts
   - kind: ethereum
     name: EndowmentMultiSigEmitter
     network: mumbai
     source:
+      address: "0x824F03DdEB9a7cd6852AA156392e358ACC79924b"
       abi: EndowmentMultiSigEmitter
+      startBlock: 37000000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

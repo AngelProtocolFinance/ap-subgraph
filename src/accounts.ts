@@ -19,7 +19,7 @@ import {
 
 export function handleEndowmentCreated(event: EndowmentCreatedEvent): void {
   let endow = new Endowment(event.params.endowId.toString())
-  endow.endowmentType = (event.params.endowType == 0) ? "Locked" : "Liquid"
+  endow.endowmentType = event.params.endowType
   endow.save()
 }
 
@@ -70,7 +70,7 @@ export function handleEndowmentWithdraw(event: EndowmentWithdrawEvent): void {
     // save withdraw tx record
     let withdraw = new EndowmentWithdrawTransaction(event.transaction.hash.toHex())
     withdraw.endowment = endow.id
-    withdraw.accountType = (event.params.accountType == 0) ? "Locked" : "Liquid"
+    withdraw.accountType = event.params.accountType
     withdraw.token = event.params.tokenAddress.toHex()
     withdraw.amount = event.params.amount
     withdraw.beneficiaryEndowId = event.params.beneficiaryEndowId.toI32()
@@ -159,7 +159,7 @@ export function handleTokenSwapped(event: TokenSwappedEvent): void {
     // save swap tx record
     let swap = new EndowmentSwapTransaction(event.transaction.hash.toHex())
     swap.endowment = endow.id
-    swap.accountType = (event.params.accountType == 0) ? "Locked" : "Liquid" 
+    swap.accountType = event.params.accountType
     swap.tokenIn = event.params.tokenIn.toHex()
     swap.amountIn = event.params.amountIn
     swap.tokenOut = event.params.tokenOut.toHex()

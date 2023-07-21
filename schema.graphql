@@ -1,11 +1,6 @@
 # ~~~~~~~~~~~~~~~~~
 # ~~~~~ ENUMS ~~~~~
 # ~~~~~~~~~~~~~~~~~
-enum AccountType {
-  Locked
-  Liquid
-}
-
 enum EndowmentType {
   Charity
   Normal
@@ -118,7 +113,7 @@ type EndowmentDepositTransaction @entity(immutable: true) {
 type EndowmentWithdrawTransaction @entity(immutable: true) {
   id: String! # transaction hash
   endowment: Endowment!
-  accountType: AccountType!
+  accountType: Int!
   token: String!
   amount: BigInt!
   beneficiaryEndowId: Int
@@ -129,7 +124,7 @@ type EndowmentWithdrawTransaction @entity(immutable: true) {
 type EndowmentSwapTransaction @entity(immutable: true) {
   id: String! # transaction Hash
   endowment: Endowment!
-  accountType: AccountType!
+  accountType: Int!
   tokenIn: String!
   amountIn: BigInt!
   tokenOut: String!

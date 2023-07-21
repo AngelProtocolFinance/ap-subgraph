@@ -46,6 +46,7 @@ export function handleInitializedMultiSig(event: InitializedMultiSigEvent): void
       let mso = new MultiSigOwner(msoId)
       mso.multiSig = ms.id
       mso.owner = user.id
+      mso.active = true
       mso.save()
     }
   }
@@ -90,10 +91,8 @@ export function handleOwnersAdded(event: OwnersAddedEvent): void {
       let mso = MultiSigOwner.load(msoId)
       if (mso == null) {
         mso = new MultiSigOwner(msoId)
-        if (mso != null) {
-          mso.multiSig = ms.id
-          mso.owner = owner
-        }
+        mso.multiSig = ms.id
+        mso.owner = owner
       }
       mso.active = true
       mso.save()
@@ -107,7 +106,7 @@ export function handleOwnersRemoved(event: OwnersRemovedEvent): void {
     for (let i = 0; i < event.params.owners.length - 1; i++) {
       const owner = event.params.owners[i].toHex()
       const msoId = event.params.msAddress.toString() + owner
-      let mso = new MultiSigOwner(msoId)
+      let mso = MultiSigOwner.load(msoId)
       if (mso != null) {
         mso.active = false
         mso.save()
@@ -127,11 +126,9 @@ export function handleOwnerReplaced(event: OwnerReplacedEvent): void {
       oldOwner.save()
       let newOwner = MultiSigOwner.load(newMsoId)
       if (newOwner == null) {
-          newOwner = new MultiSigOwner(newMsoId)
-          if (newOwner != null) {
-            newOwner.multiSig = ms.id
-            newOwner.owner = newOwner.id
-          }
+        newOwner = new MultiSigOwner(newMsoId)
+        newOwner.multiSig = ms.id
+        newOwner.owner = newOwner.id
       }
       newOwner.active = true
       newOwner.save()

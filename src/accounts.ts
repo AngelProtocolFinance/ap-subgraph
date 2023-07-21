@@ -20,7 +20,7 @@ import {
 
 export function handleEndowmentCreated(event: EndowmentCreatedEvent): void {
   let endow = new Endowment(event.params.endowId.toString())
-  endow.endowmentType = (event.params.endowType == 0) ? "Locked" : "Liquid"
+  endow.endowmentType = (event.params.endowType == 0) ? "Charity" : "Normal"
   endow.save()
 }
 

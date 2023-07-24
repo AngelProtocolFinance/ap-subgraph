@@ -15,7 +15,7 @@ enum EndowmentType {
 # ~~~ ENTITIES ~~~
 # ~~~~~~~~~~~~~~~~
 type User @entity(immutable: true) {
-  id: Bytes! # set as wallet/contract Bytes
+  id: Bytes! # set as wallet/contract address
   multiSigs: [MultiSigOwner]! @derivedFrom(field: "owner")
   applicationProposals: [ApplicationProposal]! @derivedFrom(field: "proposer")
   tokenAllowances: [EndowmentTokenAllowanceSpender]! @derivedFrom(field: "spender")

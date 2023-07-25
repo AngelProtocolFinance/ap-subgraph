@@ -365,6 +365,19 @@ export class MultiSigTransaction extends Entity {
     this.set("expiry", Value.fromBigInt(value));
   }
 
+  get metadata(): Bytes {
+    let value = this.get("metadata");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set metadata(value: Bytes) {
+    this.set("metadata", Value.fromBytes(value));
+  }
+
   get blockTimestamp(): BigInt {
     let value = this.get("blockTimestamp");
     if (!value || value.kind == ValueKind.NULL) {
@@ -566,6 +579,19 @@ export class ApplicationProposal extends Entity {
 
   set expiry(value: BigInt) {
     this.set("expiry", Value.fromBigInt(value));
+  }
+
+  get metadata(): Bytes {
+    let value = this.get("metadata");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set metadata(value: Bytes) {
+    this.set("metadata", Value.fromBytes(value));
   }
 
   get blockTimestamp(): BigInt {

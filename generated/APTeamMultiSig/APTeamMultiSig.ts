@@ -296,6 +296,10 @@ export class TransactionSubmitted__Params {
   get transactionId(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
+
+  get metadata(): Bytes {
+    return this._event.parameters[3].value.toBytes();
+  }
 }
 
 export class APTeamMultiSig__transactionsResult {

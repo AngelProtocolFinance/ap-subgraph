@@ -100,6 +100,10 @@ export class ApplicationProposed__Params {
   get expiry(): BigInt {
     return this._event.parameters[3].value.toBigInt();
   }
+
+  get metadata(): Bytes {
+    return this._event.parameters[4].value.toBytes();
+  }
 }
 
 export class ApprovalsRequiredChanged extends ethereum.Event {
@@ -439,6 +443,10 @@ export class TransactionSubmitted__Params {
 
   get transactionId(): BigInt {
     return this._event.parameters[2].value.toBigInt();
+  }
+
+  get metadata(): Bytes {
+    return this._event.parameters[3].value.toBytes();
   }
 }
 
@@ -1139,14 +1147,14 @@ export class CharityApplications__proposalsResultApplicationSplitToLiquidStruct 
 export class CharityApplications__proposalsResult {
   value0: Address;
   value1: CharityApplications__proposalsResultApplicationStruct;
-  value2: string;
+  value2: Bytes;
   value3: BigInt;
   value4: boolean;
 
   constructor(
     value0: Address,
     value1: CharityApplications__proposalsResultApplicationStruct,
-    value2: string,
+    value2: Bytes,
     value3: BigInt,
     value4: boolean
   ) {
@@ -1161,7 +1169,7 @@ export class CharityApplications__proposalsResult {
     let map = new TypedMap<string, ethereum.Value>();
     map.set("value0", ethereum.Value.fromAddress(this.value0));
     map.set("value1", ethereum.Value.fromTuple(this.value1));
-    map.set("value2", ethereum.Value.fromString(this.value2));
+    map.set("value2", ethereum.Value.fromBytes(this.value2));
     map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
     map.set("value4", ethereum.Value.fromBoolean(this.value4));
     return map;
@@ -1175,7 +1183,7 @@ export class CharityApplications__proposalsResult {
     return this.value1;
   }
 
-  getMeta(): string {
+  getMeta(): Bytes {
     return this.value2;
   }
 
@@ -1606,7 +1614,7 @@ export class CharityApplications extends ethereum.SmartContract {
   proposals(param0: BigInt): CharityApplications__proposalsResult {
     let result = super.call(
       "proposals",
-      "proposals(uint256):(address,(bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256),string,uint256,bool)",
+      "proposals(uint256):(address,(bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256),bytes,uint256,bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -1615,7 +1623,7 @@ export class CharityApplications extends ethereum.SmartContract {
       changetype<CharityApplications__proposalsResultApplicationStruct>(
         result[1].toTuple()
       ),
-      result[2].toString(),
+      result[2].toBytes(),
       result[3].toBigInt(),
       result[4].toBoolean()
     );
@@ -1626,7 +1634,7 @@ export class CharityApplications extends ethereum.SmartContract {
   ): ethereum.CallResult<CharityApplications__proposalsResult> {
     let result = super.tryCall(
       "proposals",
-      "proposals(uint256):(address,(bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256),string,uint256,bool)",
+      "proposals(uint256):(address,(bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256),bytes,uint256,bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -1639,7 +1647,7 @@ export class CharityApplications extends ethereum.SmartContract {
         changetype<CharityApplications__proposalsResultApplicationStruct>(
           value[1].toTuple()
         ),
-        value[2].toString(),
+        value[2].toBytes(),
         value[3].toBigInt(),
         value[4].toBoolean()
       )
@@ -2251,8 +2259,8 @@ export class ProposeApplicationCall__Inputs {
     );
   }
 
-  get _meta(): string {
-    return this._call.inputValues[1].value.toString();
+  get _meta(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
   }
 }
 

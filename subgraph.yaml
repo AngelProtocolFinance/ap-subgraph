@@ -74,7 +74,7 @@ dataSources:
           handler: handleOwnersRemoved
         - event: OwnerReplaced(address,address,address)
           handler: handleOwnerReplaced
-        - event: TransactionSubmitted(address,address,uint256)
+        - event: TransactionSubmitted(address,address,uint256,bytes)
           handler: handleTransactionSubmitted
         - event: TransactionConfirmed(address,address,uint256)
           handler: handleTransactionConfirmed
@@ -120,7 +120,7 @@ dataSources:
           handler: handleOwnersRemoved
         - event: OwnerReplaced(address,address,address)
           handler: handleOwnerReplaced
-        - event: TransactionSubmitted(address,address,uint256)
+        - event: TransactionSubmitted(address,address,uint256,bytes)
           handler: handleTransactionSubmitted
         - event: TransactionConfirmed(address,address,uint256)
           handler: handleTransactionConfirmed
@@ -134,7 +134,7 @@ dataSources:
           handler: handleApplicationConfirmed
         - event: ApplicationExecuted(uint256)
           handler: handleApplicationExecuted
-        - event: ApplicationProposed(uint256,address,string,uint256)
+        - event: ApplicationProposed(uint256,address,string,uint256,bytes)
           handler: handleApplicationProposed
       file: ./src/charity-applications.ts
   - kind: ethereum
@@ -170,7 +170,7 @@ dataSources:
           handler: handleOwnersAdded
         - event: OwnersRemoved(uint256,address[])
           handler: handleOwnersRemoved
-        - event: TransactionSubmitted(uint256,address,uint256)
+        - event: TransactionSubmitted(uint256,address,uint256,bytes)
           handler: handleTransactionSubmitted
         - event: TransactionConfirmed(uint256,address,uint256)
           handler: handleTransactionConfirmed

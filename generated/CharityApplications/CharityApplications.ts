@@ -1183,7 +1183,7 @@ export class CharityApplications__proposalsResult {
     return this.value1;
   }
 
-  getMeta(): Bytes {
+  getMetadata(): Bytes {
     return this.value2;
   }
 
@@ -2259,7 +2259,7 @@ export class ProposeApplicationCall__Inputs {
     );
   }
 
-  get _meta(): Bytes {
+  get _metadata(): Bytes {
     return this._call.inputValues[1].value.toBytes();
   }
 }

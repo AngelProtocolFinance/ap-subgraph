@@ -1348,30 +1348,6 @@ export class Accounts__queryConfigResultConfigStruct extends ethereum.Tuple {
   get nextAccountId(): BigInt {
     return this[4].toBigInt();
   }
-
-  get maxGeneralCategoryId(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get subDao(): Address {
-    return this[6].toAddress();
-  }
-
-  get earlyLockedWithdrawFee(): Accounts__queryConfigResultConfigEarlyLockedWithdrawFeeStruct {
-    return changetype<
-      Accounts__queryConfigResultConfigEarlyLockedWithdrawFeeStruct
-    >(this[7].toTuple());
-  }
-}
-
-export class Accounts__queryConfigResultConfigEarlyLockedWithdrawFeeStruct extends ethereum.Tuple {
-  get payoutAddress(): Address {
-    return this[0].toAddress();
-  }
-
-  get bps(): BigInt {
-    return this[1].toBigInt();
-  }
 }
 
 export class Accounts__queryEndowmentDetailsResultEndowmentStruct extends ethereum.Tuple {
@@ -2195,7 +2171,7 @@ export class Accounts extends ethereum.SmartContract {
   queryConfig(): Accounts__queryConfigResultConfigStruct {
     let result = super.call(
       "queryConfig",
-      "queryConfig():((address,string,string,address,uint256,uint256,address,(address,uint256)))",
+      "queryConfig():((address,string,string,address,uint256))",
       []
     );
 
@@ -2209,7 +2185,7 @@ export class Accounts extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "queryConfig",
-      "queryConfig():((address,string,string,address,uint256,uint256,address,(address,uint256)))",
+      "queryConfig():((address,string,string,address,uint256))",
       []
     );
     if (result.reverted) {
@@ -3975,16 +3951,6 @@ export class UpdateConfigCall__Inputs {
   get newRegistrar(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
-
-  get maxGeneralCategoryId(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get earlyLockedWithdrawFee(): UpdateConfigCallEarlyLockedWithdrawFeeStruct {
-    return changetype<UpdateConfigCallEarlyLockedWithdrawFeeStruct>(
-      this._call.inputValues[2].value.toTuple()
-    );
-  }
 }
 
 export class UpdateConfigCall__Outputs {
@@ -3992,16 +3958,6 @@ export class UpdateConfigCall__Outputs {
 
   constructor(call: UpdateConfigCall) {
     this._call = call;
-  }
-}
-
-export class UpdateConfigCallEarlyLockedWithdrawFeeStruct extends ethereum.Tuple {
-  get payoutAddress(): Address {
-    return this[0].toAddress();
-  }
-
-  get bps(): BigInt {
-    return this[1].toBigInt();
   }
 }
 

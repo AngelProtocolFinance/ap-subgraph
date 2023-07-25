@@ -144,6 +144,7 @@ export function handleTransactionSubmitted(
     tx.proposer = event.params.sender
     tx.executed = (ms.approvalsRequired < BigInt.fromI32(1) || ms.requireExecution) ? false : true
     tx.expiry = event.block.timestamp.plus(ms.transactionExpiry)
+    tx.metadata = event.params.metadata
     tx.blockTimestamp = event.block.timestamp
     tx.save()
   }
@@ -201,6 +202,7 @@ export function handleApplicationProposed(
     proposal.proposer = event.params.proposer
     proposal.executed = false
     proposal.expiry = event.params.expiry
+    proposal.metadata = event.params.metadata
     proposal.blockTimestamp = event.block.timestamp
     proposal.save()
 }

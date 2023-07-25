@@ -44,6 +44,7 @@ type MultiSigTransaction @entity {
   proposer: User!
   executed: Boolean!
   expiry: BigInt!
+  metadata: Bytes!
   blockTimestamp: BigInt!
   confirmations: [TransactionConfirmation!]! @derivedFrom(field: "transaction")
 }
@@ -61,6 +62,7 @@ type ApplicationProposal @entity {
   charityName: String!
   proposer: User!
   expiry: BigInt!
+  metadata: Bytes!
   blockTimestamp: BigInt!
   confirmations: [ApplicationConfirmation]! @derivedFrom(field: "proposal")
 }

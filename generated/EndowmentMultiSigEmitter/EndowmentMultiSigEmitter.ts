@@ -330,6 +330,10 @@ export class TransactionSubmitted__Params {
   get transactionId(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
+
+  get metadata(): Bytes {
+    return this._event.parameters[3].value.toBytes();
+  }
 }
 
 export class EndowmentMultiSigEmitter extends ethereum.SmartContract {
@@ -809,6 +813,10 @@ export class TransactionSubmittedEndowmentCall__Inputs {
 
   get transactionId(): BigInt {
     return this._call.inputValues[2].value.toBigInt();
+  }
+
+  get metadata(): Bytes {
+    return this._call.inputValues[3].value.toBytes();
   }
 }
 

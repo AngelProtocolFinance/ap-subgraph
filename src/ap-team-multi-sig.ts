@@ -22,6 +22,7 @@ import {
 
 export function handleInitializedMultiSig(event: InitializedMultiSigEvent): void {
   let ms = new MultiSig(event.params.msAddress)
+  ms.address = event.params.msAddress
   ms.transactionExpiry = event.params.transactionExpiry
   ms.requireExecution = event.params.requireExecution
   ms.approvalsRequired = event.params.approvalsRequired

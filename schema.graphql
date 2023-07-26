@@ -23,6 +23,7 @@ type User @entity(immutable: true) {
 
 type MultiSig @entity {
   id: Bytes!
+  address: Bytes!
   owners: [MultiSigOwner!]! @derivedFrom(field: "multiSig")
   transactions: [MultiSigTransaction!]! @derivedFrom(field: "multiSig")
   transactionExpiry: BigInt!

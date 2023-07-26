@@ -118,6 +118,19 @@ export class MultiSig extends Entity {
     this.set("id", Value.fromBytes(value));
   }
 
+  get address(): Bytes {
+    let value = this.get("address");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
   get owners(): MultiSigOwnerLoader {
     return new MultiSigOwnerLoader(
       "MultiSig",

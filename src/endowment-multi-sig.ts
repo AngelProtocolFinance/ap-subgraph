@@ -22,6 +22,7 @@ import {
 
 export function handleEndowmentMultisigCreated(event: EndowmentMultisigCreatedEvent): void {
   let ms = new MultiSig(Bytes.fromUTF8(event.params.endowmentId.toString()))
+  ms.address = event.params.multisigAddress
   ms.transactionExpiry = event.params.transactionExpiry
   ms.requireExecution = event.params.requireExecution
   ms.approvalsRequired = event.params.required

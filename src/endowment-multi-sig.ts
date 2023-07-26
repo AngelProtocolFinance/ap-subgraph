@@ -22,12 +22,10 @@ import {
 
 export function handleEndowmentMultisigCreated(event: EndowmentMultisigCreatedEvent): void {
   let ms = new MultiSig(Bytes.fromUTF8(event.params.endowmentId.toString()))
-  if (ms != null) {
-    ms.transactionExpiry = event.params.transactionExpiry
-    ms.requireExecution = event.params.requireExecution
-    ms.approvalsRequired = event.params.required
-    ms.save()
-  }
+  ms.transactionExpiry = event.params.transactionExpiry
+  ms.requireExecution = event.params.requireExecution
+  ms.approvalsRequired = event.params.required
+  ms.save()
 
   for (let i = 0; i < event.params.owners.length - 1; i++) {
     // look up User or create a new one if dne

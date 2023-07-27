@@ -28,6 +28,7 @@ import {
 
 export function handleInitializedMultiSig(event: InitializedMultiSigEvent): void {
   let ms = new MultiSig(event.params.msAddress)
+  ms.address = event.params.msAddress
   ms.transactionExpiry = event.params.transactionExpiry
   ms.requireExecution = event.params.requireExecution
   ms.approvalsRequired = event.params.approvalsRequired
@@ -153,7 +154,11 @@ export function handleTransactionSubmitted(
 export function handleTransactionConfirmed(
   event: TransactionConfirmedEvent
 ): void {
-  const tx = MultiSigTransaction.load(event.params.msAddress.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
+  let ms = MultiSig.load(event.params.msAddress)
+  if (ms == null) {
+    return
+  }
+  const tx = MultiSigTransaction.load(ms.id.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
   const user = User.load(event.params.sender)
   if (tx != null && user != null) {
     let txConf = TransactionConfirmation.load(tx.id.concat(event.params.sender))
@@ -170,7 +175,11 @@ export function handleTransactionConfirmed(
 export function handleTransactionConfirmationRevoked(
   event: TransactionConfirmationRevokedEvent
 ): void {
-  const tx = MultiSigTransaction.load(event.params.msAddress.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
+  let ms = MultiSig.load(event.params.msAddress)
+  if (ms == null) {
+    return
+  }
+  const tx = MultiSigTransaction.load(ms.id.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
   if (tx != null) {
     let txConf = TransactionConfirmation.load(tx.id.concat(event.params.sender))
     if (txConf != null) {
@@ -183,7 +192,11 @@ export function handleTransactionConfirmationRevoked(
 export function handleTransactionExecuted(
   event: TransactionExecutedEvent
 ): void {
-  let tx = MultiSigTransaction.load(event.params.msAddress.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
+  let ms = MultiSig.load(event.params.msAddress)
+  if (ms == null) {
+    return
+  }
+  let tx = MultiSigTransaction.load(ms.id.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
   if (tx != null) {
     tx.executed = true
     tx.save()

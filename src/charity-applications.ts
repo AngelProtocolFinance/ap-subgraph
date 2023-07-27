@@ -154,11 +154,7 @@ export function handleTransactionSubmitted(
 export function handleTransactionConfirmed(
   event: TransactionConfirmedEvent
 ): void {
-  let ms = MultiSig.load(event.params.msAddress)
-  if (ms == null) {
-    return
-  }
-  const tx = MultiSigTransaction.load(ms.id.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
+  const tx = MultiSigTransaction.load(event.params.msAddress.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
   const user = User.load(event.params.sender)
   if (tx != null && user != null) {
     let txConf = TransactionConfirmation.load(tx.id.concat(event.params.sender))
@@ -175,11 +171,7 @@ export function handleTransactionConfirmed(
 export function handleTransactionConfirmationRevoked(
   event: TransactionConfirmationRevokedEvent
 ): void {
-  let ms = MultiSig.load(event.params.msAddress)
-  if (ms == null) {
-    return
-  }
-  const tx = MultiSigTransaction.load(ms.id.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
+  const tx = MultiSigTransaction.load(event.params.msAddress.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
   if (tx != null) {
     let txConf = TransactionConfirmation.load(tx.id.concat(event.params.sender))
     if (txConf != null) {
@@ -192,11 +184,7 @@ export function handleTransactionConfirmationRevoked(
 export function handleTransactionExecuted(
   event: TransactionExecutedEvent
 ): void {
-  let ms = MultiSig.load(event.params.msAddress)
-  if (ms == null) {
-    return
-  }
-  let tx = MultiSigTransaction.load(ms.id.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
+  let tx = MultiSigTransaction.load(event.params.msAddress.concat(Bytes.fromUTF8(event.params.transactionId.toString())))
   if (tx != null) {
     tx.executed = true
     tx.save()

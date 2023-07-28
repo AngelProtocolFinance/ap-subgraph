@@ -1,4 +1,3 @@
-import { BigInt } from "@graphprotocol/graph-ts"
 import {
   EndowmentMultisigCreated as EndowmentMultisigCreatedEvent,
   ApprovalsRequirementChanged as ApprovalsRequirementChangedEvent,

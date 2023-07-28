@@ -35,7 +35,7 @@ export function handleInitializedMultiSig(event: InitializedMultiSigEvent): void
       user = new User(owner)
       user.save()
     }
-    let mso = new MultiSigOwner(ms.id + owner)
+    let mso = new MultiSigOwner(ms.id + owner.toString())
     mso.multiSig = ms.id
     mso.owner = user.id
     mso.active = true
@@ -78,7 +78,7 @@ export function handleOwnersAdded(event: OwnersAddedEvent): void {
   if (ms != null) {
     for (let i = 0; i < event.params.owners.length - 1; i++) {
       const owner = event.params.owners[i]
-      const msoId = ms.id + owner
+      const msoId = ms.id + owner.toString()
       let mso = MultiSigOwner.load(msoId)
       if (mso == null) {
         mso = new MultiSigOwner(msoId)
@@ -96,7 +96,7 @@ export function handleOwnersRemoved(event: OwnersRemovedEvent): void {
   if (ms != null) {
     for (let i = 0; i < event.params.owners.length - 1; i++) {
       const owner = event.params.owners[i]
-      let mso = MultiSigOwner.load(ms.id + owner)
+      let mso = MultiSigOwner.load(ms.id + owner.toString())
       if (mso != null) {
         mso.active = false
         mso.save()
@@ -108,8 +108,8 @@ export function handleOwnersRemoved(event: OwnersRemovedEvent): void {
 export function handleOwnerReplaced(event: OwnerReplacedEvent): void {
   let ms = MultiSig.load(event.params.msAddress.toString())
   if (ms != null) {
-    const oldMsoId = ms.id + event.params.currOwner
-    const newMsoId = ms.id + event.params.newOwner
+    const oldMsoId = ms.id + event.params.currOwner.toString()
+    const newMsoId = ms.id + event.params.newOwner.toString()
     let oldOwner = MultiSigOwner.load(oldMsoId)
     if (oldOwner != null) {
       oldOwner.active = false
@@ -131,7 +131,7 @@ export function handleTransactionSubmitted(
 ): void {
   const ms = MultiSig.load(event.params.msAddress.toString())
   if (ms != null) {
-    let tx = new MultiSigTransaction(ms.id + event.params.transactionId)
+    let tx = new MultiSigTransaction(ms.id + event.params.transactionId.toString())
     tx.transactionId = event.params.transactionId
     tx.multiSig = ms.id
     tx.proposer = event.params.sender
@@ -146,10 +146,10 @@ export function handleTransactionSubmitted(
 export function handleTransactionConfirmed(
   event: TransactionConfirmedEvent
 ): void {
-  const tx = MultiSigTransaction.load(event.params.msAddress.toString() + event.params.transactionId)
+  const tx = MultiSigTransaction.load(event.params.msAddress.toString() + event.params.transactionId.toString())
   const user = User.load(event.params.sender)
   if (tx != null && user != null) {
-    const txConfId = tx.id + event.params.sender
+    const txConfId = tx.id + event.params.sender.toString()
     let txConf = TransactionConfirmation.load(txConfId)
     if (txConf == null) {
       txConf = new TransactionConfirmation(txConfId)
@@ -164,9 +164,9 @@ export function handleTransactionConfirmed(
 export function handleTransactionConfirmationRevoked(
   event: TransactionConfirmationRevokedEvent
 ): void {
-  const tx = MultiSigTransaction.load(event.params.msAddress.toString() + event.params.transactionId)
+  const tx = MultiSigTransaction.load(event.params.msAddress.toString() + event.params.transactionId.toString())
   if (tx != null) {
-    let txConf = TransactionConfirmation.load(tx.id + event.params.sender)
+    let txConf = TransactionConfirmation.load(tx.id + event.params.sender.toString())
     if (txConf != null) {
       txConf.confirmed = false
       txConf.save()
@@ -177,7 +177,7 @@ export function handleTransactionConfirmationRevoked(
 export function handleTransactionExecuted(
   event: TransactionExecutedEvent
 ): void {
-  const tx = MultiSigTransaction.load(event.params.msAddress.toString() + event.params.transactionId)
+  const tx = MultiSigTransaction.load(event.params.msAddress.toString() + event.params.transactionId.toString())
   if (tx != null) {
     tx.executed = true
     tx.save()

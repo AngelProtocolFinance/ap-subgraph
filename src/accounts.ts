@@ -1,4 +1,4 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { BigInt } from "@graphprotocol/graph-ts"
 import {
   EndowmentCreated as EndowmentCreatedEvent,
   AllowanceSpent as AllowanceSpentEvent,
@@ -15,7 +15,6 @@ import {
   EndowmentDepositTransaction,
   EndowmentWithdrawTransaction,
   EndowmentSwapTransaction,
-  User,
 } from "../generated/schema"
 import { loadUser } from "./helpers"
 

@@ -23,7 +23,6 @@ import {
   MultiSigOwner,
   MultiSigTransaction,
   TransactionConfirmation,
-  User,
 } from "../generated/schema"
 import { loadUser } from "./helpers"
 

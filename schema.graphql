@@ -22,7 +22,7 @@ type User @entity(immutable: true) {
 }
 
 type MultiSig @entity {
-  id: Bytes!
+  id: String!
   address: Bytes!
   owners: [MultiSigOwner!]! @derivedFrom(field: "multiSig")
   transactions: [MultiSigTransaction!]! @derivedFrom(field: "multiSig")
@@ -32,14 +32,14 @@ type MultiSig @entity {
 }
 
 type MultiSigOwner @entity {
-  id: Bytes! # set as MultiSig.id.concat(User.id)
+  id: String! # set as MultiSig.id.concat(User.id)
   multiSig: MultiSig!
   owner: User!
   active: Boolean!
 }
 
 type MultiSigTransaction @entity {
-  id: Bytes! # set as MutiSig.id.concat(Transaction.id)
+  id: String! # set as MutiSig.id.concat(Transaction.id)
   transactionId: BigInt!
   multiSig: MultiSig!
   proposer: User!
@@ -51,7 +51,7 @@ type MultiSigTransaction @entity {
 }
 
 type TransactionConfirmation @entity {
-  id: Bytes! # MultiSigTransaction.id.concat(User.id)
+  id: String! # MultiSigTransaction.id.concat(User.id)
   transaction: MultiSigTransaction!
   owner: User!
   confirmed: Boolean!

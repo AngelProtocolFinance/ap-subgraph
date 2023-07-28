@@ -1,4 +1,4 @@
-import { BigInt, Bytes } from "@graphprotocol/graph-ts"
+import { BigInt } from "@graphprotocol/graph-ts"
 import {
   EndowmentCreated as EndowmentCreatedEvent,
   AllowanceSpent as AllowanceSpentEvent,
@@ -15,8 +15,8 @@ import {
   EndowmentDepositTransaction,
   EndowmentWithdrawTransaction,
   EndowmentSwapTransaction,
-  User,
 } from "../generated/schema"
+import { loadUser } from "./helpers"
 
 export function handleEndowmentCreated(event: EndowmentCreatedEvent): void {
   let endow = new Endowment(event.params.endowId.toString())
@@ -133,30 +133,28 @@ export function handleAllowanceSpent(event: AllowanceSpentEvent): void {
 export function handleAllowanceUpdated(event: AllowanceUpdatedEvent): void {
   let token = EndowmentTokenLiquid.load(event.params.endowId.toString() + event.params.tokenAddress.toHex())
   if (token != null) {
-    let user = User.load(event.params.spender)
-    if (user != null) {
-      // update the spender's allowance to the new balance
-      let spenderId = token.id + event.params.spender.toHex()
-      let spender = EndowmentTokenAllowanceSpender.load(spenderId)
-      if (spender == null) {
-        // setup new EndowmentTokenAllowanceSpender
-        spender = new EndowmentTokenAllowanceSpender(spenderId)
-        spender.token = token.id
-        spender.spender = user.id
-      } 
-      spender.amount = event.params.newBalance
-      spender.save()
-      
-      // adjust the token's outstanding allowance and balance amount depending on if add/reduce spender's balance
-      if (event.params.added > BigInt.fromI32(0)) {
-        token.allowanceOutstanding = token.allowanceOutstanding.plus(event.params.added)
-        token.amount = token.amount.minus(event.params.added)
-      } else if (event.params.deducted > BigInt.fromI32(0)) {
-        token.allowanceOutstanding = token.allowanceOutstanding.minus(event.params.deducted)
-        token.amount = token.amount.plus(event.params.deducted)
-      }
-      token.save()
+    const user = loadUser(event.params.spender)
+    // update the spender's allowance to the new balance
+    let spenderId = token.id + user.id.toHex()
+    let spender = EndowmentTokenAllowanceSpender.load(spenderId)
+    if (spender == null) {
+      // setup new EndowmentTokenAllowanceSpender
+      spender = new EndowmentTokenAllowanceSpender(spenderId)
+      spender.token = token.id
+      spender.spender = user.id
+    } 
+    spender.amount = event.params.newBalance
+    spender.save()
+    
+    // adjust the token's outstanding allowance and balance amount depending on if add/reduce spender's balance
+    if (event.params.added > BigInt.fromI32(0)) {
+      token.allowanceOutstanding = token.allowanceOutstanding.plus(event.params.added)
+      token.amount = token.amount.minus(event.params.added)
+    } else if (event.params.deducted > BigInt.fromI32(0)) {
+      token.allowanceOutstanding = token.allowanceOutstanding.minus(event.params.deducted)
+      token.amount = token.amount.plus(event.params.deducted)
     }
+    token.save()
   }
 }
 

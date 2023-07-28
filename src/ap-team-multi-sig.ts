@@ -130,7 +130,7 @@ export function handleTransactionSubmitted(
     tx.transactionId = event.params.transactionId
     tx.multiSig = ms.id
     tx.proposer = event.params.sender // only owner can submit Tx, so they must've been added already
-    tx.executed = (ms.approvalsRequired < BigInt.fromI32(1) || ms.requireExecution) ? false : true // ms.approvalsRequired < BigInt.fromI32(1)
+    tx.executed = false
     tx.expiry = event.block.timestamp.plus(ms.transactionExpiry)
     tx.metadata = event.params.metadata
     tx.blockTimestamp = event.block.timestamp

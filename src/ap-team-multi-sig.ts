@@ -129,7 +129,7 @@ export function handleTransactionSubmitted(
     let tx = new MultiSigTransaction(ms.id + event.params.transactionId.toString())
     tx.transactionId = event.params.transactionId
     tx.multiSig = ms.id
-    tx.proposer = event.params.sender
+    tx.proposer = event.params.sender // only owner can submit Tx, so they must've been added already
     tx.executed = (ms.approvalsRequired < BigInt.fromI32(1) || ms.requireExecution) ? false : true // ms.approvalsRequired < BigInt.fromI32(1)
     tx.expiry = event.block.timestamp.plus(ms.transactionExpiry)
     tx.metadata = event.params.metadata
@@ -143,6 +143,7 @@ export function handleTransactionConfirmed(
 ): void {
   const tx = MultiSigTransaction.load(event.params.msAddress.toHex() + event.params.transactionId.toString())
   if (tx != null) {
+    // only owner can confirm Tx, so they must've been added already
     const txConfId = tx.id + event.params.sender.toHex()
     let txConf = TransactionConfirmation.load(txConfId)
     if (txConf == null) {

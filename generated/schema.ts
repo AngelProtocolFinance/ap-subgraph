@@ -78,9 +78,9 @@ export class User extends Entity {
 }
 
 export class MultiSig extends Entity {
-  constructor(id: Bytes) {
+  constructor(id: string) {
     super();
-    this.set("id", Value.fromBytes(id));
+    this.set("id", Value.fromString(id));
   }
 
   save(): void {
@@ -88,34 +88,32 @@ export class MultiSig extends Entity {
     assert(id != null, "Cannot save MultiSig entity without an ID");
     if (id) {
       assert(
-        id.kind == ValueKind.BYTES,
-        `Entities of type MultiSig must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        id.kind == ValueKind.STRING,
+        `Entities of type MultiSig must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("MultiSig", id.toBytes().toHexString(), this);
+      store.set("MultiSig", id.toString(), this);
     }
   }
 
-  static loadInBlock(id: Bytes): MultiSig | null {
-    return changetype<MultiSig | null>(
-      store.get_in_block("MultiSig", id.toHexString())
-    );
+  static loadInBlock(id: string): MultiSig | null {
+    return changetype<MultiSig | null>(store.get_in_block("MultiSig", id));
   }
 
-  static load(id: Bytes): MultiSig | null {
-    return changetype<MultiSig | null>(store.get("MultiSig", id.toHexString()));
+  static load(id: string): MultiSig | null {
+    return changetype<MultiSig | null>(store.get("MultiSig", id));
   }
 
-  get id(): Bytes {
+  get id(): string {
     let value = this.get("id");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set id(value: Bytes) {
-    this.set("id", Value.fromBytes(value));
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
   }
 
   get address(): Bytes {
@@ -188,9 +186,9 @@ export class MultiSig extends Entity {
 }
 
 export class MultiSigOwner extends Entity {
-  constructor(id: Bytes) {
+  constructor(id: string) {
     super();
-    this.set("id", Value.fromBytes(id));
+    this.set("id", Value.fromString(id));
   }
 
   save(): void {
@@ -198,49 +196,47 @@ export class MultiSigOwner extends Entity {
     assert(id != null, "Cannot save MultiSigOwner entity without an ID");
     if (id) {
       assert(
-        id.kind == ValueKind.BYTES,
-        `Entities of type MultiSigOwner must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        id.kind == ValueKind.STRING,
+        `Entities of type MultiSigOwner must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("MultiSigOwner", id.toBytes().toHexString(), this);
+      store.set("MultiSigOwner", id.toString(), this);
     }
   }
 
-  static loadInBlock(id: Bytes): MultiSigOwner | null {
+  static loadInBlock(id: string): MultiSigOwner | null {
     return changetype<MultiSigOwner | null>(
-      store.get_in_block("MultiSigOwner", id.toHexString())
+      store.get_in_block("MultiSigOwner", id)
     );
   }
 
-  static load(id: Bytes): MultiSigOwner | null {
-    return changetype<MultiSigOwner | null>(
-      store.get("MultiSigOwner", id.toHexString())
-    );
+  static load(id: string): MultiSigOwner | null {
+    return changetype<MultiSigOwner | null>(store.get("MultiSigOwner", id));
   }
 
-  get id(): Bytes {
+  get id(): string {
     let value = this.get("id");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set id(value: Bytes) {
-    this.set("id", Value.fromBytes(value));
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
   }
 
-  get multiSig(): Bytes {
+  get multiSig(): string {
     let value = this.get("multiSig");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set multiSig(value: Bytes) {
-    this.set("multiSig", Value.fromBytes(value));
+  set multiSig(value: string) {
+    this.set("multiSig", Value.fromString(value));
   }
 
   get owner(): Bytes {
@@ -271,9 +267,9 @@ export class MultiSigOwner extends Entity {
 }
 
 export class MultiSigTransaction extends Entity {
-  constructor(id: Bytes) {
+  constructor(id: string) {
     super();
-    this.set("id", Value.fromBytes(id));
+    this.set("id", Value.fromString(id));
   }
 
   save(): void {
@@ -281,36 +277,36 @@ export class MultiSigTransaction extends Entity {
     assert(id != null, "Cannot save MultiSigTransaction entity without an ID");
     if (id) {
       assert(
-        id.kind == ValueKind.BYTES,
-        `Entities of type MultiSigTransaction must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        id.kind == ValueKind.STRING,
+        `Entities of type MultiSigTransaction must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("MultiSigTransaction", id.toBytes().toHexString(), this);
+      store.set("MultiSigTransaction", id.toString(), this);
     }
   }
 
-  static loadInBlock(id: Bytes): MultiSigTransaction | null {
+  static loadInBlock(id: string): MultiSigTransaction | null {
     return changetype<MultiSigTransaction | null>(
-      store.get_in_block("MultiSigTransaction", id.toHexString())
+      store.get_in_block("MultiSigTransaction", id)
     );
   }
 
-  static load(id: Bytes): MultiSigTransaction | null {
+  static load(id: string): MultiSigTransaction | null {
     return changetype<MultiSigTransaction | null>(
-      store.get("MultiSigTransaction", id.toHexString())
+      store.get("MultiSigTransaction", id)
     );
   }
 
-  get id(): Bytes {
+  get id(): string {
     let value = this.get("id");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set id(value: Bytes) {
-    this.set("id", Value.fromBytes(value));
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
   }
 
   get transactionId(): BigInt {
@@ -326,17 +322,17 @@ export class MultiSigTransaction extends Entity {
     this.set("transactionId", Value.fromBigInt(value));
   }
 
-  get multiSig(): Bytes {
+  get multiSig(): string {
     let value = this.get("multiSig");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set multiSig(value: Bytes) {
-    this.set("multiSig", Value.fromBytes(value));
+  set multiSig(value: string) {
+    this.set("multiSig", Value.fromString(value));
   }
 
   get proposer(): Bytes {
@@ -414,9 +410,9 @@ export class MultiSigTransaction extends Entity {
 }
 
 export class TransactionConfirmation extends Entity {
-  constructor(id: Bytes) {
+  constructor(id: string) {
     super();
-    this.set("id", Value.fromBytes(id));
+    this.set("id", Value.fromString(id));
   }
 
   save(): void {
@@ -427,49 +423,49 @@ export class TransactionConfirmation extends Entity {
     );
     if (id) {
       assert(
-        id.kind == ValueKind.BYTES,
-        `Entities of type TransactionConfirmation must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        id.kind == ValueKind.STRING,
+        `Entities of type TransactionConfirmation must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("TransactionConfirmation", id.toBytes().toHexString(), this);
+      store.set("TransactionConfirmation", id.toString(), this);
     }
   }
 
-  static loadInBlock(id: Bytes): TransactionConfirmation | null {
+  static loadInBlock(id: string): TransactionConfirmation | null {
     return changetype<TransactionConfirmation | null>(
-      store.get_in_block("TransactionConfirmation", id.toHexString())
+      store.get_in_block("TransactionConfirmation", id)
     );
   }
 
-  static load(id: Bytes): TransactionConfirmation | null {
+  static load(id: string): TransactionConfirmation | null {
     return changetype<TransactionConfirmation | null>(
-      store.get("TransactionConfirmation", id.toHexString())
+      store.get("TransactionConfirmation", id)
     );
   }
 
-  get id(): Bytes {
+  get id(): string {
     let value = this.get("id");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set id(value: Bytes) {
-    this.set("id", Value.fromBytes(value));
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
   }
 
-  get transaction(): Bytes {
+  get transaction(): string {
     let value = this.get("transaction");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBytes();
+      return value.toString();
     }
   }
 
-  set transaction(value: Bytes) {
-    this.set("transaction", Value.fromBytes(value));
+  set transaction(value: string) {
+    this.set("transaction", Value.fromString(value));
   }
 
   get owner(): Bytes {

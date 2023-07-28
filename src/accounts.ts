@@ -37,7 +37,7 @@ export function handleEndowmentDeposit(event: EndowmentDepositEvent): void {
     deposit.save()
 
     // update the locked and liquid Endowment Token Balances
-    let endowTokenId = endow.id + event.params.tokenAddress.toString()
+    let endowTokenId = endow.id + event.params.tokenAddress.toHex()
     if (event.params.amountLocked > BigInt.fromI32(0)) {
       let token = EndowmentTokenLocked.load(endowTokenId)
       if (!token) {
@@ -83,7 +83,7 @@ export function handleEndowmentWithdraw(event: EndowmentWithdrawEvent): void {
 
     // update the Endowment Token Balance
     // check if AccountType is "Locked" first
-    let endowTokenId = endow.id + event.params.tokenAddress.toString()
+    let endowTokenId = endow.id + event.params.tokenAddress.toHex()
     if (event.params.accountType == 0) {
       let tokenLocked = EndowmentTokenLocked.load(endowTokenId)
       if (tokenLocked != null) {
@@ -116,12 +116,12 @@ export function handleEndowmentWithdraw(event: EndowmentWithdrawEvent): void {
 }
 
 export function handleAllowanceSpent(event: AllowanceSpentEvent): void {
-  let token = EndowmentTokenLiquid.load(event.params.endowId.toString() + event.params.tokenAddress.toString())
+  let token = EndowmentTokenLiquid.load(event.params.endowId.toString() + event.params.tokenAddress.toHex())
   if (token == null) {
     return;
   }
 
-  let spender = EndowmentTokenAllowanceSpender.load(token.id + event.params.spender.toString())
+  let spender = EndowmentTokenAllowanceSpender.load(token.id + event.params.spender.toHex())
   if (spender != null) {
     token.allowanceOutstanding = token.allowanceOutstanding.minus(event.params.amount)
     token.save()
@@ -131,12 +131,12 @@ export function handleAllowanceSpent(event: AllowanceSpentEvent): void {
 }
 
 export function handleAllowanceUpdated(event: AllowanceUpdatedEvent): void {
-  let token = EndowmentTokenLiquid.load(event.params.endowId.toString() + event.params.tokenAddress.toString())
+  let token = EndowmentTokenLiquid.load(event.params.endowId.toString() + event.params.tokenAddress.toHex())
   if (token != null) {
     let user = User.load(event.params.spender)
     if (user != null) {
       // update the spender's allowance to the new balance
-      let spenderId = token.id + event.params.spender.toString()
+      let spenderId = token.id + event.params.spender.toHex()
       let spender = EndowmentTokenAllowanceSpender.load(spenderId)
       if (spender == null) {
         // setup new EndowmentTokenAllowanceSpender
@@ -164,8 +164,8 @@ export function handleTokenSwapped(event: TokenSwappedEvent): void {
   let endow = Endowment.load(event.params.endowId.toString())
 
   if(endow != null && event.params.tokenIn && event.params.tokenOut) {
-    let tokenInId = endow.id + event.params.tokenIn.toString()
-    let tokenOutId = endow.id + event.params.tokenOut.toString()
+    let tokenInId = endow.id + event.params.tokenIn.toHex()
+    let tokenOutId = endow.id + event.params.tokenOut.toHex()
     // save swap tx record
     let swap = new EndowmentSwapTransaction(event.transaction.hash)
     swap.endowment = endow.id

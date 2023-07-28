@@ -36,6 +36,7 @@ type MultiSigOwner @entity {
   multiSig: MultiSig!
   owner: User!
   active: Boolean!
+  applicationConfirmations: [ApplicationConfirmation]! @derivedFrom(field: "owner")
 }
 
 type MultiSigTransaction @entity {
@@ -71,7 +72,7 @@ type ApplicationProposal @entity {
 type ApplicationConfirmation @entity {
   id: String! # set as (Proposal ID + User Addr)
   proposal: ApplicationProposal!
-  owner: User!
+  owner: MultiSigOwner!
   confirmed: Boolean!
 }
 

@@ -18,6 +18,7 @@ type User @entity(immutable: true) {
   id: Bytes! # set as wallet/contract address
   multiSigs: [MultiSigOwner]! @derivedFrom(field: "owner")
   applicationProposals: [ApplicationProposal]! @derivedFrom(field: "proposer")
+  applicationConfirmations: [ApplicationConfirmation]! @derivedFrom(field: "owner")
   tokenAllowances: [EndowmentTokenAllowanceSpender]! @derivedFrom(field: "spender")
 }
 
@@ -36,7 +37,6 @@ type MultiSigOwner @entity {
   multiSig: MultiSig!
   owner: User!
   active: Boolean!
-  applicationConfirmations: [ApplicationConfirmation]! @derivedFrom(field: "owner")
 }
 
 type MultiSigTransaction @entity {
@@ -72,7 +72,7 @@ type ApplicationProposal @entity {
 type ApplicationConfirmation @entity {
   id: String! # set as (Proposal ID + User Addr)
   proposal: ApplicationProposal!
-  owner: MultiSigOwner!
+  owner: User!
   confirmed: Boolean!
 }
 

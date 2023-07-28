@@ -68,14 +68,6 @@ export class User extends Entity {
     );
   }
 
-  get applicationConfirmations(): ApplicationConfirmationLoader {
-    return new ApplicationConfirmationLoader(
-      "User",
-      this.get("id")!.toString(),
-      "applicationConfirmations"
-    );
-  }
-
   get tokenAllowances(): EndowmentTokenAllowanceSpenderLoader {
     return new EndowmentTokenAllowanceSpenderLoader(
       "User",
@@ -1521,24 +1513,6 @@ export class ApplicationProposalLoader extends Entity {
   }
 }
 
-export class ApplicationConfirmationLoader extends Entity {
-  _entity: string;
-  _field: string;
-  _id: string;
-
-  constructor(entity: string, id: string, field: string) {
-    super();
-    this._entity = entity;
-    this._id = id;
-    this._field = field;
-  }
-
-  load(): ApplicationConfirmation[] {
-    let value = store.loadRelated(this._entity, this._id, this._field);
-    return changetype<ApplicationConfirmation[]>(value);
-  }
-}
-
 export class EndowmentTokenAllowanceSpenderLoader extends Entity {
   _entity: string;
   _field: string;
@@ -1590,6 +1564,24 @@ export class TransactionConfirmationLoader extends Entity {
   load(): TransactionConfirmation[] {
     let value = store.loadRelated(this._entity, this._id, this._field);
     return changetype<TransactionConfirmation[]>(value);
+  }
+}
+
+export class ApplicationConfirmationLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): ApplicationConfirmation[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<ApplicationConfirmation[]>(value);
   }
 }
 

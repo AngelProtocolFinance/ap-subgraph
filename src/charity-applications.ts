@@ -33,7 +33,7 @@ export function handleInitializedMultiSig(event: InitializedMultiSigEvent): void
   ms.approvalsRequired = event.params.approvalsRequired
   ms.save()
 
-  for (let i = 0; i < event.params.owners.length - 1; i++) {
+  for (let i = 0; i < event.params.owners.length; i++) {
     // look up User or create a new one if dne
     const user = loadUser(event.params.owners[i])
     let mso = new MultiSigOwner(ms.id + user.id.toHex())
@@ -77,7 +77,7 @@ export function handleExpiryChanged(
 export function handleOwnersAdded(event: OwnersAddedEvent): void {
   let ms = MultiSig.load(event.params.msAddress.toHex())
   if (ms != null) {
-    for (let i = 0; i < event.params.owners.length - 1; i++) {
+    for (let i = 0; i < event.params.owners.length; i++) {
       const user = loadUser(event.params.owners[i])
       const msoId = ms.id + user.id.toHex()
       let mso = MultiSigOwner.load(msoId)
@@ -95,7 +95,7 @@ export function handleOwnersAdded(event: OwnersAddedEvent): void {
 export function handleOwnersRemoved(event: OwnersRemovedEvent): void {
   let ms = MultiSig.load(event.params.msAddress.toHex())
   if (ms != null) {
-    for (let i = 0; i < event.params.owners.length - 1; i++) {
+    for (let i = 0; i < event.params.owners.length; i++) {
       const owner = event.params.owners[i]
       let mso = MultiSigOwner.load(ms.id + owner.toHex())
       if (mso != null) {

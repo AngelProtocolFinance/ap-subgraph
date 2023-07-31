@@ -28,7 +28,6 @@ export function handleEndowmentMultisigCreated(event: EndowmentMultisigCreatedEv
   ms.save()
 
   for (let i = 0; i < event.params.owners.length; i++) {
-    // look up User or create a new one if dne
     const user = loadUser(event.params.owners[i])
     let mso = new MultiSigOwner(ms.id + user.id.toHex())
     mso.multiSig = ms.id

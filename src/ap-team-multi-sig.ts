@@ -26,6 +26,7 @@ export function handleInitializedMultiSig(event: InitializedMultiSigEvent): void
   ms.requireExecution = event.params.requireExecution
   ms.approvalsRequired = event.params.approvalsRequired
   ms.save()
+  
   for (let i = 0; i < event.params.owners.length; i++) {
     const user = loadUser(event.params.owners[i])
     let mso = new MultiSigOwner(ms.id + user.id.toHex())

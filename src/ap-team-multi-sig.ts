@@ -161,7 +161,7 @@ export function handleTransactionConfirmationRevoked(
 ): void {
   const tx = MultiSigTransaction.load(event.params.msAddress.toHex() + event.params.transactionId.toString())
   if (tx != null) {
-    let txConf = TransactionConfirmation.load(tx.id + event.params.sender.toString())
+    let txConf = TransactionConfirmation.load(tx.id + event.params.sender.toHex())
     if (txConf != null) {
       txConf.confirmed = false
       txConf.save()

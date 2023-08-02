@@ -206,32 +206,6 @@ export class RequireExecutionChanged__Params {
   }
 }
 
-export class TransactionConfirmationOfFormerOwnerRevoked extends ethereum.Event {
-  get params(): TransactionConfirmationOfFormerOwnerRevoked__Params {
-    return new TransactionConfirmationOfFormerOwnerRevoked__Params(this);
-  }
-}
-
-export class TransactionConfirmationOfFormerOwnerRevoked__Params {
-  _event: TransactionConfirmationOfFormerOwnerRevoked;
-
-  constructor(event: TransactionConfirmationOfFormerOwnerRevoked) {
-    this._event = event;
-  }
-
-  get endowmentId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get formerOwner(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get transactionId(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
 export class TransactionConfirmationRevoked extends ethereum.Event {
   get params(): TransactionConfirmationRevoked__Params {
     return new TransactionConfirmationRevoked__Params(this);
@@ -630,48 +604,6 @@ export class RequireExecutionChangedEndowmentCall__Outputs {
   _call: RequireExecutionChangedEndowmentCall;
 
   constructor(call: RequireExecutionChangedEndowmentCall) {
-    this._call = call;
-  }
-}
-
-export class TransactionConfirmationOfFormerOwnerRevokedEndowmentCall extends ethereum.Call {
-  get inputs(): TransactionConfirmationOfFormerOwnerRevokedEndowmentCall__Inputs {
-    return new TransactionConfirmationOfFormerOwnerRevokedEndowmentCall__Inputs(
-      this
-    );
-  }
-
-  get outputs(): TransactionConfirmationOfFormerOwnerRevokedEndowmentCall__Outputs {
-    return new TransactionConfirmationOfFormerOwnerRevokedEndowmentCall__Outputs(
-      this
-    );
-  }
-}
-
-export class TransactionConfirmationOfFormerOwnerRevokedEndowmentCall__Inputs {
-  _call: TransactionConfirmationOfFormerOwnerRevokedEndowmentCall;
-
-  constructor(call: TransactionConfirmationOfFormerOwnerRevokedEndowmentCall) {
-    this._call = call;
-  }
-
-  get endowmentId(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get formerOwner(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get transactionId(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-}
-
-export class TransactionConfirmationOfFormerOwnerRevokedEndowmentCall__Outputs {
-  _call: TransactionConfirmationOfFormerOwnerRevokedEndowmentCall;
-
-  constructor(call: TransactionConfirmationOfFormerOwnerRevokedEndowmentCall) {
     this._call = call;
   }
 }

@@ -2132,48 +2132,6 @@ export class ExecuteTransactionCall__Outputs {
   }
 }
 
-export class InitializeCall extends ethereum.Call {
-  get inputs(): InitializeCall__Inputs {
-    return new InitializeCall__Inputs(this);
-  }
-
-  get outputs(): InitializeCall__Outputs {
-    return new InitializeCall__Outputs(this);
-  }
-}
-
-export class InitializeCall__Inputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
-  }
-
-  get value0(): Array<Address> {
-    return this._call.inputValues[0].value.toAddressArray();
-  }
-
-  get value1(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get value2(): boolean {
-    return this._call.inputValues[2].value.toBoolean();
-  }
-
-  get value3(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
-  }
-}
-
-export class InitializeCall__Outputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
-  }
-}
-
 export class InitializeApplicationsCall extends ethereum.Call {
   get inputs(): InitializeApplicationsCall__Inputs {
     return new InitializeApplicationsCall__Inputs(this);

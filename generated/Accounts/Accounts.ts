@@ -3313,6 +3313,10 @@ export class DepositERC20CallDetailsStruct extends ethereum.Tuple {
   get liquidPercentage(): BigInt {
     return this[2].toBigInt();
   }
+
+  get donationMatch(): Address {
+    return this[3].toAddress();
+  }
 }
 
 export class DepositMaticCall extends ethereum.Call {
@@ -3358,6 +3362,10 @@ export class DepositMaticCallDetailsStruct extends ethereum.Tuple {
 
   get liquidPercentage(): BigInt {
     return this[2].toBigInt();
+  }
+
+  get donationMatch(): Address {
+    return this[3].toAddress();
   }
 }
 

@@ -935,20 +935,20 @@ export class ExecuteTransactionCall__Outputs {
   }
 }
 
-export class InitializeCall extends ethereum.Call {
-  get inputs(): InitializeCall__Inputs {
-    return new InitializeCall__Inputs(this);
+export class InitializeAPTeamCall extends ethereum.Call {
+  get inputs(): InitializeAPTeamCall__Inputs {
+    return new InitializeAPTeamCall__Inputs(this);
   }
 
-  get outputs(): InitializeCall__Outputs {
-    return new InitializeCall__Outputs(this);
+  get outputs(): InitializeAPTeamCall__Outputs {
+    return new InitializeAPTeamCall__Outputs(this);
   }
 }
 
-export class InitializeCall__Inputs {
-  _call: InitializeCall;
+export class InitializeAPTeamCall__Inputs {
+  _call: InitializeAPTeamCall;
 
-  constructor(call: InitializeCall) {
+  constructor(call: InitializeAPTeamCall) {
     this._call = call;
   }
 
@@ -969,10 +969,10 @@ export class InitializeCall__Inputs {
   }
 }
 
-export class InitializeCall__Outputs {
-  _call: InitializeCall;
+export class InitializeAPTeamCall__Outputs {
+  _call: InitializeAPTeamCall;
 
-  constructor(call: InitializeCall) {
+  constructor(call: InitializeAPTeamCall) {
     this._call = call;
   }
 }

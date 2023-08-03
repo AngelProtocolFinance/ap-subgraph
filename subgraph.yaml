@@ -43,9 +43,9 @@ dataSources:
     name: APTeamMultiSig
     network: mumbai
     source:
-      address: "0x9034E5Bb0e03c985952C3506363Fe936c4A799f5"
+      address: "0x58F5663E1029F85Ee77b1AD08241d9e626fa4AA9"
       abi: APTeamMultiSig
-      startBlock: 38551746
+      startBlock: 38588293
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

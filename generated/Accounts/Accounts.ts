@@ -2299,6 +2299,106 @@ export class Accounts extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
+
+  sweepForClosure(id: BigInt, token: Address): BigInt {
+    let result = super.call(
+      "sweepForClosure",
+      "sweepForClosure(uint32,address):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(id), ethereum.Value.fromAddress(token)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_sweepForClosure(id: BigInt, token: Address): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "sweepForClosure",
+      "sweepForClosure(uint32,address):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(id), ethereum.Value.fromAddress(token)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  sweepForEndowment(id: BigInt, vault: i32, token: Address): BigInt {
+    let result = super.call(
+      "sweepForEndowment",
+      "sweepForEndowment(uint32,uint8,address):(uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(id),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(vault)),
+        ethereum.Value.fromAddress(token)
+      ]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_sweepForEndowment(
+    id: BigInt,
+    vault: i32,
+    token: Address
+  ): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "sweepForEndowment",
+      "sweepForEndowment(uint32,uint8,address):(uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(id),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(vault)),
+        ethereum.Value.fromAddress(token)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+}
+
+export class AddGasCall extends ethereum.Call {
+  get inputs(): AddGasCall__Inputs {
+    return new AddGasCall__Inputs(this);
+  }
+
+  get outputs(): AddGasCall__Outputs {
+    return new AddGasCall__Outputs(this);
+  }
+}
+
+export class AddGasCall__Inputs {
+  _call: AddGasCall;
+
+  constructor(call: AddGasCall) {
+    this._call = call;
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get vault(): i32 {
+    return this._call.inputValues[1].value.toI32();
+  }
+
+  get token(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get amount(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
+  }
+}
+
+export class AddGasCall__Outputs {
+  _call: AddGasCall;
+
+  constructor(call: AddGasCall) {
+    this._call = call;
+  }
 }
 
 export class CloseEndowmentCall extends ethereum.Call {
@@ -3894,6 +3994,86 @@ export class SwapTokenCall__Outputs {
 
   constructor(call: SwapTokenCall) {
     this._call = call;
+  }
+}
+
+export class SweepForClosureCall extends ethereum.Call {
+  get inputs(): SweepForClosureCall__Inputs {
+    return new SweepForClosureCall__Inputs(this);
+  }
+
+  get outputs(): SweepForClosureCall__Outputs {
+    return new SweepForClosureCall__Outputs(this);
+  }
+}
+
+export class SweepForClosureCall__Inputs {
+  _call: SweepForClosureCall;
+
+  constructor(call: SweepForClosureCall) {
+    this._call = call;
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get token(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class SweepForClosureCall__Outputs {
+  _call: SweepForClosureCall;
+
+  constructor(call: SweepForClosureCall) {
+    this._call = call;
+  }
+
+  get value0(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class SweepForEndowmentCall extends ethereum.Call {
+  get inputs(): SweepForEndowmentCall__Inputs {
+    return new SweepForEndowmentCall__Inputs(this);
+  }
+
+  get outputs(): SweepForEndowmentCall__Outputs {
+    return new SweepForEndowmentCall__Outputs(this);
+  }
+}
+
+export class SweepForEndowmentCall__Inputs {
+  _call: SweepForEndowmentCall;
+
+  constructor(call: SweepForEndowmentCall) {
+    this._call = call;
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get vault(): i32 {
+    return this._call.inputValues[1].value.toI32();
+  }
+
+  get token(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+}
+
+export class SweepForEndowmentCall__Outputs {
+  _call: SweepForEndowmentCall;
+
+  constructor(call: SweepForEndowmentCall) {
+    this._call = call;
+  }
+
+  get value0(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
   }
 }
 

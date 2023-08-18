@@ -179,3 +179,25 @@ dataSources:
         - event: TransactionConfirmationRevoked(uint256,address,uint256)
           handler: handleTransactionConfirmationRevoked
       file: ./src/endowment-multi-sig.ts
+  - kind: ethereum
+    name: Registrar
+    network: mumbai
+    source:
+      address: "0xe1215B3e150dd298d787D41a4879959D30Dc3939"
+      abi: Registrar
+      startBlock: 38267261
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Strategy
+      abis:
+        - name: Registrar
+          file: ./abis/Registrar.json
+      eventHandlers:
+        - event: StrategyApprovalUpdated(bytes4,uint8)
+          handler: handleStrategyApprovalUpdated
+        - event: StrategyParamsUpdated(bytes4,string,address,address,uint8)
+          handler: handleStrategyParamsUpdated
+      file: ./src/registrar.ts

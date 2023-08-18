@@ -11,6 +11,13 @@ enum EndowmentType {
   Normal
 }
 
+enum StrategyApprovalState {
+  NOT_APPROVED,
+  APPROVED,
+  WITHDRAW_ONLY,
+  DEPRECATED
+}
+
 # ~~~~~~~~~~~~~~~~
 # ~~~ ENTITIES ~~~
 # ~~~~~~~~~~~~~~~~
@@ -138,4 +145,10 @@ type EndowmentSwapTransaction @entity(immutable: true) {
   tokenOut: Bytes!
   amountOut: BigInt!
   blockTimestamp: BigInt!
+}
+
+type Strategy @entity {
+  id: Bytes! # strategy selector
+  network: String!
+  state: StrategyApprovalState!
 }

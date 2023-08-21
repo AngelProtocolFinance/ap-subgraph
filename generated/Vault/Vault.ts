@@ -31,7 +31,7 @@ export class Deposit__Params {
     return this._event.parameters[1].value.toAddress();
   }
 
-  get amtDeposited(): BigInt {
+  get amount(): BigInt {
     return this._event.parameters[2].value.toBigInt();
   }
 
@@ -83,19 +83,19 @@ export class Redeem__Params {
     this._event = event;
   }
 
-  get accountId(): BigInt {
+  get endowId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
   }
 
-  get vaultType(): i32 {
-    return this._event.parameters[1].value.toI32();
+  get vault(): Address {
+    return this._event.parameters[1].value.toAddress();
   }
 
-  get tokenRedeemed(): Address {
-    return this._event.parameters[2].value.toAddress();
+  get shares(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
   }
 
-  get amtRedeemed(): BigInt {
+  get amountRedeemed(): BigInt {
     return this._event.parameters[3].value.toBigInt();
   }
 }
@@ -113,8 +113,20 @@ export class RewardsHarvested__Params {
     this._event = event;
   }
 
-  get accountIds(): Array<BigInt> {
-    return this._event.parameters[0].value.toBigIntArray();
+  get endowId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get vault(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+
+  get shares(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get amountHarvested(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
   }
 }
 
@@ -1268,7 +1280,7 @@ export class RedeemCall__Inputs {
     return this._call.inputValues[0].value.toBigInt();
   }
 
-  get amt(): BigInt {
+  get shares(): BigInt {
     return this._call.inputValues[1].value.toBigInt();
   }
 }

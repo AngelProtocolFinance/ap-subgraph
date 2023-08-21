@@ -1,5 +1,9 @@
 import { BigInt } from "@graphprotocol/graph-ts"
-import { VaultConfigUpdated as VaultConfigUpdatedEvent, Deposit as DepositEvent } from "../generated/Vault/Vault"
+import {
+    VaultConfigUpdated as VaultConfigUpdatedEvent,
+    Deposit as DepositEvent,
+    Redeem as RedeemEvent,
+} from "../generated/Vault/Vault"
 import { Endowment, Strategy, Vault, VaultShare } from "../generated/schema"
 import { AccountType } from "./helpers"
 
@@ -39,7 +43,19 @@ export function handleDeposit(event: DepositEvent): void {
         vaultShare.deposited = BigInt.zero()
         vaultShare.shares = BigInt.zero()
     }
-    vaultShare.deposited = vaultShare.deposited.plus(event.params.amtDeposited)
+    vaultShare.deposited = vaultShare.deposited.plus(event.params.amount)
     vaultShare.shares = vaultShare.shares.plus(event.params.sharesReceived)
+    vaultShare.save()
+}
+
+export function handleRedeem(event: RedeemEvent): void {
+    const vault = Vault.load(event.params.vault)
+    if (vault == null) return
+    const vaultShare = VaultShare.load(
+        vault.id.toHex() + event.params.endowId.toString()
+    )
+    if (vaultShare == null) return
+    vaultShare.deposited = vaultShare.deposited.minus(event.params.amountRedeemed)
+    vaultShare.shares = vaultShare.shares.minus(event.params.shares)
     vaultShare.save()
 }

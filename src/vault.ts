@@ -5,7 +5,7 @@ import {
     Redeem as RedeemEvent,
 } from "../generated/Vault/Vault"
 import { Endowment, Strategy, Vault, VaultShare } from "../generated/schema"
-import { AccountType } from "./helpers"
+import { VaultType } from "./helpers"
 
 export function handleVaultConfigUpdated(event: VaultConfigUpdatedEvent): void {
     const strategy = Strategy.load(event.params.config.strategySelector)
@@ -19,7 +19,10 @@ export function handleVaultConfigUpdated(event: VaultConfigUpdatedEvent): void {
         vault.totalShares = BigInt.zero()
     }
 
-    vault.type = AccountType[event.params.config.vaultType]
+    vault.type =
+        event.params.config.vaultType == VaultType.Locked
+            ? "Locked"
+            : "Liquid"
     vault.strategy = strategy.id
     vault.address = event.params.config.strategy
     vault.baseToken = event.params.config.baseToken
@@ -55,7 +58,9 @@ export function handleRedeem(event: RedeemEvent): void {
         vault.id.toHex() + event.params.endowId.toString()
     )
     if (vaultShare == null) return
-    vaultShare.deposited = vaultShare.deposited.minus(event.params.amountRedeemed)
+    vaultShare.deposited = vaultShare.deposited.minus(
+        event.params.amountRedeemed
+    )
     vaultShare.shares = vaultShare.shares.minus(event.params.shares)
     vaultShare.save()
 }

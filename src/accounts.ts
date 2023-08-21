@@ -16,11 +16,11 @@ import {
   EndowmentWithdrawTransaction,
   EndowmentSwapTransaction,
 } from "../generated/schema"
-import { loadUser } from "./helpers"
+import { EndowmentType, VaultType, loadUser } from "./helpers"
 
 export function handleEndowmentCreated(event: EndowmentCreatedEvent): void {
   let endow = new Endowment(event.params.endowId.toString())
-  endow.endowmentType = (event.params.endowType == 0) ? "Charity" : "Normal"
+  endow.endowmentType = (event.params.endowType == EndowmentType.Charity) ? "Charity" : "Normal"
   endow.save()
 }
 
@@ -73,7 +73,7 @@ export function handleEndowmentWithdraw(event: EndowmentWithdrawEvent): void {
     // save withdraw tx record
     let withdraw = new EndowmentWithdrawTransaction(event.transaction.hash)
     withdraw.endowment = endow.id
-    withdraw.accountType = (event.params.accountType == 0) ? "Locked" : "Liquid"
+    withdraw.accountType = (event.params.accountType == VaultType.Locked) ? "Locked" : "Liquid"
     withdraw.token = event.params.tokenAddress
     withdraw.amount = event.params.amount
     withdraw.beneficiaryEndowId = event.params.beneficiaryEndowId.toI32()
@@ -84,7 +84,7 @@ export function handleEndowmentWithdraw(event: EndowmentWithdrawEvent): void {
     // update the Endowment Token Balance
     // check if AccountType is "Locked" first
     let endowTokenId = endow.id + event.params.tokenAddress.toHex()
-    if (event.params.accountType == 0) {
+    if (event.params.accountType == VaultType.Locked) {
       let tokenLocked = EndowmentTokenLocked.load(endowTokenId)
       if (tokenLocked != null) {
         tokenLocked.amount = tokenLocked.amount.minus(event.params.amount)
@@ -167,7 +167,7 @@ export function handleTokenSwapped(event: TokenSwappedEvent): void {
     // save swap tx record
     let swap = new EndowmentSwapTransaction(event.transaction.hash)
     swap.endowment = endow.id
-    swap.accountType = (event.params.accountType == 0) ? "Locked" : "Liquid" 
+    swap.accountType = (event.params.accountType == VaultType.Locked) ? "Locked" : "Liquid" 
     swap.tokenIn = event.params.tokenIn
     swap.amountIn = event.params.amountIn
     swap.tokenOut = event.params.tokenOut
@@ -177,7 +177,7 @@ export function handleTokenSwapped(event: TokenSwappedEvent): void {
 
     // update the involved Endowment Token Balances
     // check if the accountType is "Locked" first
-    if (event.params.accountType == 0) {
+    if (event.params.accountType == VaultType.Locked) {
       let tokenIn = EndowmentTokenLocked.load(tokenInId)
       if (tokenIn) {
         let tokenOut = EndowmentTokenLocked.load(tokenOutId)

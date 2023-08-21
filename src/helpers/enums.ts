@@ -1,16 +1,16 @@
-export enum AccountType {
+export enum VaultType {
     Locked,
-    Liquid,
+    Liquid
 }
 
 export enum EndowmentType {
     Charity,
-    Normal,
+    Normal
 }
 
 export enum StrategyApprovalState {
     NOT_APPROVED,
     APPROVED,
     WITHDRAW_ONLY,
-    DEPRECATED,
+    DEPRECATED
 }

@@ -100,36 +100,6 @@ export class Redeem__Params {
   }
 }
 
-export class RewardsHarvested extends ethereum.Event {
-  get params(): RewardsHarvested__Params {
-    return new RewardsHarvested__Params(this);
-  }
-}
-
-export class RewardsHarvested__Params {
-  _event: RewardsHarvested;
-
-  constructor(event: RewardsHarvested) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get vault(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get shares(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-
-  get amountHarvested(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
-  }
-}
-
 export class Transfer extends ethereum.Event {
   get params(): Transfer__Params {
     return new Transfer__Params(this);

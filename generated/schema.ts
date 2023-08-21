@@ -1549,6 +1549,140 @@ export class Strategy extends Entity {
   set state(value: string) {
     this.set("state", Value.fromString(value));
   }
+
+  get vaultLocked(): VaultLoader {
+    return new VaultLoader(
+      "Strategy",
+      this.get("id")!.toString(),
+      "vaultLocked"
+    );
+  }
+
+  get vaultLiquid(): VaultLoader {
+    return new VaultLoader(
+      "Strategy",
+      this.get("id")!.toString(),
+      "vaultLiquid"
+    );
+  }
+}
+
+export class Vault extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Vault entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Vault must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Vault", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): Vault | null {
+    return changetype<Vault | null>(store.get_in_block("Vault", id));
+  }
+
+  static load(id: string): Vault | null {
+    return changetype<Vault | null>(store.get("Vault", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get type(): string {
+    let value = this.get("type");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set type(value: string) {
+    this.set("type", Value.fromString(value));
+  }
+
+  get strategy(): Bytes {
+    let value = this.get("strategy");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set strategy(value: Bytes) {
+    this.set("strategy", Value.fromBytes(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
+  get baseToken(): Bytes {
+    let value = this.get("baseToken");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set baseToken(value: Bytes) {
+    this.set("baseToken", Value.fromBytes(value));
+  }
+
+  get yieldToken(): Bytes {
+    let value = this.get("yieldToken");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set yieldToken(value: Bytes) {
+    this.set("yieldToken", Value.fromBytes(value));
+  }
+
+  get totalShares(): BigInt {
+    let value = this.get("totalShares");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalShares(value: BigInt) {
+    this.set("totalShares", Value.fromBigInt(value));
+  }
 }
 
 export class MultiSigOwnerLoader extends Entity {
@@ -1746,5 +1880,23 @@ export class EndowmentSwapTransactionLoader extends Entity {
   load(): EndowmentSwapTransaction[] {
     let value = store.loadRelated(this._entity, this._id, this._field);
     return changetype<EndowmentSwapTransaction[]>(value);
+  }
+}
+
+export class VaultLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): Vault[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<Vault[]>(value);
   }
 }

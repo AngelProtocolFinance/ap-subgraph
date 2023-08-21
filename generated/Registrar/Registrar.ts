@@ -279,92 +279,52 @@ export class Registrar__queryConfigResultValue0Struct extends ethereum.Tuple {
     return this[3].toAddress();
   }
 
-  get subdaoGovContract(): Address {
+  get haloToken(): Address {
     return this[4].toAddress();
   }
 
-  get subdaoTokenContract(): Address {
+  get govContract(): Address {
     return this[5].toAddress();
   }
 
-  get subdaoBondingTokenContract(): Address {
+  get fundraisingContract(): Address {
     return this[6].toAddress();
   }
 
-  get subdaoCw900Contract(): Address {
+  get uniswapRouter(): Address {
     return this[7].toAddress();
   }
 
-  get subdaoDistributorContract(): Address {
+  get uniswapFactory(): Address {
     return this[8].toAddress();
   }
 
-  get subdaoEmitter(): Address {
+  get multisigFactory(): Address {
     return this[9].toAddress();
   }
 
-  get donationMatchContract(): Address {
+  get multisigEmitter(): Address {
     return this[10].toAddress();
   }
 
-  get donationMatchCharitesContract(): Address {
+  get charityApplications(): Address {
     return this[11].toAddress();
   }
 
-  get donationMatchEmitter(): Address {
+  get proxyAdmin(): Address {
     return this[12].toAddress();
   }
 
-  get haloToken(): Address {
+  get usdcAddress(): Address {
     return this[13].toAddress();
   }
 
-  get govContract(): Address {
+  get wMaticAddress(): Address {
     return this[14].toAddress();
   }
 
-  get fundraisingContract(): Address {
-    return this[15].toAddress();
-  }
-
-  get uniswapRouter(): Address {
-    return this[16].toAddress();
-  }
-
-  get uniswapFactory(): Address {
-    return this[17].toAddress();
-  }
-
-  get multisigFactory(): Address {
-    return this[18].toAddress();
-  }
-
-  get multisigEmitter(): Address {
-    return this[19].toAddress();
-  }
-
-  get charityApplications(): Address {
-    return this[20].toAddress();
-  }
-
-  get proxyAdmin(): Address {
-    return this[21].toAddress();
-  }
-
-  get usdcAddress(): Address {
-    return this[22].toAddress();
-  }
-
-  get wMaticAddress(): Address {
-    return this[23].toAddress();
-  }
-
-  get cw900lvAddress(): Address {
-    return this[24].toAddress();
-  }
-
   get gasFwdFactory(): Address {
-    return this[25].toAddress();
+    return this[15].toAddress();
   }
 }
 
@@ -698,7 +658,7 @@ export class Registrar extends ethereum.SmartContract {
   queryConfig(): Registrar__queryConfigResultValue0Struct {
     let result = super.call(
       "queryConfig",
-      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address))",
+      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address))",
       []
     );
 
@@ -712,7 +672,7 @@ export class Registrar extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "queryConfig",
-      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address))",
+      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address))",
       []
     );
     if (result.reverted) {
@@ -1193,92 +1153,52 @@ export class UpdateConfigCallDetailsStruct extends ethereum.Tuple {
     return this[3].toAddress();
   }
 
-  get subdaoGovContract(): Address {
+  get haloToken(): Address {
     return this[4].toAddress();
   }
 
-  get subdaoTokenContract(): Address {
+  get govContract(): Address {
     return this[5].toAddress();
   }
 
-  get subdaoBondingTokenContract(): Address {
+  get fundraisingContract(): Address {
     return this[6].toAddress();
   }
 
-  get subdaoCw900Contract(): Address {
+  get uniswapRouter(): Address {
     return this[7].toAddress();
   }
 
-  get subdaoDistributorContract(): Address {
+  get uniswapFactory(): Address {
     return this[8].toAddress();
   }
 
-  get subdaoEmitter(): Address {
+  get multisigFactory(): Address {
     return this[9].toAddress();
   }
 
-  get donationMatchContract(): Address {
+  get multisigEmitter(): Address {
     return this[10].toAddress();
   }
 
-  get donationMatchCharitesContract(): Address {
+  get charityApplications(): Address {
     return this[11].toAddress();
   }
 
-  get donationMatchEmitter(): Address {
+  get proxyAdmin(): Address {
     return this[12].toAddress();
   }
 
-  get haloToken(): Address {
+  get usdcAddress(): Address {
     return this[13].toAddress();
   }
 
-  get govContract(): Address {
+  get wMaticAddress(): Address {
     return this[14].toAddress();
   }
 
-  get fundraisingContract(): Address {
-    return this[15].toAddress();
-  }
-
-  get uniswapRouter(): Address {
-    return this[16].toAddress();
-  }
-
-  get uniswapFactory(): Address {
-    return this[17].toAddress();
-  }
-
-  get multisigFactory(): Address {
-    return this[18].toAddress();
-  }
-
-  get multisigEmitter(): Address {
-    return this[19].toAddress();
-  }
-
-  get charityApplications(): Address {
-    return this[20].toAddress();
-  }
-
-  get proxyAdmin(): Address {
-    return this[21].toAddress();
-  }
-
-  get usdcAddress(): Address {
-    return this[22].toAddress();
-  }
-
-  get wMaticAddress(): Address {
-    return this[23].toAddress();
-  }
-
-  get cw900lvAddress(): Address {
-    return this[24].toAddress();
-  }
-
   get gasFwdFactory(): Address {
-    return this[25].toAddress();
+    return this[15].toAddress();
   }
 }
 

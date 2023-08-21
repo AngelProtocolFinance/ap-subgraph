@@ -91,6 +91,8 @@ type Endowment @entity(immutable: true) {
   deposits: [EndowmentDepositTransaction]! @derivedFrom(field: "endowment")
   withdrawals: [EndowmentWithdrawTransaction]! @derivedFrom(field: "endowment")
   swaps: [EndowmentSwapTransaction]! @derivedFrom(field: "endowment")
+  vaultSharesLocked: [VaultShare]! @derivedFrom(field: "endowment")
+  vaultSharesLiquid: [VaultShare]! @derivedFrom(field: "endowment")
 }
 
 type EndowmentTokenLocked @entity {
@@ -151,16 +153,26 @@ type Strategy @entity {
   id: Bytes! # strategy selector
   network: String!
   state: StrategyApprovalState!
-  vaultLocked: Vault! @derivedFrom(field: "strategy")
-  vaultLiquid: Vault! @derivedFrom(field: "strategy")
+  vaultLocked: Vault
+  vaultLiquid: Vault
 }
 
 type Vault @entity {
-  id: String! # Strategy.id.concat(vault.type)
+  id: Bytes! # Vault.address
   type: AccountType!
   strategy: Strategy!
   address: Bytes!
   baseToken: Bytes!
   yieldToken: Bytes!
   totalShares: BigInt!
+  shares: [VaultShare!]! @derivedFrom(field: "vault")
+}
+
+type VaultShare @entity {
+  id: String! # Vault.id.concat(Endowment.id)
+  vault: Vault!
+  endowmentId: String! # can be used even on chains where there are no Endowments deployed
+  endowment: Endowment # will be accessible only on chains where Endowments are deployed
+  deposited: BigInt!
+  shares: BigInt!
 }

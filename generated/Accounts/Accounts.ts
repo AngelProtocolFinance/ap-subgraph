@@ -114,54 +114,6 @@ export class DafApprovedEndowmentsUpdated__Params {
   }
 }
 
-export class DaoContractCreated extends ethereum.Event {
-  get params(): DaoContractCreated__Params {
-    return new DaoContractCreated__Params(this);
-  }
-}
-
-export class DaoContractCreated__Params {
-  _event: DaoContractCreated;
-
-  constructor(event: DaoContractCreated) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited extends ethereum.Event {
-  get params(): DonationDeposited__Params {
-    return new DonationDeposited__Params(this);
-  }
-}
-
-export class DonationDeposited__Params {
-  _event: DonationDeposited;
-
-  constructor(event: DonationDeposited) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
-  }
-}
-
 export class DonationMatchCreated extends ethereum.Event {
   get params(): DonationMatchCreated__Params {
     return new DonationMatchCreated__Params(this);
@@ -181,36 +133,6 @@ export class DonationMatchCreated__Params {
 
   get donationMatchContract(): Address {
     return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationWithdrawn extends ethereum.Event {
-  get params(): DonationWithdrawn__Params {
-    return new DonationWithdrawn__Params(this);
-  }
-}
-
-export class DonationWithdrawn__Params {
-  _event: DonationWithdrawn;
-
-  constructor(event: DonationWithdrawn) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
   }
 }
 
@@ -655,152 +577,6 @@ export class UnexpectedTokensParam0Struct extends ethereum.Tuple {
 
   get status(): i32 {
     return this[7].toI32();
-  }
-}
-
-export class Accounts__createDaoContractInputCreatedaomessageStruct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get owner(): Address {
-    return this[1].toAddress();
-  }
-
-  get quorum(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get threshold(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get votingPeriod(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get timelockPeriod(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get expirationPeriod(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get proposalDeposit(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get snapshotPeriod(): BigInt {
-    return this[8].toBigInt();
-  }
-
-  get token(): Accounts__createDaoContractInputCreatedaomessageTokenStruct {
-    return changetype<
-      Accounts__createDaoContractInputCreatedaomessageTokenStruct
-    >(this[9].toTuple());
-  }
-
-  get endowType(): i32 {
-    return this[10].toI32();
-  }
-
-  get endowOwner(): Address {
-    return this[11].toAddress();
-  }
-
-  get registrarContract(): Address {
-    return this[12].toAddress();
-  }
-}
-
-export class Accounts__createDaoContractInputCreatedaomessageTokenStruct extends ethereum.Tuple {
-  get token(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): Accounts__createDaoContractInputCreatedaomessageTokenDataStruct {
-    return changetype<
-      Accounts__createDaoContractInputCreatedaomessageTokenDataStruct
-    >(this[1].toTuple());
-  }
-}
-
-export class Accounts__createDaoContractInputCreatedaomessageTokenDataStruct extends ethereum.Tuple {
-  get existingData(): Address {
-    return this[0].toAddress();
-  }
-
-  get newInitialSupply(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get newName(): string {
-    return this[2].toString();
-  }
-
-  get newSymbol(): string {
-    return this[3].toString();
-  }
-
-  get veBondingType(): Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeStruct {
-    return changetype<
-      Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeStruct
-    >(this[4].toTuple());
-  }
-
-  get veBondingName(): string {
-    return this[5].toString();
-  }
-
-  get veBondingSymbol(): string {
-    return this[6].toString();
-  }
-
-  get veBondingDecimals(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get veBondingReserveDenom(): Address {
-    return this[8].toAddress();
-  }
-
-  get veBondingReserveDecimals(): BigInt {
-    return this[9].toBigInt();
-  }
-
-  get veBondingPeriod(): BigInt {
-    return this[10].toBigInt();
-  }
-}
-
-export class Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeStruct extends ethereum.Tuple {
-  get ve_type(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeDataStruct {
-    return changetype<
-      Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeDataStruct
-    >(this[1].toTuple());
-  }
-}
-
-export class Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeDataStruct extends ethereum.Tuple {
-  get value(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get scale(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get slope(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get power(): BigInt {
-    return this[3].toBigInt();
   }
 }
 
@@ -1519,7 +1295,7 @@ export class Accounts__queryEndowmentDetailsResultValue0Struct extends ethereum.
     return this[11].toAddress();
   }
 
-  get daoToken(): Address {
+  get donationMatch(): Address {
     return this[12].toAddress();
   }
 
@@ -1527,72 +1303,68 @@ export class Accounts__queryEndowmentDetailsResultValue0Struct extends ethereum.
     return this[13].toBoolean();
   }
 
-  get donationMatchContract(): Address {
-    return this[14].toAddress();
-  }
-
   get allowlistedBeneficiaries(): Array<Address> {
-    return this[15].toAddressArray();
+    return this[14].toAddressArray();
   }
 
   get allowlistedContributors(): Array<Address> {
-    return this[16].toAddressArray();
+    return this[15].toAddressArray();
   }
 
   get maturityAllowlist(): Array<Address> {
-    return this[17].toAddressArray();
+    return this[16].toAddressArray();
   }
 
   get earlyLockedWithdrawFee(): Accounts__queryEndowmentDetailsResultValue0EarlyLockedWithdrawFeeStruct {
     return changetype<
       Accounts__queryEndowmentDetailsResultValue0EarlyLockedWithdrawFeeStruct
-    >(this[18].toTuple());
+    >(this[17].toTuple());
   }
 
   get withdrawFee(): Accounts__queryEndowmentDetailsResultValue0WithdrawFeeStruct {
     return changetype<
       Accounts__queryEndowmentDetailsResultValue0WithdrawFeeStruct
-    >(this[19].toTuple());
+    >(this[18].toTuple());
   }
 
   get depositFee(): Accounts__queryEndowmentDetailsResultValue0DepositFeeStruct {
     return changetype<
       Accounts__queryEndowmentDetailsResultValue0DepositFeeStruct
-    >(this[20].toTuple());
+    >(this[19].toTuple());
   }
 
   get balanceFee(): Accounts__queryEndowmentDetailsResultValue0BalanceFeeStruct {
     return changetype<
       Accounts__queryEndowmentDetailsResultValue0BalanceFeeStruct
-    >(this[21].toTuple());
+    >(this[20].toTuple());
   }
 
   get settingsController(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerStruct {
     return changetype<
       Accounts__queryEndowmentDetailsResultValue0SettingsControllerStruct
-    >(this[22].toTuple());
+    >(this[21].toTuple());
   }
 
   get parent(): BigInt {
-    return this[23].toBigInt();
+    return this[22].toBigInt();
   }
 
   get ignoreUserSplits(): boolean {
-    return this[24].toBoolean();
+    return this[23].toBoolean();
   }
 
   get splitToLiquid(): Accounts__queryEndowmentDetailsResultValue0SplitToLiquidStruct {
     return changetype<
       Accounts__queryEndowmentDetailsResultValue0SplitToLiquidStruct
-    >(this[25].toTuple());
+    >(this[24].toTuple());
   }
 
   get referralId(): BigInt {
-    return this[26].toBigInt();
+    return this[25].toBigInt();
   }
 
   get gasFwd(): Address {
-    return this[27].toAddress();
+    return this[26].toAddress();
   }
 }
 
@@ -2193,33 +1965,6 @@ export class Accounts extends ethereum.SmartContract {
     return new Accounts("Accounts", address);
   }
 
-  createDaoContract(
-    createdaomessage: Accounts__createDaoContractInputCreatedaomessageStruct
-  ): Address {
-    let result = super.call(
-      "createDaoContract",
-      "createDaoContract((uint32,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,(uint8,(address,uint256,string,string,(uint8,(uint128,uint256,uint128,uint128)),string,string,uint256,address,uint256,uint256)),uint8,address,address)):(address)",
-      [ethereum.Value.fromTuple(createdaomessage)]
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_createDaoContract(
-    createdaomessage: Accounts__createDaoContractInputCreatedaomessageStruct
-  ): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "createDaoContract",
-      "createDaoContract((uint32,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,(uint8,(address,uint256,string,string,(uint8,(uint128,uint256,uint128,uint128)),string,string,uint256,address,uint256,uint256)),uint8,address,address)):(address)",
-      [ethereum.Value.fromTuple(createdaomessage)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   createEndowment(
     details: Accounts__createEndowmentInputDetailsStruct
   ): BigInt {
@@ -2316,7 +2061,7 @@ export class Accounts extends ethereum.SmartContract {
   ): Accounts__queryEndowmentDetailsResultValue0Struct {
     let result = super.call(
       "queryEndowmentDetails",
-      "queryEndowmentDetails(uint32):((address,string,uint256[],uint8,uint8,string,string,uint256,(bool,uint32,uint32,bool,uint32,uint32),uint256,address,address,address,bool,address,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256,address))",
+      "queryEndowmentDetails(uint32):((address,string,uint256[],uint8,uint8,string,string,uint256,(bool,uint32,uint32,bool,uint32,uint32),uint256,address,address,address,bool,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256,address))",
       [ethereum.Value.fromUnsignedBigInt(id)]
     );
 
@@ -2330,7 +2075,7 @@ export class Accounts extends ethereum.SmartContract {
   ): ethereum.CallResult<Accounts__queryEndowmentDetailsResultValue0Struct> {
     let result = super.tryCall(
       "queryEndowmentDetails",
-      "queryEndowmentDetails(uint32):((address,string,uint256[],uint8,uint8,string,string,uint256,(bool,uint32,uint32,bool,uint32,uint32),uint256,address,address,address,bool,address,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256,address))",
+      "queryEndowmentDetails(uint32):((address,string,uint256[],uint8,uint8,string,string,uint256,(bool,uint32,uint32,bool,uint32,uint32),uint256,address,address,address,bool,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256,address))",
       [ethereum.Value.fromUnsignedBigInt(id)]
     );
     if (result.reverted) {
@@ -2570,188 +2315,6 @@ export class CloseEndowmentCallBeneficiaryDataStruct extends ethereum.Tuple {
 
   get addr(): Address {
     return this[1].toAddress();
-  }
-}
-
-export class CreateDaoContractCall extends ethereum.Call {
-  get inputs(): CreateDaoContractCall__Inputs {
-    return new CreateDaoContractCall__Inputs(this);
-  }
-
-  get outputs(): CreateDaoContractCall__Outputs {
-    return new CreateDaoContractCall__Outputs(this);
-  }
-}
-
-export class CreateDaoContractCall__Inputs {
-  _call: CreateDaoContractCall;
-
-  constructor(call: CreateDaoContractCall) {
-    this._call = call;
-  }
-
-  get createdaomessage(): CreateDaoContractCallCreatedaomessageStruct {
-    return changetype<CreateDaoContractCallCreatedaomessageStruct>(
-      this._call.inputValues[0].value.toTuple()
-    );
-  }
-}
-
-export class CreateDaoContractCall__Outputs {
-  _call: CreateDaoContractCall;
-
-  constructor(call: CreateDaoContractCall) {
-    this._call = call;
-  }
-
-  get daoAddress(): Address {
-    return this._call.outputValues[0].value.toAddress();
-  }
-}
-
-export class CreateDaoContractCallCreatedaomessageStruct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get owner(): Address {
-    return this[1].toAddress();
-  }
-
-  get quorum(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get threshold(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get votingPeriod(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get timelockPeriod(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get expirationPeriod(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get proposalDeposit(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get snapshotPeriod(): BigInt {
-    return this[8].toBigInt();
-  }
-
-  get token(): CreateDaoContractCallCreatedaomessageTokenStruct {
-    return changetype<CreateDaoContractCallCreatedaomessageTokenStruct>(
-      this[9].toTuple()
-    );
-  }
-
-  get endowType(): i32 {
-    return this[10].toI32();
-  }
-
-  get endowOwner(): Address {
-    return this[11].toAddress();
-  }
-
-  get registrarContract(): Address {
-    return this[12].toAddress();
-  }
-}
-
-export class CreateDaoContractCallCreatedaomessageTokenStruct extends ethereum.Tuple {
-  get token(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): CreateDaoContractCallCreatedaomessageTokenDataStruct {
-    return changetype<CreateDaoContractCallCreatedaomessageTokenDataStruct>(
-      this[1].toTuple()
-    );
-  }
-}
-
-export class CreateDaoContractCallCreatedaomessageTokenDataStruct extends ethereum.Tuple {
-  get existingData(): Address {
-    return this[0].toAddress();
-  }
-
-  get newInitialSupply(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get newName(): string {
-    return this[2].toString();
-  }
-
-  get newSymbol(): string {
-    return this[3].toString();
-  }
-
-  get veBondingType(): CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeStruct {
-    return changetype<
-      CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeStruct
-    >(this[4].toTuple());
-  }
-
-  get veBondingName(): string {
-    return this[5].toString();
-  }
-
-  get veBondingSymbol(): string {
-    return this[6].toString();
-  }
-
-  get veBondingDecimals(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get veBondingReserveDenom(): Address {
-    return this[8].toAddress();
-  }
-
-  get veBondingReserveDecimals(): BigInt {
-    return this[9].toBigInt();
-  }
-
-  get veBondingPeriod(): BigInt {
-    return this[10].toBigInt();
-  }
-}
-
-export class CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeStruct extends ethereum.Tuple {
-  get ve_type(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeDataStruct {
-    return changetype<
-      CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeDataStruct
-    >(this[1].toTuple());
-  }
-}
-
-export class CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeDataStruct extends ethereum.Tuple {
-  get value(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get scale(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get slope(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get power(): BigInt {
-    return this[3].toBigInt();
   }
 }
 
@@ -3433,44 +2996,6 @@ export class CreateEndowmentCallDetailsSplitToLiquidStruct extends ethereum.Tupl
   }
 }
 
-export class DepositDonationMatchERC20Call extends ethereum.Call {
-  get inputs(): DepositDonationMatchERC20Call__Inputs {
-    return new DepositDonationMatchERC20Call__Inputs(this);
-  }
-
-  get outputs(): DepositDonationMatchERC20Call__Outputs {
-    return new DepositDonationMatchERC20Call__Outputs(this);
-  }
-}
-
-export class DepositDonationMatchERC20Call__Inputs {
-  _call: DepositDonationMatchERC20Call;
-
-  constructor(call: DepositDonationMatchERC20Call) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get token(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-}
-
-export class DepositDonationMatchERC20Call__Outputs {
-  _call: DepositDonationMatchERC20Call;
-
-  constructor(call: DepositDonationMatchERC20Call) {
-    this._call = call;
-  }
-}
-
 export class DepositERC20Call extends ethereum.Call {
   get inputs(): DepositERC20Call__Inputs {
     return new DepositERC20Call__Inputs(this);
@@ -3618,226 +3143,6 @@ export class ManageAllowancesCall__Outputs {
 
   constructor(call: ManageAllowancesCall) {
     this._call = call;
-  }
-}
-
-export class SetupDaoCall extends ethereum.Call {
-  get inputs(): SetupDaoCall__Inputs {
-    return new SetupDaoCall__Inputs(this);
-  }
-
-  get outputs(): SetupDaoCall__Outputs {
-    return new SetupDaoCall__Outputs(this);
-  }
-}
-
-export class SetupDaoCall__Inputs {
-  _call: SetupDaoCall;
-
-  constructor(call: SetupDaoCall) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get details(): SetupDaoCallDetailsStruct {
-    return changetype<SetupDaoCallDetailsStruct>(
-      this._call.inputValues[1].value.toTuple()
-    );
-  }
-}
-
-export class SetupDaoCall__Outputs {
-  _call: SetupDaoCall;
-
-  constructor(call: SetupDaoCall) {
-    this._call = call;
-  }
-}
-
-export class SetupDaoCallDetailsStruct extends ethereum.Tuple {
-  get quorum(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get threshold(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get votingPeriod(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get timelockPeriod(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get expirationPeriod(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get proposalDeposit(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get snapshotPeriod(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get token(): SetupDaoCallDetailsTokenStruct {
-    return changetype<SetupDaoCallDetailsTokenStruct>(this[7].toTuple());
-  }
-}
-
-export class SetupDaoCallDetailsTokenStruct extends ethereum.Tuple {
-  get token(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): SetupDaoCallDetailsTokenDataStruct {
-    return changetype<SetupDaoCallDetailsTokenDataStruct>(this[1].toTuple());
-  }
-}
-
-export class SetupDaoCallDetailsTokenDataStruct extends ethereum.Tuple {
-  get existingData(): Address {
-    return this[0].toAddress();
-  }
-
-  get newInitialSupply(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get newName(): string {
-    return this[2].toString();
-  }
-
-  get newSymbol(): string {
-    return this[3].toString();
-  }
-
-  get veBondingType(): SetupDaoCallDetailsTokenDataVeBondingTypeStruct {
-    return changetype<SetupDaoCallDetailsTokenDataVeBondingTypeStruct>(
-      this[4].toTuple()
-    );
-  }
-
-  get veBondingName(): string {
-    return this[5].toString();
-  }
-
-  get veBondingSymbol(): string {
-    return this[6].toString();
-  }
-
-  get veBondingDecimals(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get veBondingReserveDenom(): Address {
-    return this[8].toAddress();
-  }
-
-  get veBondingReserveDecimals(): BigInt {
-    return this[9].toBigInt();
-  }
-
-  get veBondingPeriod(): BigInt {
-    return this[10].toBigInt();
-  }
-}
-
-export class SetupDaoCallDetailsTokenDataVeBondingTypeStruct extends ethereum.Tuple {
-  get ve_type(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): SetupDaoCallDetailsTokenDataVeBondingTypeDataStruct {
-    return changetype<SetupDaoCallDetailsTokenDataVeBondingTypeDataStruct>(
-      this[1].toTuple()
-    );
-  }
-}
-
-export class SetupDaoCallDetailsTokenDataVeBondingTypeDataStruct extends ethereum.Tuple {
-  get value(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get scale(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get slope(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get power(): BigInt {
-    return this[3].toBigInt();
-  }
-}
-
-export class SetupDonationMatchCall extends ethereum.Call {
-  get inputs(): SetupDonationMatchCall__Inputs {
-    return new SetupDonationMatchCall__Inputs(this);
-  }
-
-  get outputs(): SetupDonationMatchCall__Outputs {
-    return new SetupDonationMatchCall__Outputs(this);
-  }
-}
-
-export class SetupDonationMatchCall__Inputs {
-  _call: SetupDonationMatchCall;
-
-  constructor(call: SetupDonationMatchCall) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get details(): SetupDonationMatchCallDetailsStruct {
-    return changetype<SetupDonationMatchCallDetailsStruct>(
-      this._call.inputValues[1].value.toTuple()
-    );
-  }
-}
-
-export class SetupDonationMatchCall__Outputs {
-  _call: SetupDonationMatchCall;
-
-  constructor(call: SetupDonationMatchCall) {
-    this._call = call;
-  }
-}
-
-export class SetupDonationMatchCallDetailsStruct extends ethereum.Tuple {
-  get enumData(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): SetupDonationMatchCallDetailsDataStruct {
-    return changetype<SetupDonationMatchCallDetailsDataStruct>(
-      this[1].toTuple()
-    );
-  }
-}
-
-export class SetupDonationMatchCallDetailsDataStruct extends ethereum.Tuple {
-  get reserveToken(): Address {
-    return this[0].toAddress();
-  }
-
-  get uniswapFactory(): Address {
-    return this[1].toAddress();
-  }
-
-  get poolFee(): i32 {
-    return this[2].toI32();
   }
 }
 
@@ -5250,43 +4555,5 @@ export class WithdrawCallTokensStruct extends ethereum.Tuple {
 
   get amnt(): BigInt {
     return this[1].toBigInt();
-  }
-}
-
-export class WithdrawDonationMatchERC20Call extends ethereum.Call {
-  get inputs(): WithdrawDonationMatchERC20Call__Inputs {
-    return new WithdrawDonationMatchERC20Call__Inputs(this);
-  }
-
-  get outputs(): WithdrawDonationMatchERC20Call__Outputs {
-    return new WithdrawDonationMatchERC20Call__Outputs(this);
-  }
-}
-
-export class WithdrawDonationMatchERC20Call__Inputs {
-  _call: WithdrawDonationMatchERC20Call;
-
-  constructor(call: WithdrawDonationMatchERC20Call) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-}
-
-export class WithdrawDonationMatchERC20Call__Outputs {
-  _call: WithdrawDonationMatchERC20Call;
-
-  constructor(call: WithdrawDonationMatchERC20Call) {
-    this._call = call;
   }
 }

@@ -8,7 +8,7 @@ import { StrategyApprovalState } from "./helpers"
 export function handleStrategyParamsUpdated(
     event: StrategyParamsUpdatedEvent
 ): void {
-    const strategy = new Strategy(event.params._strategyId)
+    const strategy = new Strategy(event.params._strategySelector)
     strategy.network = event.params._network
     strategy.state = getStrategyApprovalState(event.params._approvalState)
     strategy.save()
@@ -17,7 +17,7 @@ export function handleStrategyParamsUpdated(
 export function handleStrategyApprovalUpdated(
     event: StrategyApprovalUpdatedEvent
 ): void {
-    const strategy = Strategy.load(event.params._strategyId)
+    const strategy = Strategy.load(event.params._strategySelector)
     if (strategy != null) {
         strategy.state = getStrategyApprovalState(event.params._approvalState)
         strategy.save()

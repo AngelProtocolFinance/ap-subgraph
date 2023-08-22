@@ -459,7 +459,7 @@ export class RefundNeededParam0Struct extends ethereum.Tuple {
     return this[0].toString();
   }
 
-  get strategyId(): Bytes {
+  get strategySelector(): Bytes {
     return this[1].toBytes();
   }
 
@@ -551,7 +551,7 @@ export class UnexpectedTokensParam0Struct extends ethereum.Tuple {
     return this[0].toString();
   }
 
-  get strategyId(): Bytes {
+  get strategySelector(): Bytes {
     return this[1].toBytes();
   }
 

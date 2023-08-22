@@ -91,8 +91,6 @@ type Endowment @entity(immutable: true) {
   deposits: [EndowmentDepositTransaction]! @derivedFrom(field: "endowment")
   withdrawals: [EndowmentWithdrawTransaction]! @derivedFrom(field: "endowment")
   swaps: [EndowmentSwapTransaction]! @derivedFrom(field: "endowment")
-  vaultSharesLocked: [VaultShare]! @derivedFrom(field: "endowment")
-  vaultSharesLiquid: [VaultShare]! @derivedFrom(field: "endowment")
 }
 
 type EndowmentTokenLocked @entity {
@@ -171,8 +169,7 @@ type Vault @entity {
 type VaultShare @entity {
   id: String! # Vault.id.concat(Endowment.id)
   vault: Vault!
-  endowmentId: String! # can be used even on chains where there are no Endowments deployed
-  endowment: Endowment # will be accessible only on chains where Endowments are deployed
+  endowmentId: String! # we save only Endowment ID so that this entity can be used even on chains where there are no Endowments deployed
   deposited: BigInt!
   shares: BigInt!
 }

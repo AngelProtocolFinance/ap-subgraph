@@ -808,22 +808,6 @@ export class Endowment extends Entity {
       "swaps"
     );
   }
-
-  get vaultSharesLocked(): VaultShareLoader {
-    return new VaultShareLoader(
-      "Endowment",
-      this.get("id")!.toString(),
-      "vaultSharesLocked"
-    );
-  }
-
-  get vaultSharesLiquid(): VaultShareLoader {
-    return new VaultShareLoader(
-      "Endowment",
-      this.get("id")!.toString(),
-      "vaultSharesLiquid"
-    );
-  }
 }
 
 export class EndowmentTokenLocked extends Entity {
@@ -1788,23 +1772,6 @@ export class VaultShare extends Entity {
 
   set endowmentId(value: string) {
     this.set("endowmentId", Value.fromString(value));
-  }
-
-  get endowment(): string | null {
-    let value = this.get("endowment");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set endowment(value: string | null) {
-    if (!value) {
-      this.unset("endowment");
-    } else {
-      this.set("endowment", Value.fromString(<string>value));
-    }
   }
 
   get deposited(): BigInt {

@@ -4,7 +4,7 @@ import {
     Deposit as DepositEvent,
     Redeem as RedeemEvent,
 } from "../generated/Vault/Vault"
-import { Endowment, Strategy, Vault, VaultShare } from "../generated/schema"
+import { Strategy, Vault, VaultShare } from "../generated/schema"
 import { VaultType } from "./helpers"
 
 export function handleVaultConfigUpdated(event: VaultConfigUpdatedEvent): void {
@@ -37,10 +37,6 @@ export function handleDeposit(event: DepositEvent): void {
         vaultShare = new VaultShare(vault.id.toHex() + endowId)
         vaultShare.vault = vault.id
         vaultShare.endowmentId = endowId
-        const endowment = Endowment.load(endowId)
-        if (endowment != null) {
-            vaultShare.endowment = endowId
-        }
         vaultShare.deposited = BigInt.zero()
         vaultShare.shares = BigInt.zero()
     }

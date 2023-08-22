@@ -4,7 +4,7 @@
             "address": "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5",
             "startBlock": 9384610
         },
-        "Vault": {
+        "VaultEmitter": {
             "address": "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5",
             "startBlock": 1384600
         }
@@ -14,7 +14,7 @@
             "address": "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5",
             "startBlock": 1000000
         },
-        "Vault": {
+        "VaultEmitter": {
             "address": "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5",
             "startBlock": 1000000
         }

@@ -326,6 +326,10 @@ export class Registrar__queryConfigResultValue0Struct extends ethereum.Tuple {
   get gasFwdFactory(): Address {
     return this[15].toAddress();
   }
+
+  get vaultEmitter(): Address {
+    return this[16].toAddress();
+  }
 }
 
 export class Registrar__queryNetworkConnectionResultResponseStruct extends ethereum.Tuple {
@@ -658,7 +662,7 @@ export class Registrar extends ethereum.SmartContract {
   queryConfig(): Registrar__queryConfigResultValue0Struct {
     let result = super.call(
       "queryConfig",
-      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address))",
+      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address))",
       []
     );
 
@@ -672,7 +676,7 @@ export class Registrar extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "queryConfig",
-      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address))",
+      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address))",
       []
     );
     if (result.reverted) {
@@ -1199,6 +1203,10 @@ export class UpdateConfigCallDetailsStruct extends ethereum.Tuple {
 
   get gasFwdFactory(): Address {
     return this[15].toAddress();
+  }
+
+  get vaultEmitter(): Address {
+    return this[16].toAddress();
   }
 }
 

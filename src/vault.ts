@@ -20,9 +20,7 @@ export function handleVaultConfigUpdated(event: VaultConfigUpdatedEvent): void {
     }
 
     vault.type =
-        event.params.config.vaultType == VaultType.Locked
-            ? "Locked"
-            : "Liquid"
+        event.params.config.vaultType == VaultType.Locked ? "Locked" : "Liquid"
     vault.strategy = strategy.id
     vault.address = event.params.config.strategy
     vault.baseToken = event.params.config.baseToken

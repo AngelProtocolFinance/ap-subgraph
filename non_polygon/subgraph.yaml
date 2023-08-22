@@ -1,0 +1,51 @@
+specVersion: 0.0.5
+schema:
+  file: ../schema.graphql
+dataSources:
+  - kind: ethereum
+    name: LocalRegistrar
+    network: goerli
+    source:
+      abi: LocalRegistrar
+      address: "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5"
+      startBlock: 9384610
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Strategy
+      abis:
+        - name: LocalRegistrar
+          file: ../abis/LocalRegistrar.json
+      eventHandlers:
+        - event: StrategyApprovalUpdated(bytes4,uint8)
+          handler: handleStrategyApprovalUpdated
+        - event: StrategyParamsUpdated(bytes4,string,address,address,uint8)
+          handler: handleStrategyParamsUpdated
+      file: ../src/local-registrar.ts
+  - kind: ethereum
+    name: Vault
+    network: goerli
+    source:
+      abi: Vault
+      address: "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5"
+      startBlock: 1384600
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Vault
+        - VaultShare
+      abis:
+        - name: Vault
+          file: ../abis/Vault.json
+      eventHandlers:
+        - event: Deposit(uint32,address,uint256,uint256)
+          handler: handleDeposit
+        - event: Redeem(uint32,address,uint256,uint256)
+          handler: handleRedeem
+        - event: VaultConfigUpdated(address,(uint8,bytes4,address,address,address,address,string,string,address))
+          handler: handleVaultConfigUpdated
+      file: ../src/vault.ts

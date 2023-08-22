@@ -1,0 +1,22 @@
+{
+    "goerli": {
+        "LocalRegistrar": {
+            "address": "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5",
+            "startBlock": 9384610
+        },
+        "Vault": {
+            "address": "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5",
+            "startBlock": 1384600
+        }
+    },
+    "mumbai": {
+        "LocalRegistrar": {
+            "address": "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5",
+            "startBlock": 1000000
+        },
+        "Vault": {
+            "address": "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5",
+            "startBlock": 1000000
+        }
+    }
+}

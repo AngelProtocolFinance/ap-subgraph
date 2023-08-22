@@ -1,6 +1,6 @@
 specVersion: 0.0.5
 schema:
-  file: ./schema.graphql
+  file: ../schema.graphql
 dataSources:
   - kind: ethereum
     name: Accounts
@@ -24,7 +24,7 @@ dataSources:
         - EndowmentSwapTransaction
       abis:
         - name: Accounts
-          file: ./abis/Accounts.json
+          file: ../abis/Accounts.json
       eventHandlers:
         - event: EndowmentCreated(uint256,uint8)
           handler: handleEndowmentCreated
@@ -38,7 +38,7 @@ dataSources:
           handler: handleAllowanceSpent
         - event: TokenSwapped(uint256,uint8,address,uint256,address,uint256)
           handler: handleTokenSwapped
-      file: ./src/accounts.ts
+      file: ../src/accounts.ts
   - kind: ethereum
     name: APTeamMultiSig
     network: mumbai
@@ -58,7 +58,7 @@ dataSources:
         - TransactionConfirmation
       abis:
         - name: APTeamMultiSig
-          file: ./abis/APTeamMultiSig.json
+          file: ../abis/APTeamMultiSig.json
       eventHandlers:
         - event: InitializedMultiSig(address,address[],uint256,bool,uint256)
           handler: handleInitializedMultiSig
@@ -82,7 +82,7 @@ dataSources:
           handler: handleTransactionExecuted
         - event: TransactionConfirmationRevoked(address,address,uint256)
           handler: handleTransactionConfirmationRevoked
-      file: ./src/ap-team-multi-sig.ts
+      file: ../src/ap-team-multi-sig.ts
   - kind: ethereum
     name: CharityApplications
     network: mumbai
@@ -104,7 +104,7 @@ dataSources:
         - ApplicationConfirmation
       abis:
         - name: CharityApplications
-          file: ./abis/CharityApplications.json
+          file: ../abis/CharityApplications.json
       eventHandlers:
         - event: InitializedMultiSig(address,address[],uint256,bool,uint256)
           handler: handleInitializedMultiSig
@@ -136,7 +136,7 @@ dataSources:
           handler: handleApplicationExecuted
         - event: ApplicationProposed(uint256,address,string,uint256,bytes)
           handler: handleApplicationProposed
-      file: ./src/charity-applications.ts
+      file: ../src/charity-applications.ts
   - kind: ethereum
     name: EndowmentMultiSigEmitter
     network: mumbai
@@ -156,7 +156,7 @@ dataSources:
         - TransactionConfirmation
       abis:
         - name: EndowmentMultiSigEmitter
-          file: ./abis/EndowmentMultiSigEmitter.json
+          file: ../abis/EndowmentMultiSigEmitter.json
       eventHandlers:
         - event: EndowmentMultisigCreated(address,uint256,address,address[],uint256,bool,uint256)
           handler: handleEndowmentMultisigCreated
@@ -178,13 +178,13 @@ dataSources:
           handler: handleTransactionExecuted
         - event: TransactionConfirmationRevoked(uint256,address,uint256)
           handler: handleTransactionConfirmationRevoked
-      file: ./src/endowment-multi-sig.ts
+      file: ../src/endowment-multi-sig.ts
   - kind: ethereum
-    name: LocalRegistrar
+    name: Registrar
     network: mumbai
     source:
       address: "0xe1215B3e150dd298d787D41a4879959D30Dc3939"
-      abi: LocalRegistrar
+      abi: Registrar
       startBlock: 38267261
     mapping:
       kind: ethereum/events
@@ -193,14 +193,14 @@ dataSources:
       entities:
         - Strategy
       abis:
-        - name: LocalRegistrar
-          file: ./abis/LocalRegistrar.json
+        - name: Registrar
+          file: ../abis/Registrar.json
       eventHandlers:
         - event: StrategyApprovalUpdated(bytes4,uint8)
           handler: handleStrategyApprovalUpdated
         - event: StrategyParamsUpdated(bytes4,string,address,address,uint8)
           handler: handleStrategyParamsUpdated
-      file: ./src/local-registrar.ts
+      file: ../src/registrar.ts
   - kind: ethereum
     name: Vault
     network: mumbai
@@ -217,7 +217,7 @@ dataSources:
         - VaultShare
       abis:
         - name: Vault
-          file: ./abis/Vault.json
+          file: ../abis/Vault.json
       eventHandlers:
         - event: Deposit(uint32,address,uint256,uint256)
           handler: handleDeposit
@@ -225,4 +225,4 @@ dataSources:
           handler: handleRedeem
         - event: VaultConfigUpdated(address,(uint8,bytes4,address,address,address,address,string,string,address))
           handler: handleVaultConfigUpdated
-      file: ./src/vault.ts
+      file: ../src/vault.ts

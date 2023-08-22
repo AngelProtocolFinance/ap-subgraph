@@ -808,6 +808,22 @@ export class Endowment extends Entity {
       "swaps"
     );
   }
+
+  get vaultSharesLocked(): VaultShareLoader {
+    return new VaultShareLoader(
+      "Endowment",
+      this.get("id")!.toString(),
+      "vaultSharesLocked"
+    );
+  }
+
+  get vaultSharesLiquid(): VaultShareLoader {
+    return new VaultShareLoader(
+      "Endowment",
+      this.get("id")!.toString(),
+      "vaultSharesLiquid"
+    );
+  }
 }
 
 export class EndowmentTokenLocked extends Entity {
@@ -1483,6 +1499,341 @@ export class EndowmentSwapTransaction extends Entity {
   }
 }
 
+export class Strategy extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set("id", Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Strategy entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type Strategy must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Strategy", id.toBytes().toHexString(), this);
+    }
+  }
+
+  static loadInBlock(id: Bytes): Strategy | null {
+    return changetype<Strategy | null>(
+      store.get_in_block("Strategy", id.toHexString())
+    );
+  }
+
+  static load(id: Bytes): Strategy | null {
+    return changetype<Strategy | null>(store.get("Strategy", id.toHexString()));
+  }
+
+  get id(): Bytes {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
+  }
+
+  get network(): string {
+    let value = this.get("network");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set network(value: string) {
+    this.set("network", Value.fromString(value));
+  }
+
+  get state(): string {
+    let value = this.get("state");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set state(value: string) {
+    this.set("state", Value.fromString(value));
+  }
+
+  get vaultLocked(): Bytes | null {
+    let value = this.get("vaultLocked");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set vaultLocked(value: Bytes | null) {
+    if (!value) {
+      this.unset("vaultLocked");
+    } else {
+      this.set("vaultLocked", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get vaultLiquid(): Bytes | null {
+    let value = this.get("vaultLiquid");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set vaultLiquid(value: Bytes | null) {
+    if (!value) {
+      this.unset("vaultLiquid");
+    } else {
+      this.set("vaultLiquid", Value.fromBytes(<Bytes>value));
+    }
+  }
+}
+
+export class Vault extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set("id", Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Vault entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type Vault must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Vault", id.toBytes().toHexString(), this);
+    }
+  }
+
+  static loadInBlock(id: Bytes): Vault | null {
+    return changetype<Vault | null>(
+      store.get_in_block("Vault", id.toHexString())
+    );
+  }
+
+  static load(id: Bytes): Vault | null {
+    return changetype<Vault | null>(store.get("Vault", id.toHexString()));
+  }
+
+  get id(): Bytes {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
+  }
+
+  get type(): string {
+    let value = this.get("type");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set type(value: string) {
+    this.set("type", Value.fromString(value));
+  }
+
+  get strategy(): Bytes {
+    let value = this.get("strategy");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set strategy(value: Bytes) {
+    this.set("strategy", Value.fromBytes(value));
+  }
+
+  get address(): Bytes {
+    let value = this.get("address");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set address(value: Bytes) {
+    this.set("address", Value.fromBytes(value));
+  }
+
+  get baseToken(): Bytes {
+    let value = this.get("baseToken");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set baseToken(value: Bytes) {
+    this.set("baseToken", Value.fromBytes(value));
+  }
+
+  get yieldToken(): Bytes {
+    let value = this.get("yieldToken");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set yieldToken(value: Bytes) {
+    this.set("yieldToken", Value.fromBytes(value));
+  }
+
+  get totalShares(): BigInt {
+    let value = this.get("totalShares");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalShares(value: BigInt) {
+    this.set("totalShares", Value.fromBigInt(value));
+  }
+
+  get shares(): VaultShareLoader {
+    return new VaultShareLoader("Vault", this.get("id")!.toString(), "shares");
+  }
+}
+
+export class VaultShare extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save VaultShare entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type VaultShare must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("VaultShare", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): VaultShare | null {
+    return changetype<VaultShare | null>(store.get_in_block("VaultShare", id));
+  }
+
+  static load(id: string): VaultShare | null {
+    return changetype<VaultShare | null>(store.get("VaultShare", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get vault(): Bytes {
+    let value = this.get("vault");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set vault(value: Bytes) {
+    this.set("vault", Value.fromBytes(value));
+  }
+
+  get endowmentId(): string {
+    let value = this.get("endowmentId");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set endowmentId(value: string) {
+    this.set("endowmentId", Value.fromString(value));
+  }
+
+  get endowment(): string | null {
+    let value = this.get("endowment");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set endowment(value: string | null) {
+    if (!value) {
+      this.unset("endowment");
+    } else {
+      this.set("endowment", Value.fromString(<string>value));
+    }
+  }
+
+  get deposited(): BigInt {
+    let value = this.get("deposited");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set deposited(value: BigInt) {
+    this.set("deposited", Value.fromBigInt(value));
+  }
+
+  get shares(): BigInt {
+    let value = this.get("shares");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set shares(value: BigInt) {
+    this.set("shares", Value.fromBigInt(value));
+  }
+}
+
 export class MultiSigOwnerLoader extends Entity {
   _entity: string;
   _field: string;
@@ -1678,5 +2029,23 @@ export class EndowmentSwapTransactionLoader extends Entity {
   load(): EndowmentSwapTransaction[] {
     let value = store.loadRelated(this._entity, this._id, this._field);
     return changetype<EndowmentSwapTransaction[]>(value);
+  }
+}
+
+export class VaultShareLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): VaultShare[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<VaultShare[]>(value);
   }
 }

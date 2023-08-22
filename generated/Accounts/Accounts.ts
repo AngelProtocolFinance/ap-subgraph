@@ -92,51 +92,25 @@ export class ConfigUpdated__Params {
   }
 }
 
-export class DaoContractCreated extends ethereum.Event {
-  get params(): DaoContractCreated__Params {
-    return new DaoContractCreated__Params(this);
+export class DafApprovedEndowmentsUpdated extends ethereum.Event {
+  get params(): DafApprovedEndowmentsUpdated__Params {
+    return new DafApprovedEndowmentsUpdated__Params(this);
   }
 }
 
-export class DaoContractCreated__Params {
-  _event: DaoContractCreated;
+export class DafApprovedEndowmentsUpdated__Params {
+  _event: DafApprovedEndowmentsUpdated;
 
-  constructor(event: DaoContractCreated) {
+  constructor(event: DafApprovedEndowmentsUpdated) {
     this._event = event;
   }
 
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
+  get add(): Array<BigInt> {
+    return this._event.parameters[0].value.toBigIntArray();
   }
 
-  get daoAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class DonationDeposited extends ethereum.Event {
-  get params(): DonationDeposited__Params {
-    return new DonationDeposited__Params(this);
-  }
-}
-
-export class DonationDeposited__Params {
-  _event: DonationDeposited;
-
-  constructor(event: DonationDeposited) {
-    this._event = event;
-  }
-
-  get endowId(): BigInt {
-    return this._event.parameters[0].value.toBigInt();
-  }
-
-  get tokenAddress(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._event.parameters[2].value.toBigInt();
+  get remove(): Array<BigInt> {
+    return this._event.parameters[1].value.toBigIntArray();
   }
 }
 
@@ -162,16 +136,16 @@ export class DonationMatchCreated__Params {
   }
 }
 
-export class DonationWithdrawn extends ethereum.Event {
-  get params(): DonationWithdrawn__Params {
-    return new DonationWithdrawn__Params(this);
+export class EndowmentAllowlistUpdated extends ethereum.Event {
+  get params(): EndowmentAllowlistUpdated__Params {
+    return new EndowmentAllowlistUpdated__Params(this);
   }
 }
 
-export class DonationWithdrawn__Params {
-  _event: DonationWithdrawn;
+export class EndowmentAllowlistUpdated__Params {
+  _event: EndowmentAllowlistUpdated;
 
-  constructor(event: DonationWithdrawn) {
+  constructor(event: EndowmentAllowlistUpdated) {
     this._event = event;
   }
 
@@ -179,16 +153,16 @@ export class DonationWithdrawn__Params {
     return this._event.parameters[0].value.toBigInt();
   }
 
-  get recipient(): Address {
-    return this._event.parameters[1].value.toAddress();
+  get allowlistType(): i32 {
+    return this._event.parameters[1].value.toI32();
   }
 
-  get tokenAddress(): Address {
-    return this._event.parameters[2].value.toAddress();
+  get add(): Array<Address> {
+    return this._event.parameters[2].value.toAddressArray();
   }
 
-  get amount(): BigInt {
-    return this._event.parameters[3].value.toBigInt();
+  get remove(): Array<Address> {
+    return this._event.parameters[3].value.toAddressArray();
   }
 }
 
@@ -207,6 +181,32 @@ export class EndowmentClosed__Params {
 
   get endowId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
+  }
+
+  get beneficiary(): EndowmentClosedBeneficiaryStruct {
+    return changetype<EndowmentClosedBeneficiaryStruct>(
+      this._event.parameters[1].value.toTuple()
+    );
+  }
+}
+
+export class EndowmentClosedBeneficiaryStruct extends ethereum.Tuple {
+  get data(): EndowmentClosedBeneficiaryDataStruct {
+    return changetype<EndowmentClosedBeneficiaryDataStruct>(this[0].toTuple());
+  }
+
+  get enumData(): i32 {
+    return this[1].toI32();
+  }
+}
+
+export class EndowmentClosedBeneficiaryDataStruct extends ethereum.Tuple {
+  get endowId(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get addr(): Address {
+    return this[1].toAddress();
   }
 }
 
@@ -275,8 +275,28 @@ export class EndowmentInvested__Params {
     this._event = event;
   }
 
-  get param0(): i32 {
-    return this._event.parameters[0].value.toI32();
+  get endowId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get strategy(): Bytes {
+    return this._event.parameters[1].value.toBytes();
+  }
+
+  get network(): string {
+    return this._event.parameters[2].value.toString();
+  }
+
+  get token(): Address {
+    return this._event.parameters[3].value.toAddress();
+  }
+
+  get lockAmt(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
+  }
+
+  get liquidAmt(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
   }
 }
 
@@ -293,8 +313,28 @@ export class EndowmentRedeemed__Params {
     this._event = event;
   }
 
-  get param0(): i32 {
-    return this._event.parameters[0].value.toI32();
+  get endowId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get strategy(): Bytes {
+    return this._event.parameters[1].value.toBytes();
+  }
+
+  get network(): string {
+    return this._event.parameters[2].value.toString();
+  }
+
+  get token(): Address {
+    return this._event.parameters[3].value.toAddress();
+  }
+
+  get lockAmt(): BigInt {
+    return this._event.parameters[4].value.toBigInt();
+  }
+
+  get liquidAmt(): BigInt {
+    return this._event.parameters[5].value.toBigInt();
   }
 }
 
@@ -540,152 +580,6 @@ export class UnexpectedTokensParam0Struct extends ethereum.Tuple {
   }
 }
 
-export class Accounts__createDaoContractInputCreatedaomessageStruct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get owner(): Address {
-    return this[1].toAddress();
-  }
-
-  get quorum(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get threshold(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get votingPeriod(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get timelockPeriod(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get expirationPeriod(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get proposalDeposit(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get snapshotPeriod(): BigInt {
-    return this[8].toBigInt();
-  }
-
-  get token(): Accounts__createDaoContractInputCreatedaomessageTokenStruct {
-    return changetype<
-      Accounts__createDaoContractInputCreatedaomessageTokenStruct
-    >(this[9].toTuple());
-  }
-
-  get endowType(): i32 {
-    return this[10].toI32();
-  }
-
-  get endowOwner(): Address {
-    return this[11].toAddress();
-  }
-
-  get registrarContract(): Address {
-    return this[12].toAddress();
-  }
-}
-
-export class Accounts__createDaoContractInputCreatedaomessageTokenStruct extends ethereum.Tuple {
-  get token(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): Accounts__createDaoContractInputCreatedaomessageTokenDataStruct {
-    return changetype<
-      Accounts__createDaoContractInputCreatedaomessageTokenDataStruct
-    >(this[1].toTuple());
-  }
-}
-
-export class Accounts__createDaoContractInputCreatedaomessageTokenDataStruct extends ethereum.Tuple {
-  get existingData(): Address {
-    return this[0].toAddress();
-  }
-
-  get newInitialSupply(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get newName(): string {
-    return this[2].toString();
-  }
-
-  get newSymbol(): string {
-    return this[3].toString();
-  }
-
-  get veBondingType(): Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeStruct {
-    return changetype<
-      Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeStruct
-    >(this[4].toTuple());
-  }
-
-  get veBondingName(): string {
-    return this[5].toString();
-  }
-
-  get veBondingSymbol(): string {
-    return this[6].toString();
-  }
-
-  get veBondingDecimals(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get veBondingReserveDenom(): Address {
-    return this[8].toAddress();
-  }
-
-  get veBondingReserveDecimals(): BigInt {
-    return this[9].toBigInt();
-  }
-
-  get veBondingPeriod(): BigInt {
-    return this[10].toBigInt();
-  }
-}
-
-export class Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeStruct extends ethereum.Tuple {
-  get ve_type(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeDataStruct {
-    return changetype<
-      Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeDataStruct
-    >(this[1].toTuple());
-  }
-}
-
-export class Accounts__createDaoContractInputCreatedaomessageTokenDataVeBondingTypeDataStruct extends ethereum.Tuple {
-  get value(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get scale(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get slope(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get power(): BigInt {
-    return this[3].toBigInt();
-  }
-}
-
 export class Accounts__createEndowmentInputDetailsStruct extends ethereum.Tuple {
   get withdrawBeforeMaturity(): boolean {
     return this[0].toBoolean();
@@ -739,46 +633,46 @@ export class Accounts__createEndowmentInputDetailsStruct extends ethereum.Tuple 
     return this[12].toAddressArray();
   }
 
+  get maturityAllowlist(): Array<Address> {
+    return this[13].toAddressArray();
+  }
+
   get earlyLockedWithdrawFee(): Accounts__createEndowmentInputDetailsEarlyLockedWithdrawFeeStruct {
     return changetype<
       Accounts__createEndowmentInputDetailsEarlyLockedWithdrawFeeStruct
-    >(this[13].toTuple());
+    >(this[14].toTuple());
   }
 
   get withdrawFee(): Accounts__createEndowmentInputDetailsWithdrawFeeStruct {
     return changetype<Accounts__createEndowmentInputDetailsWithdrawFeeStruct>(
-      this[14].toTuple()
+      this[15].toTuple()
     );
   }
 
   get depositFee(): Accounts__createEndowmentInputDetailsDepositFeeStruct {
     return changetype<Accounts__createEndowmentInputDetailsDepositFeeStruct>(
-      this[15].toTuple()
+      this[16].toTuple()
     );
   }
 
   get balanceFee(): Accounts__createEndowmentInputDetailsBalanceFeeStruct {
     return changetype<Accounts__createEndowmentInputDetailsBalanceFeeStruct>(
-      this[16].toTuple()
+      this[17].toTuple()
     );
   }
 
   get proposalLink(): BigInt {
-    return this[17].toBigInt();
+    return this[18].toBigInt();
   }
 
   get settingsController(): Accounts__createEndowmentInputDetailsSettingsControllerStruct {
     return changetype<
       Accounts__createEndowmentInputDetailsSettingsControllerStruct
-    >(this[18].toTuple());
+    >(this[19].toTuple());
   }
 
   get parent(): BigInt {
-    return this[19].toBigInt();
-  }
-
-  get maturityAllowlist(): Array<Address> {
-    return this[20].toAddressArray();
+    return this[20].toBigInt();
   }
 
   get ignoreUserSplits(): boolean {
@@ -1350,7 +1244,7 @@ export class Accounts__queryConfigResultConfigStruct extends ethereum.Tuple {
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0Struct extends ethereum.Tuple {
   get owner(): Address {
     return this[0].toAddress();
   }
@@ -1383,9 +1277,9 @@ export class Accounts__queryEndowmentDetailsResultEndowmentStruct extends ethere
     return this[7].toBigInt();
   }
 
-  get rebalance(): Accounts__queryEndowmentDetailsResultEndowmentRebalanceStruct {
+  get rebalance(): Accounts__queryEndowmentDetailsResultValue0RebalanceStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentRebalanceStruct
+      Accounts__queryEndowmentDetailsResultValue0RebalanceStruct
     >(this[8].toTuple());
   }
 
@@ -1401,7 +1295,7 @@ export class Accounts__queryEndowmentDetailsResultEndowmentStruct extends ethere
     return this[11].toAddress();
   }
 
-  get daoToken(): Address {
+  get donationMatch(): Address {
     return this[12].toAddress();
   }
 
@@ -1409,76 +1303,72 @@ export class Accounts__queryEndowmentDetailsResultEndowmentStruct extends ethere
     return this[13].toBoolean();
   }
 
-  get donationMatchContract(): Address {
-    return this[14].toAddress();
-  }
-
   get allowlistedBeneficiaries(): Array<Address> {
-    return this[15].toAddressArray();
+    return this[14].toAddressArray();
   }
 
   get allowlistedContributors(): Array<Address> {
-    return this[16].toAddressArray();
+    return this[15].toAddressArray();
   }
 
   get maturityAllowlist(): Array<Address> {
-    return this[17].toAddressArray();
+    return this[16].toAddressArray();
   }
 
-  get earlyLockedWithdrawFee(): Accounts__queryEndowmentDetailsResultEndowmentEarlyLockedWithdrawFeeStruct {
+  get earlyLockedWithdrawFee(): Accounts__queryEndowmentDetailsResultValue0EarlyLockedWithdrawFeeStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentEarlyLockedWithdrawFeeStruct
+      Accounts__queryEndowmentDetailsResultValue0EarlyLockedWithdrawFeeStruct
+    >(this[17].toTuple());
+  }
+
+  get withdrawFee(): Accounts__queryEndowmentDetailsResultValue0WithdrawFeeStruct {
+    return changetype<
+      Accounts__queryEndowmentDetailsResultValue0WithdrawFeeStruct
     >(this[18].toTuple());
   }
 
-  get withdrawFee(): Accounts__queryEndowmentDetailsResultEndowmentWithdrawFeeStruct {
+  get depositFee(): Accounts__queryEndowmentDetailsResultValue0DepositFeeStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentWithdrawFeeStruct
+      Accounts__queryEndowmentDetailsResultValue0DepositFeeStruct
     >(this[19].toTuple());
   }
 
-  get depositFee(): Accounts__queryEndowmentDetailsResultEndowmentDepositFeeStruct {
+  get balanceFee(): Accounts__queryEndowmentDetailsResultValue0BalanceFeeStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentDepositFeeStruct
+      Accounts__queryEndowmentDetailsResultValue0BalanceFeeStruct
     >(this[20].toTuple());
   }
 
-  get balanceFee(): Accounts__queryEndowmentDetailsResultEndowmentBalanceFeeStruct {
+  get settingsController(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentBalanceFeeStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerStruct
     >(this[21].toTuple());
   }
 
-  get settingsController(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerStruct {
-    return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerStruct
-    >(this[22].toTuple());
-  }
-
   get parent(): BigInt {
-    return this[23].toBigInt();
+    return this[22].toBigInt();
   }
 
   get ignoreUserSplits(): boolean {
-    return this[24].toBoolean();
+    return this[23].toBoolean();
   }
 
-  get splitToLiquid(): Accounts__queryEndowmentDetailsResultEndowmentSplitToLiquidStruct {
+  get splitToLiquid(): Accounts__queryEndowmentDetailsResultValue0SplitToLiquidStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSplitToLiquidStruct
-    >(this[25].toTuple());
+      Accounts__queryEndowmentDetailsResultValue0SplitToLiquidStruct
+    >(this[24].toTuple());
   }
 
   get referralId(): BigInt {
-    return this[26].toBigInt();
+    return this[25].toBigInt();
   }
 
   get gasFwd(): Address {
-    return this[27].toAddress();
+    return this[26].toAddress();
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentRebalanceStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0RebalanceStruct extends ethereum.Tuple {
   get rebalanceLiquidProfits(): boolean {
     return this[0].toBoolean();
   }
@@ -1504,7 +1394,7 @@ export class Accounts__queryEndowmentDetailsResultEndowmentRebalanceStruct exten
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentEarlyLockedWithdrawFeeStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0EarlyLockedWithdrawFeeStruct extends ethereum.Tuple {
   get payoutAddress(): Address {
     return this[0].toAddress();
   }
@@ -1514,7 +1404,7 @@ export class Accounts__queryEndowmentDetailsResultEndowmentEarlyLockedWithdrawFe
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentWithdrawFeeStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0WithdrawFeeStruct extends ethereum.Tuple {
   get payoutAddress(): Address {
     return this[0].toAddress();
   }
@@ -1524,7 +1414,7 @@ export class Accounts__queryEndowmentDetailsResultEndowmentWithdrawFeeStruct ext
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentDepositFeeStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0DepositFeeStruct extends ethereum.Tuple {
   get payoutAddress(): Address {
     return this[0].toAddress();
   }
@@ -1534,7 +1424,7 @@ export class Accounts__queryEndowmentDetailsResultEndowmentDepositFeeStruct exte
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentBalanceFeeStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0BalanceFeeStruct extends ethereum.Tuple {
   get payoutAddress(): Address {
     return this[0].toAddress();
   }
@@ -1544,123 +1434,123 @@ export class Accounts__queryEndowmentDetailsResultEndowmentBalanceFeeStruct exte
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerStruct extends ethereum.Tuple {
-  get acceptedTokens(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAcceptedTokensStruct {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerStruct extends ethereum.Tuple {
+  get acceptedTokens(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerAcceptedTokensStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAcceptedTokensStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerAcceptedTokensStruct
     >(this[0].toTuple());
   }
 
-  get lockedInvestmentManagement(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLockedInvestmentManagementStruct {
+  get lockedInvestmentManagement(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerLockedInvestmentManagementStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLockedInvestmentManagementStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerLockedInvestmentManagementStruct
     >(this[1].toTuple());
   }
 
-  get liquidInvestmentManagement(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLiquidInvestmentManagementStruct {
+  get liquidInvestmentManagement(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerLiquidInvestmentManagementStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLiquidInvestmentManagementStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerLiquidInvestmentManagementStruct
     >(this[2].toTuple());
   }
 
-  get allowlistedBeneficiaries(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAllowlistedBeneficiariesStruct {
+  get allowlistedBeneficiaries(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerAllowlistedBeneficiariesStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAllowlistedBeneficiariesStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerAllowlistedBeneficiariesStruct
     >(this[3].toTuple());
   }
 
-  get allowlistedContributors(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAllowlistedContributorsStruct {
+  get allowlistedContributors(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerAllowlistedContributorsStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAllowlistedContributorsStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerAllowlistedContributorsStruct
     >(this[4].toTuple());
   }
 
-  get maturityAllowlist(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMaturityAllowlistStruct {
+  get maturityAllowlist(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerMaturityAllowlistStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMaturityAllowlistStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerMaturityAllowlistStruct
     >(this[5].toTuple());
   }
 
-  get maturityTime(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMaturityTimeStruct {
+  get maturityTime(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerMaturityTimeStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMaturityTimeStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerMaturityTimeStruct
     >(this[6].toTuple());
   }
 
-  get earlyLockedWithdrawFee(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerEarlyLockedWithdrawFeeStruct {
+  get earlyLockedWithdrawFee(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerEarlyLockedWithdrawFeeStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerEarlyLockedWithdrawFeeStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerEarlyLockedWithdrawFeeStruct
     >(this[7].toTuple());
   }
 
-  get withdrawFee(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerWithdrawFeeStruct {
+  get withdrawFee(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerWithdrawFeeStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerWithdrawFeeStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerWithdrawFeeStruct
     >(this[8].toTuple());
   }
 
-  get depositFee(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerDepositFeeStruct {
+  get depositFee(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerDepositFeeStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerDepositFeeStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerDepositFeeStruct
     >(this[9].toTuple());
   }
 
-  get balanceFee(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerBalanceFeeStruct {
+  get balanceFee(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerBalanceFeeStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerBalanceFeeStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerBalanceFeeStruct
     >(this[10].toTuple());
   }
 
-  get name(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerNameStruct {
+  get name(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerNameStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerNameStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerNameStruct
     >(this[11].toTuple());
   }
 
-  get image(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerImageStruct {
+  get image(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerImageStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerImageStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerImageStruct
     >(this[12].toTuple());
   }
 
-  get logo(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLogoStruct {
+  get logo(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerLogoStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLogoStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerLogoStruct
     >(this[13].toTuple());
   }
 
-  get sdgs(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSdgsStruct {
+  get sdgs(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerSdgsStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSdgsStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerSdgsStruct
     >(this[14].toTuple());
   }
 
-  get splitToLiquid(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSplitToLiquidStruct {
+  get splitToLiquid(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerSplitToLiquidStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSplitToLiquidStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerSplitToLiquidStruct
     >(this[15].toTuple());
   }
 
-  get ignoreUserSplits(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerIgnoreUserSplitsStruct {
+  get ignoreUserSplits(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerIgnoreUserSplitsStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerIgnoreUserSplitsStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerIgnoreUserSplitsStruct
     >(this[16].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAcceptedTokensStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerAcceptedTokensStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAcceptedTokensDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerAcceptedTokensDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAcceptedTokensDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerAcceptedTokensDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAcceptedTokensDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerAcceptedTokensDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1670,19 +1560,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAcc
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLockedInvestmentManagementStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerLockedInvestmentManagementStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLockedInvestmentManagementDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerLockedInvestmentManagementDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLockedInvestmentManagementDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerLockedInvestmentManagementDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLockedInvestmentManagementDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerLockedInvestmentManagementDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1692,19 +1582,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLoc
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLiquidInvestmentManagementStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerLiquidInvestmentManagementStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLiquidInvestmentManagementDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerLiquidInvestmentManagementDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLiquidInvestmentManagementDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerLiquidInvestmentManagementDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLiquidInvestmentManagementDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerLiquidInvestmentManagementDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1714,19 +1604,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLiq
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAllowlistedBeneficiariesStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerAllowlistedBeneficiariesStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAllowlistedBeneficiariesDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerAllowlistedBeneficiariesDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAllowlistedBeneficiariesDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerAllowlistedBeneficiariesDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAllowlistedBeneficiariesDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerAllowlistedBeneficiariesDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1736,19 +1626,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAll
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAllowlistedContributorsStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerAllowlistedContributorsStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAllowlistedContributorsDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerAllowlistedContributorsDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAllowlistedContributorsDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerAllowlistedContributorsDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAllowlistedContributorsDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerAllowlistedContributorsDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1758,19 +1648,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerAll
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMaturityAllowlistStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerMaturityAllowlistStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMaturityAllowlistDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerMaturityAllowlistDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMaturityAllowlistDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerMaturityAllowlistDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMaturityAllowlistDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerMaturityAllowlistDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1780,19 +1670,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMat
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMaturityTimeStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerMaturityTimeStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMaturityTimeDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerMaturityTimeDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMaturityTimeDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerMaturityTimeDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMaturityTimeDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerMaturityTimeDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1802,19 +1692,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerMat
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerEarlyLockedWithdrawFeeStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerEarlyLockedWithdrawFeeStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerEarlyLockedWithdrawFeeDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerEarlyLockedWithdrawFeeDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerEarlyLockedWithdrawFeeDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerEarlyLockedWithdrawFeeDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerEarlyLockedWithdrawFeeDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerEarlyLockedWithdrawFeeDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1824,19 +1714,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerEar
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerWithdrawFeeStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerWithdrawFeeStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerWithdrawFeeDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerWithdrawFeeDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerWithdrawFeeDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerWithdrawFeeDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerWithdrawFeeDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerWithdrawFeeDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1846,19 +1736,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerWit
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerDepositFeeStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerDepositFeeStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerDepositFeeDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerDepositFeeDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerDepositFeeDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerDepositFeeDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerDepositFeeDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerDepositFeeDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1868,19 +1758,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerDep
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerBalanceFeeStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerBalanceFeeStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerBalanceFeeDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerBalanceFeeDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerBalanceFeeDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerBalanceFeeDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerBalanceFeeDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerBalanceFeeDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1890,19 +1780,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerBal
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerNameStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerNameStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerNameDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerNameDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerNameDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerNameDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerNameDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerNameDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1912,19 +1802,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerNam
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerImageStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerImageStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerImageDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerImageDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerImageDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerImageDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerImageDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerImageDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1934,19 +1824,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerIma
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLogoStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerLogoStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLogoDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerLogoDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLogoDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerLogoDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLogoDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerLogoDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1956,19 +1846,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerLog
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSdgsStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerSdgsStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSdgsDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerSdgsDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSdgsDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerSdgsDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSdgsDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerSdgsDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -1978,19 +1868,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSdg
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSplitToLiquidStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerSplitToLiquidStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSplitToLiquidDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerSplitToLiquidDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSplitToLiquidDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerSplitToLiquidDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSplitToLiquidDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerSplitToLiquidDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -2000,19 +1890,19 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerSpl
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerIgnoreUserSplitsStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerIgnoreUserSplitsStruct extends ethereum.Tuple {
   get locked(): boolean {
     return this[0].toBoolean();
   }
 
-  get delegate(): Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerIgnoreUserSplitsDelegateStruct {
+  get delegate(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerIgnoreUserSplitsDelegateStruct {
     return changetype<
-      Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerIgnoreUserSplitsDelegateStruct
+      Accounts__queryEndowmentDetailsResultValue0SettingsControllerIgnoreUserSplitsDelegateStruct
     >(this[1].toTuple());
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerIgnoreUserSplitsDelegateStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SettingsControllerIgnoreUserSplitsDelegateStruct extends ethereum.Tuple {
   get addr(): Address {
     return this[0].toAddress();
   }
@@ -2022,7 +1912,7 @@ export class Accounts__queryEndowmentDetailsResultEndowmentSettingsControllerIgn
   }
 }
 
-export class Accounts__queryEndowmentDetailsResultEndowmentSplitToLiquidStruct extends ethereum.Tuple {
+export class Accounts__queryEndowmentDetailsResultValue0SplitToLiquidStruct extends ethereum.Tuple {
   get max(): BigInt {
     return this[0].toBigInt();
   }
@@ -2065,12 +1955,8 @@ export class Accounts__queryStateResultStateResponseClosingBeneficiaryDataStruct
     return this[0].toBigInt();
   }
 
-  get fundId(): BigInt {
-    return this[1].toBigInt();
-  }
-
   get addr(): Address {
-    return this[2].toAddress();
+    return this[1].toAddress();
   }
 }
 
@@ -2079,39 +1965,12 @@ export class Accounts extends ethereum.SmartContract {
     return new Accounts("Accounts", address);
   }
 
-  createDaoContract(
-    createdaomessage: Accounts__createDaoContractInputCreatedaomessageStruct
-  ): Address {
-    let result = super.call(
-      "createDaoContract",
-      "createDaoContract((uint32,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,(uint8,(address,uint256,string,string,(uint8,(uint128,uint256,uint128,uint128)),string,string,uint256,address,uint256,uint256)),uint8,address,address)):(address)",
-      [ethereum.Value.fromTuple(createdaomessage)]
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_createDaoContract(
-    createdaomessage: Accounts__createDaoContractInputCreatedaomessageStruct
-  ): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "createDaoContract",
-      "createDaoContract((uint32,address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,(uint8,(address,uint256,string,string,(uint8,(uint128,uint256,uint128,uint128)),string,string,uint256,address,uint256,uint256)),uint8,address,address)):(address)",
-      [ethereum.Value.fromTuple(createdaomessage)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   createEndowment(
     details: Accounts__createEndowmentInputDetailsStruct
   ): BigInt {
     let result = super.call(
       "createEndowment",
-      "createEndowment((bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256)):(uint32)",
+      "createEndowment((bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256)):(uint32)",
       [ethereum.Value.fromTuple(details)]
     );
 
@@ -2123,7 +1982,7 @@ export class Accounts extends ethereum.SmartContract {
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "createEndowment",
-      "createEndowment((bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256)):(uint32)",
+      "createEndowment((bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256)):(uint32)",
       [ethereum.Value.fromTuple(details)]
     );
     if (result.reverted) {
@@ -2199,24 +2058,24 @@ export class Accounts extends ethereum.SmartContract {
 
   queryEndowmentDetails(
     id: BigInt
-  ): Accounts__queryEndowmentDetailsResultEndowmentStruct {
+  ): Accounts__queryEndowmentDetailsResultValue0Struct {
     let result = super.call(
       "queryEndowmentDetails",
-      "queryEndowmentDetails(uint32):((address,string,uint256[],uint8,uint8,string,string,uint256,(bool,uint32,uint32,bool,uint32,uint32),uint256,address,address,address,bool,address,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256,address))",
+      "queryEndowmentDetails(uint32):((address,string,uint256[],uint8,uint8,string,string,uint256,(bool,uint32,uint32,bool,uint32,uint32),uint256,address,address,address,bool,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256,address))",
       [ethereum.Value.fromUnsignedBigInt(id)]
     );
 
-    return changetype<Accounts__queryEndowmentDetailsResultEndowmentStruct>(
+    return changetype<Accounts__queryEndowmentDetailsResultValue0Struct>(
       result[0].toTuple()
     );
   }
 
   try_queryEndowmentDetails(
     id: BigInt
-  ): ethereum.CallResult<Accounts__queryEndowmentDetailsResultEndowmentStruct> {
+  ): ethereum.CallResult<Accounts__queryEndowmentDetailsResultValue0Struct> {
     let result = super.tryCall(
       "queryEndowmentDetails",
-      "queryEndowmentDetails(uint32):((address,string,uint256[],uint8,uint8,string,string,uint256,(bool,uint32,uint32,bool,uint32,uint32),uint256,address,address,address,bool,address,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256,address))",
+      "queryEndowmentDetails(uint32):((address,string,uint256[],uint8,uint8,string,string,uint256,(bool,uint32,uint32,bool,uint32,uint32),uint256,address,address,address,bool,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256,address))",
       [ethereum.Value.fromUnsignedBigInt(id)]
     );
     if (result.reverted) {
@@ -2224,7 +2083,7 @@ export class Accounts extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      changetype<Accounts__queryEndowmentDetailsResultEndowmentStruct>(
+      changetype<Accounts__queryEndowmentDetailsResultValue0Struct>(
         value[0].toTuple()
       )
     );
@@ -2233,7 +2092,7 @@ export class Accounts extends ethereum.SmartContract {
   queryState(id: BigInt): Accounts__queryStateResultStateResponseStruct {
     let result = super.call(
       "queryState",
-      "queryState(uint32):((bool,((uint32,uint256,address),uint8)))",
+      "queryState(uint32):((bool,((uint32,address),uint8)))",
       [ethereum.Value.fromUnsignedBigInt(id)]
     );
 
@@ -2247,7 +2106,7 @@ export class Accounts extends ethereum.SmartContract {
   ): ethereum.CallResult<Accounts__queryStateResultStateResponseStruct> {
     let result = super.tryCall(
       "queryState",
-      "queryState(uint32):((bool,((uint32,uint256,address),uint8)))",
+      "queryState(uint32):((bool,((uint32,address),uint8)))",
       [ethereum.Value.fromUnsignedBigInt(id)]
     );
     if (result.reverted) {
@@ -2454,194 +2313,8 @@ export class CloseEndowmentCallBeneficiaryDataStruct extends ethereum.Tuple {
     return this[0].toBigInt();
   }
 
-  get fundId(): BigInt {
-    return this[1].toBigInt();
-  }
-
   get addr(): Address {
-    return this[2].toAddress();
-  }
-}
-
-export class CreateDaoContractCall extends ethereum.Call {
-  get inputs(): CreateDaoContractCall__Inputs {
-    return new CreateDaoContractCall__Inputs(this);
-  }
-
-  get outputs(): CreateDaoContractCall__Outputs {
-    return new CreateDaoContractCall__Outputs(this);
-  }
-}
-
-export class CreateDaoContractCall__Inputs {
-  _call: CreateDaoContractCall;
-
-  constructor(call: CreateDaoContractCall) {
-    this._call = call;
-  }
-
-  get createdaomessage(): CreateDaoContractCallCreatedaomessageStruct {
-    return changetype<CreateDaoContractCallCreatedaomessageStruct>(
-      this._call.inputValues[0].value.toTuple()
-    );
-  }
-}
-
-export class CreateDaoContractCall__Outputs {
-  _call: CreateDaoContractCall;
-
-  constructor(call: CreateDaoContractCall) {
-    this._call = call;
-  }
-
-  get daoAddress(): Address {
-    return this._call.outputValues[0].value.toAddress();
-  }
-}
-
-export class CreateDaoContractCallCreatedaomessageStruct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get owner(): Address {
     return this[1].toAddress();
-  }
-
-  get quorum(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get threshold(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get votingPeriod(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get timelockPeriod(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get expirationPeriod(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get proposalDeposit(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get snapshotPeriod(): BigInt {
-    return this[8].toBigInt();
-  }
-
-  get token(): CreateDaoContractCallCreatedaomessageTokenStruct {
-    return changetype<CreateDaoContractCallCreatedaomessageTokenStruct>(
-      this[9].toTuple()
-    );
-  }
-
-  get endowType(): i32 {
-    return this[10].toI32();
-  }
-
-  get endowOwner(): Address {
-    return this[11].toAddress();
-  }
-
-  get registrarContract(): Address {
-    return this[12].toAddress();
-  }
-}
-
-export class CreateDaoContractCallCreatedaomessageTokenStruct extends ethereum.Tuple {
-  get token(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): CreateDaoContractCallCreatedaomessageTokenDataStruct {
-    return changetype<CreateDaoContractCallCreatedaomessageTokenDataStruct>(
-      this[1].toTuple()
-    );
-  }
-}
-
-export class CreateDaoContractCallCreatedaomessageTokenDataStruct extends ethereum.Tuple {
-  get existingData(): Address {
-    return this[0].toAddress();
-  }
-
-  get newInitialSupply(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get newName(): string {
-    return this[2].toString();
-  }
-
-  get newSymbol(): string {
-    return this[3].toString();
-  }
-
-  get veBondingType(): CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeStruct {
-    return changetype<
-      CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeStruct
-    >(this[4].toTuple());
-  }
-
-  get veBondingName(): string {
-    return this[5].toString();
-  }
-
-  get veBondingSymbol(): string {
-    return this[6].toString();
-  }
-
-  get veBondingDecimals(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get veBondingReserveDenom(): Address {
-    return this[8].toAddress();
-  }
-
-  get veBondingReserveDecimals(): BigInt {
-    return this[9].toBigInt();
-  }
-
-  get veBondingPeriod(): BigInt {
-    return this[10].toBigInt();
-  }
-}
-
-export class CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeStruct extends ethereum.Tuple {
-  get ve_type(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeDataStruct {
-    return changetype<
-      CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeDataStruct
-    >(this[1].toTuple());
-  }
-}
-
-export class CreateDaoContractCallCreatedaomessageTokenDataVeBondingTypeDataStruct extends ethereum.Tuple {
-  get value(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get scale(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get slope(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get power(): BigInt {
-    return this[3].toBigInt();
   }
 }
 
@@ -2734,46 +2407,46 @@ export class CreateEndowmentCallDetailsStruct extends ethereum.Tuple {
     return this[12].toAddressArray();
   }
 
+  get maturityAllowlist(): Array<Address> {
+    return this[13].toAddressArray();
+  }
+
   get earlyLockedWithdrawFee(): CreateEndowmentCallDetailsEarlyLockedWithdrawFeeStruct {
     return changetype<CreateEndowmentCallDetailsEarlyLockedWithdrawFeeStruct>(
-      this[13].toTuple()
+      this[14].toTuple()
     );
   }
 
   get withdrawFee(): CreateEndowmentCallDetailsWithdrawFeeStruct {
     return changetype<CreateEndowmentCallDetailsWithdrawFeeStruct>(
-      this[14].toTuple()
+      this[15].toTuple()
     );
   }
 
   get depositFee(): CreateEndowmentCallDetailsDepositFeeStruct {
     return changetype<CreateEndowmentCallDetailsDepositFeeStruct>(
-      this[15].toTuple()
+      this[16].toTuple()
     );
   }
 
   get balanceFee(): CreateEndowmentCallDetailsBalanceFeeStruct {
     return changetype<CreateEndowmentCallDetailsBalanceFeeStruct>(
-      this[16].toTuple()
+      this[17].toTuple()
     );
   }
 
   get proposalLink(): BigInt {
-    return this[17].toBigInt();
+    return this[18].toBigInt();
   }
 
   get settingsController(): CreateEndowmentCallDetailsSettingsControllerStruct {
     return changetype<CreateEndowmentCallDetailsSettingsControllerStruct>(
-      this[18].toTuple()
+      this[19].toTuple()
     );
   }
 
   get parent(): BigInt {
-    return this[19].toBigInt();
-  }
-
-  get maturityAllowlist(): Array<Address> {
-    return this[20].toAddressArray();
+    return this[20].toBigInt();
   }
 
   get ignoreUserSplits(): boolean {
@@ -3323,44 +2996,6 @@ export class CreateEndowmentCallDetailsSplitToLiquidStruct extends ethereum.Tupl
   }
 }
 
-export class DepositDonationMatchERC20Call extends ethereum.Call {
-  get inputs(): DepositDonationMatchERC20Call__Inputs {
-    return new DepositDonationMatchERC20Call__Inputs(this);
-  }
-
-  get outputs(): DepositDonationMatchERC20Call__Outputs {
-    return new DepositDonationMatchERC20Call__Outputs(this);
-  }
-}
-
-export class DepositDonationMatchERC20Call__Inputs {
-  _call: DepositDonationMatchERC20Call;
-
-  constructor(call: DepositDonationMatchERC20Call) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get token(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-}
-
-export class DepositDonationMatchERC20Call__Outputs {
-  _call: DepositDonationMatchERC20Call;
-
-  constructor(call: DepositDonationMatchERC20Call) {
-    this._call = call;
-  }
-}
-
 export class DepositERC20Call extends ethereum.Call {
   get inputs(): DepositERC20Call__Inputs {
     return new DepositERC20Call__Inputs(this);
@@ -3508,226 +3143,6 @@ export class ManageAllowancesCall__Outputs {
 
   constructor(call: ManageAllowancesCall) {
     this._call = call;
-  }
-}
-
-export class SetupDaoCall extends ethereum.Call {
-  get inputs(): SetupDaoCall__Inputs {
-    return new SetupDaoCall__Inputs(this);
-  }
-
-  get outputs(): SetupDaoCall__Outputs {
-    return new SetupDaoCall__Outputs(this);
-  }
-}
-
-export class SetupDaoCall__Inputs {
-  _call: SetupDaoCall;
-
-  constructor(call: SetupDaoCall) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get details(): SetupDaoCallDetailsStruct {
-    return changetype<SetupDaoCallDetailsStruct>(
-      this._call.inputValues[1].value.toTuple()
-    );
-  }
-}
-
-export class SetupDaoCall__Outputs {
-  _call: SetupDaoCall;
-
-  constructor(call: SetupDaoCall) {
-    this._call = call;
-  }
-}
-
-export class SetupDaoCallDetailsStruct extends ethereum.Tuple {
-  get quorum(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get threshold(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get votingPeriod(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get timelockPeriod(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get expirationPeriod(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get proposalDeposit(): BigInt {
-    return this[5].toBigInt();
-  }
-
-  get snapshotPeriod(): BigInt {
-    return this[6].toBigInt();
-  }
-
-  get token(): SetupDaoCallDetailsTokenStruct {
-    return changetype<SetupDaoCallDetailsTokenStruct>(this[7].toTuple());
-  }
-}
-
-export class SetupDaoCallDetailsTokenStruct extends ethereum.Tuple {
-  get token(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): SetupDaoCallDetailsTokenDataStruct {
-    return changetype<SetupDaoCallDetailsTokenDataStruct>(this[1].toTuple());
-  }
-}
-
-export class SetupDaoCallDetailsTokenDataStruct extends ethereum.Tuple {
-  get existingData(): Address {
-    return this[0].toAddress();
-  }
-
-  get newInitialSupply(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get newName(): string {
-    return this[2].toString();
-  }
-
-  get newSymbol(): string {
-    return this[3].toString();
-  }
-
-  get veBondingType(): SetupDaoCallDetailsTokenDataVeBondingTypeStruct {
-    return changetype<SetupDaoCallDetailsTokenDataVeBondingTypeStruct>(
-      this[4].toTuple()
-    );
-  }
-
-  get veBondingName(): string {
-    return this[5].toString();
-  }
-
-  get veBondingSymbol(): string {
-    return this[6].toString();
-  }
-
-  get veBondingDecimals(): BigInt {
-    return this[7].toBigInt();
-  }
-
-  get veBondingReserveDenom(): Address {
-    return this[8].toAddress();
-  }
-
-  get veBondingReserveDecimals(): BigInt {
-    return this[9].toBigInt();
-  }
-
-  get veBondingPeriod(): BigInt {
-    return this[10].toBigInt();
-  }
-}
-
-export class SetupDaoCallDetailsTokenDataVeBondingTypeStruct extends ethereum.Tuple {
-  get ve_type(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): SetupDaoCallDetailsTokenDataVeBondingTypeDataStruct {
-    return changetype<SetupDaoCallDetailsTokenDataVeBondingTypeDataStruct>(
-      this[1].toTuple()
-    );
-  }
-}
-
-export class SetupDaoCallDetailsTokenDataVeBondingTypeDataStruct extends ethereum.Tuple {
-  get value(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get scale(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get slope(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get power(): BigInt {
-    return this[3].toBigInt();
-  }
-}
-
-export class SetupDonationMatchCall extends ethereum.Call {
-  get inputs(): SetupDonationMatchCall__Inputs {
-    return new SetupDonationMatchCall__Inputs(this);
-  }
-
-  get outputs(): SetupDonationMatchCall__Outputs {
-    return new SetupDonationMatchCall__Outputs(this);
-  }
-}
-
-export class SetupDonationMatchCall__Inputs {
-  _call: SetupDonationMatchCall;
-
-  constructor(call: SetupDonationMatchCall) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get details(): SetupDonationMatchCallDetailsStruct {
-    return changetype<SetupDonationMatchCallDetailsStruct>(
-      this._call.inputValues[1].value.toTuple()
-    );
-  }
-}
-
-export class SetupDonationMatchCall__Outputs {
-  _call: SetupDonationMatchCall;
-
-  constructor(call: SetupDonationMatchCall) {
-    this._call = call;
-  }
-}
-
-export class SetupDonationMatchCallDetailsStruct extends ethereum.Tuple {
-  get enumData(): i32 {
-    return this[0].toI32();
-  }
-
-  get data(): SetupDonationMatchCallDetailsDataStruct {
-    return changetype<SetupDonationMatchCallDetailsDataStruct>(
-      this[1].toTuple()
-    );
-  }
-}
-
-export class SetupDonationMatchCallDetailsDataStruct extends ethereum.Tuple {
-  get reserveToken(): Address {
-    return this[0].toAddress();
-  }
-
-  get uniswapFactory(): Address {
-    return this[1].toAddress();
-  }
-
-  get poolFee(): i32 {
-    return this[2].toI32();
   }
 }
 
@@ -4072,7 +3487,7 @@ export class SweepForEndowmentCall__Outputs {
     this._call = call;
   }
 
-  get value0(): BigInt {
+  get funds(): BigInt {
     return this._call.outputValues[0].value.toBigInt();
   }
 }
@@ -4149,6 +3564,40 @@ export class UpdateConfigCall__Outputs {
   }
 }
 
+export class UpdateDafApprovedEndowmentsCall extends ethereum.Call {
+  get inputs(): UpdateDafApprovedEndowmentsCall__Inputs {
+    return new UpdateDafApprovedEndowmentsCall__Inputs(this);
+  }
+
+  get outputs(): UpdateDafApprovedEndowmentsCall__Outputs {
+    return new UpdateDafApprovedEndowmentsCall__Outputs(this);
+  }
+}
+
+export class UpdateDafApprovedEndowmentsCall__Inputs {
+  _call: UpdateDafApprovedEndowmentsCall;
+
+  constructor(call: UpdateDafApprovedEndowmentsCall) {
+    this._call = call;
+  }
+
+  get add(): Array<BigInt> {
+    return this._call.inputValues[0].value.toBigIntArray();
+  }
+
+  get remove(): Array<BigInt> {
+    return this._call.inputValues[1].value.toBigIntArray();
+  }
+}
+
+export class UpdateDafApprovedEndowmentsCall__Outputs {
+  _call: UpdateDafApprovedEndowmentsCall;
+
+  constructor(call: UpdateDafApprovedEndowmentsCall) {
+    this._call = call;
+  }
+}
+
 export class UpdateDelegateCall extends ethereum.Call {
   get inputs(): UpdateDelegateCall__Inputs {
     return new UpdateDelegateCall__Inputs(this);
@@ -4191,6 +3640,48 @@ export class UpdateDelegateCall__Outputs {
   _call: UpdateDelegateCall;
 
   constructor(call: UpdateDelegateCall) {
+    this._call = call;
+  }
+}
+
+export class UpdateEndowmentAllowlistCall extends ethereum.Call {
+  get inputs(): UpdateEndowmentAllowlistCall__Inputs {
+    return new UpdateEndowmentAllowlistCall__Inputs(this);
+  }
+
+  get outputs(): UpdateEndowmentAllowlistCall__Outputs {
+    return new UpdateEndowmentAllowlistCall__Outputs(this);
+  }
+}
+
+export class UpdateEndowmentAllowlistCall__Inputs {
+  _call: UpdateEndowmentAllowlistCall;
+
+  constructor(call: UpdateEndowmentAllowlistCall) {
+    this._call = call;
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get allowlistType(): i32 {
+    return this._call.inputValues[1].value.toI32();
+  }
+
+  get add(): Array<Address> {
+    return this._call.inputValues[2].value.toAddressArray();
+  }
+
+  get remove(): Array<Address> {
+    return this._call.inputValues[3].value.toAddressArray();
+  }
+}
+
+export class UpdateEndowmentAllowlistCall__Outputs {
+  _call: UpdateEndowmentAllowlistCall;
+
+  constructor(call: UpdateEndowmentAllowlistCall) {
     this._call = call;
   }
 }
@@ -4852,30 +4343,14 @@ export class UpdateEndowmentSettingsCallDetailsStruct extends ethereum.Tuple {
     return this[2].toBigInt();
   }
 
-  get allowlistedBeneficiaries(): Array<Address> {
-    return this[3].toAddressArray();
-  }
-
-  get allowlistedContributors(): Array<Address> {
-    return this[4].toAddressArray();
-  }
-
-  get maturity_allowlist_add(): Array<Address> {
-    return this[5].toAddressArray();
-  }
-
-  get maturity_allowlist_remove(): Array<Address> {
-    return this[6].toAddressArray();
-  }
-
   get splitToLiquid(): UpdateEndowmentSettingsCallDetailsSplitToLiquidStruct {
     return changetype<UpdateEndowmentSettingsCallDetailsSplitToLiquidStruct>(
-      this[7].toTuple()
+      this[3].toTuple()
     );
   }
 
   get ignoreUserSplits(): boolean {
-    return this[8].toBoolean();
+    return this[4].toBoolean();
   }
 }
 
@@ -5080,43 +4555,5 @@ export class WithdrawCallTokensStruct extends ethereum.Tuple {
 
   get amnt(): BigInt {
     return this[1].toBigInt();
-  }
-}
-
-export class WithdrawDonationMatchERC20Call extends ethereum.Call {
-  get inputs(): WithdrawDonationMatchERC20Call__Inputs {
-    return new WithdrawDonationMatchERC20Call__Inputs(this);
-  }
-
-  get outputs(): WithdrawDonationMatchERC20Call__Outputs {
-    return new WithdrawDonationMatchERC20Call__Outputs(this);
-  }
-}
-
-export class WithdrawDonationMatchERC20Call__Inputs {
-  _call: WithdrawDonationMatchERC20Call;
-
-  constructor(call: WithdrawDonationMatchERC20Call) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get recipient(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get amount(): BigInt {
-    return this._call.inputValues[2].value.toBigInt();
-  }
-}
-
-export class WithdrawDonationMatchERC20Call__Outputs {
-  _call: WithdrawDonationMatchERC20Call;
-
-  constructor(call: WithdrawDonationMatchERC20Call) {
-    this._call = call;
   }
 }

@@ -555,46 +555,46 @@ export class CharityApplications__proposalsResultApplicationStruct extends ether
     return this[12].toAddressArray();
   }
 
+  get maturityAllowlist(): Array<Address> {
+    return this[13].toAddressArray();
+  }
+
   get earlyLockedWithdrawFee(): CharityApplications__proposalsResultApplicationEarlyLockedWithdrawFeeStruct {
     return changetype<
       CharityApplications__proposalsResultApplicationEarlyLockedWithdrawFeeStruct
-    >(this[13].toTuple());
+    >(this[14].toTuple());
   }
 
   get withdrawFee(): CharityApplications__proposalsResultApplicationWithdrawFeeStruct {
     return changetype<
       CharityApplications__proposalsResultApplicationWithdrawFeeStruct
-    >(this[14].toTuple());
+    >(this[15].toTuple());
   }
 
   get depositFee(): CharityApplications__proposalsResultApplicationDepositFeeStruct {
     return changetype<
       CharityApplications__proposalsResultApplicationDepositFeeStruct
-    >(this[15].toTuple());
+    >(this[16].toTuple());
   }
 
   get balanceFee(): CharityApplications__proposalsResultApplicationBalanceFeeStruct {
     return changetype<
       CharityApplications__proposalsResultApplicationBalanceFeeStruct
-    >(this[16].toTuple());
+    >(this[17].toTuple());
   }
 
   get proposalLink(): BigInt {
-    return this[17].toBigInt();
+    return this[18].toBigInt();
   }
 
   get settingsController(): CharityApplications__proposalsResultApplicationSettingsControllerStruct {
     return changetype<
       CharityApplications__proposalsResultApplicationSettingsControllerStruct
-    >(this[18].toTuple());
+    >(this[19].toTuple());
   }
 
   get parent(): BigInt {
-    return this[19].toBigInt();
-  }
-
-  get maturityAllowlist(): Array<Address> {
-    return this[20].toAddressArray();
+    return this[20].toBigInt();
   }
 
   get ignoreUserSplits(): boolean {
@@ -1614,7 +1614,7 @@ export class CharityApplications extends ethereum.SmartContract {
   proposals(param0: BigInt): CharityApplications__proposalsResult {
     let result = super.call(
       "proposals",
-      "proposals(uint256):(address,(bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256),bytes,uint256,bool)",
+      "proposals(uint256):(address,(bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256),bytes,uint256,bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -1634,7 +1634,7 @@ export class CharityApplications extends ethereum.SmartContract {
   ): ethereum.CallResult<CharityApplications__proposalsResult> {
     let result = super.tryCall(
       "proposals",
-      "proposals(uint256):(address,(bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,address[],bool,(uint256,uint256,uint256),uint256),bytes,uint256,bool)",
+      "proposals(uint256):(address,(bool,uint256,string,uint256[],uint8,uint8,string,string,address[],uint256,uint256,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),uint256,((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256),bytes,uint256,bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -2283,46 +2283,46 @@ export class ProposeApplicationCall_applicationStruct extends ethereum.Tuple {
     return this[12].toAddressArray();
   }
 
+  get maturityAllowlist(): Array<Address> {
+    return this[13].toAddressArray();
+  }
+
   get earlyLockedWithdrawFee(): ProposeApplicationCall_applicationEarlyLockedWithdrawFeeStruct {
     return changetype<
       ProposeApplicationCall_applicationEarlyLockedWithdrawFeeStruct
-    >(this[13].toTuple());
+    >(this[14].toTuple());
   }
 
   get withdrawFee(): ProposeApplicationCall_applicationWithdrawFeeStruct {
     return changetype<ProposeApplicationCall_applicationWithdrawFeeStruct>(
-      this[14].toTuple()
+      this[15].toTuple()
     );
   }
 
   get depositFee(): ProposeApplicationCall_applicationDepositFeeStruct {
     return changetype<ProposeApplicationCall_applicationDepositFeeStruct>(
-      this[15].toTuple()
+      this[16].toTuple()
     );
   }
 
   get balanceFee(): ProposeApplicationCall_applicationBalanceFeeStruct {
     return changetype<ProposeApplicationCall_applicationBalanceFeeStruct>(
-      this[16].toTuple()
+      this[17].toTuple()
     );
   }
 
   get proposalLink(): BigInt {
-    return this[17].toBigInt();
+    return this[18].toBigInt();
   }
 
   get settingsController(): ProposeApplicationCall_applicationSettingsControllerStruct {
     return changetype<
       ProposeApplicationCall_applicationSettingsControllerStruct
-    >(this[18].toTuple());
+    >(this[19].toTuple());
   }
 
   get parent(): BigInt {
-    return this[19].toBigInt();
-  }
-
-  get maturityAllowlist(): Array<Address> {
-    return this[20].toAddressArray();
+    return this[20].toBigInt();
   }
 
   get ignoreUserSplits(): boolean {

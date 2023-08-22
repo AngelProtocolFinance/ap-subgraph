@@ -155,7 +155,7 @@ export class VaultConfigUpdatedConfigStruct extends ethereum.Tuple {
     return this[0].toI32();
   }
 
-  get strategySelector(): Bytes {
+  get strategyId(): Bytes {
     return this[1].toBytes();
   }
 
@@ -227,7 +227,7 @@ export class Vault__getVaultConfigResultValue0Struct extends ethereum.Tuple {
     return this[0].toI32();
   }
 
-  get strategySelector(): Bytes {
+  get strategyId(): Bytes {
     return this[1].toBytes();
   }
 
@@ -339,7 +339,7 @@ export class Vault__vaultConfigResult {
     return this.value0;
   }
 
-  getStrategySelector(): Bytes {
+  getStrategyId(): Bytes {
     return this.value1;
   }
 
@@ -1048,7 +1048,7 @@ export class ConstructorCall_configStruct extends ethereum.Tuple {
     return this[0].toI32();
   }
 
-  get strategySelector(): Bytes {
+  get strategyId(): Bytes {
     return this[1].toBytes();
   }
 
@@ -1412,7 +1412,7 @@ export class SetVaultConfigCall_newConfigStruct extends ethereum.Tuple {
     return this[0].toI32();
   }
 
-  get strategySelector(): Bytes {
+  get strategyId(): Bytes {
     return this[1].toBytes();
   }
 

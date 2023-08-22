@@ -8,7 +8,7 @@ import { Endowment, Strategy, Vault, VaultShare } from "../generated/schema"
 import { VaultType } from "./helpers"
 
 export function handleVaultConfigUpdated(event: VaultConfigUpdatedEvent): void {
-    const strategy = Strategy.load(event.params.config.strategySelector)
+    const strategy = Strategy.load(event.params.config.strategyId)
     if (strategy == null) {
         return
     }

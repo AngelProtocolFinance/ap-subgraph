@@ -143,7 +143,7 @@ export class StrategyApprovalUpdated__Params {
     this._event = event;
   }
 
-  get _strategySelector(): Bytes {
+  get _strategyId(): Bytes {
     return this._event.parameters[0].value.toBytes();
   }
 
@@ -165,7 +165,7 @@ export class StrategyParamsUpdated__Params {
     this._event = event;
   }
 
-  get _strategySelector(): Bytes {
+  get _strategyId(): Bytes {
     return this._event.parameters[0].value.toBytes();
   }
 
@@ -403,23 +403,21 @@ export class LocalRegistrar extends ethereum.SmartContract {
     );
   }
 
-  getStrategyApprovalState(_strategySelector: Bytes): i32 {
+  getStrategyApprovalState(_strategyId: Bytes): i32 {
     let result = super.call(
       "getStrategyApprovalState",
       "getStrategyApprovalState(bytes4):(uint8)",
-      [ethereum.Value.fromFixedBytes(_strategySelector)]
+      [ethereum.Value.fromFixedBytes(_strategyId)]
     );
 
     return result[0].toI32();
   }
 
-  try_getStrategyApprovalState(
-    _strategySelector: Bytes
-  ): ethereum.CallResult<i32> {
+  try_getStrategyApprovalState(_strategyId: Bytes): ethereum.CallResult<i32> {
     let result = super.tryCall(
       "getStrategyApprovalState",
       "getStrategyApprovalState(bytes4):(uint8)",
-      [ethereum.Value.fromFixedBytes(_strategySelector)]
+      [ethereum.Value.fromFixedBytes(_strategyId)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -429,12 +427,12 @@ export class LocalRegistrar extends ethereum.SmartContract {
   }
 
   getStrategyParamsById(
-    _strategySelector: Bytes
+    _strategyId: Bytes
   ): LocalRegistrar__getStrategyParamsByIdResultValue0Struct {
     let result = super.call(
       "getStrategyParamsById",
       "getStrategyParamsById(bytes4):((uint8,string,address,address))",
-      [ethereum.Value.fromFixedBytes(_strategySelector)]
+      [ethereum.Value.fromFixedBytes(_strategyId)]
     );
 
     return changetype<LocalRegistrar__getStrategyParamsByIdResultValue0Struct>(
@@ -443,14 +441,14 @@ export class LocalRegistrar extends ethereum.SmartContract {
   }
 
   try_getStrategyParamsById(
-    _strategySelector: Bytes
+    _strategyId: Bytes
   ): ethereum.CallResult<
     LocalRegistrar__getStrategyParamsByIdResultValue0Struct
   > {
     let result = super.tryCall(
       "getStrategyParamsById",
       "getStrategyParamsById(bytes4):((uint8,string,address,address))",
-      [ethereum.Value.fromFixedBytes(_strategySelector)]
+      [ethereum.Value.fromFixedBytes(_strategyId)]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -789,7 +787,7 @@ export class SetStrategyApprovalStateCall__Inputs {
     this._call = call;
   }
 
-  get _strategySelector(): Bytes {
+  get _strategyId(): Bytes {
     return this._call.inputValues[0].value.toBytes();
   }
 
@@ -823,7 +821,7 @@ export class SetStrategyParamsCall__Inputs {
     this._call = call;
   }
 
-  get _strategySelector(): Bytes {
+  get _strategyId(): Bytes {
     return this._call.inputValues[0].value.toBytes();
   }
 

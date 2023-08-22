@@ -1,7 +1,7 @@
 import {
     StrategyApprovalUpdated as StrategyApprovalUpdatedEvent,
     StrategyParamsUpdated as StrategyParamsUpdatedEvent,
-} from "../generated/Registrar/Registrar"
+} from "../generated/LocalRegistrar/LocalRegistrar"
 import { Strategy } from "../generated/schema"
 import { StrategyApprovalState } from "./helpers"
 

@@ -180,11 +180,11 @@ dataSources:
           handler: handleTransactionConfirmationRevoked
       file: ./src/endowment-multi-sig.ts
   - kind: ethereum
-    name: Registrar
+    name: LocalRegistrar
     network: mumbai
     source:
       address: "0xe1215B3e150dd298d787D41a4879959D30Dc3939"
-      abi: Registrar
+      abi: LocalRegistrar
       startBlock: 38267261
     mapping:
       kind: ethereum/events
@@ -193,14 +193,14 @@ dataSources:
       entities:
         - Strategy
       abis:
-        - name: Registrar
-          file: ./abis/Registrar.json
+        - name: LocalRegistrar
+          file: ./abis/LocalRegistrar.json
       eventHandlers:
         - event: StrategyApprovalUpdated(bytes4,uint8)
           handler: handleStrategyApprovalUpdated
         - event: StrategyParamsUpdated(bytes4,string,address,address,uint8)
           handler: handleStrategyParamsUpdated
-      file: ./src/registrar.ts
+      file: ./src/local-registrar.ts
   - kind: ethereum
     name: Vault
     network: mumbai

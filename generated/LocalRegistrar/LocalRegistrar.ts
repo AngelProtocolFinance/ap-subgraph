@@ -208,7 +208,7 @@ export class TokenAcceptanceUpdated__Params {
   }
 }
 
-export class Registrar__getFeeSettingsByFeeTypeResultValue0Struct extends ethereum.Tuple {
+export class LocalRegistrar__getFeeSettingsByFeeTypeResultValue0Struct extends ethereum.Tuple {
   get payoutAddress(): Address {
     return this[0].toAddress();
   }
@@ -218,7 +218,7 @@ export class Registrar__getFeeSettingsByFeeTypeResultValue0Struct extends ethere
   }
 }
 
-export class Registrar__getRebalanceParamsResultValue0Struct extends ethereum.Tuple {
+export class LocalRegistrar__getRebalanceParamsResultValue0Struct extends ethereum.Tuple {
   get rebalanceLiquidProfits(): boolean {
     return this[0].toBoolean();
   }
@@ -244,7 +244,7 @@ export class Registrar__getRebalanceParamsResultValue0Struct extends ethereum.Tu
   }
 }
 
-export class Registrar__getStrategyParamsByIdResultValue0Struct extends ethereum.Tuple {
+export class LocalRegistrar__getStrategyParamsByIdResultValue0Struct extends ethereum.Tuple {
   get approvalState(): i32 {
     return this[0].toI32();
   }
@@ -262,73 +262,7 @@ export class Registrar__getStrategyParamsByIdResultValue0Struct extends ethereum
   }
 }
 
-export class Registrar__queryConfigResultValue0Struct extends ethereum.Tuple {
-  get accountsContract(): Address {
-    return this[0].toAddress();
-  }
-
-  get apTeamMultisig(): Address {
-    return this[1].toAddress();
-  }
-
-  get treasury(): Address {
-    return this[2].toAddress();
-  }
-
-  get indexFundContract(): Address {
-    return this[3].toAddress();
-  }
-
-  get haloToken(): Address {
-    return this[4].toAddress();
-  }
-
-  get govContract(): Address {
-    return this[5].toAddress();
-  }
-
-  get fundraisingContract(): Address {
-    return this[6].toAddress();
-  }
-
-  get uniswapRouter(): Address {
-    return this[7].toAddress();
-  }
-
-  get uniswapFactory(): Address {
-    return this[8].toAddress();
-  }
-
-  get multisigFactory(): Address {
-    return this[9].toAddress();
-  }
-
-  get multisigEmitter(): Address {
-    return this[10].toAddress();
-  }
-
-  get charityApplications(): Address {
-    return this[11].toAddress();
-  }
-
-  get proxyAdmin(): Address {
-    return this[12].toAddress();
-  }
-
-  get usdcAddress(): Address {
-    return this[13].toAddress();
-  }
-
-  get wMaticAddress(): Address {
-    return this[14].toAddress();
-  }
-
-  get gasFwdFactory(): Address {
-    return this[15].toAddress();
-  }
-}
-
-export class Registrar__queryNetworkConnectionResultResponseStruct extends ethereum.Tuple {
+export class LocalRegistrar__queryNetworkConnectionResultResponseStruct extends ethereum.Tuple {
   get chainId(): BigInt {
     return this[0].toBigInt();
   }
@@ -350,9 +284,9 @@ export class Registrar__queryNetworkConnectionResultResponseStruct extends ether
   }
 }
 
-export class Registrar extends ethereum.SmartContract {
-  static bind(address: Address): Registrar {
-    return new Registrar("Registrar", address);
+export class LocalRegistrar extends ethereum.SmartContract {
+  static bind(address: Address): LocalRegistrar {
+    return new LocalRegistrar("LocalRegistrar", address);
   }
 
   getAccountsContractAddressByChain(_targetChain: string): string {
@@ -382,21 +316,23 @@ export class Registrar extends ethereum.SmartContract {
 
   getFeeSettingsByFeeType(
     _feeType: i32
-  ): Registrar__getFeeSettingsByFeeTypeResultValue0Struct {
+  ): LocalRegistrar__getFeeSettingsByFeeTypeResultValue0Struct {
     let result = super.call(
       "getFeeSettingsByFeeType",
       "getFeeSettingsByFeeType(uint8):((address,uint256))",
       [ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_feeType))]
     );
 
-    return changetype<Registrar__getFeeSettingsByFeeTypeResultValue0Struct>(
-      result[0].toTuple()
-    );
+    return changetype<
+      LocalRegistrar__getFeeSettingsByFeeTypeResultValue0Struct
+    >(result[0].toTuple());
   }
 
   try_getFeeSettingsByFeeType(
     _feeType: i32
-  ): ethereum.CallResult<Registrar__getFeeSettingsByFeeTypeResultValue0Struct> {
+  ): ethereum.CallResult<
+    LocalRegistrar__getFeeSettingsByFeeTypeResultValue0Struct
+  > {
     let result = super.tryCall(
       "getFeeSettingsByFeeType",
       "getFeeSettingsByFeeType(uint8):((address,uint256))",
@@ -407,7 +343,7 @@ export class Registrar extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      changetype<Registrar__getFeeSettingsByFeeTypeResultValue0Struct>(
+      changetype<LocalRegistrar__getFeeSettingsByFeeTypeResultValue0Struct>(
         value[0].toTuple()
       )
     );
@@ -436,20 +372,20 @@ export class Registrar extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getRebalanceParams(): Registrar__getRebalanceParamsResultValue0Struct {
+  getRebalanceParams(): LocalRegistrar__getRebalanceParamsResultValue0Struct {
     let result = super.call(
       "getRebalanceParams",
       "getRebalanceParams():((bool,uint32,uint32,bool,uint32,uint32))",
       []
     );
 
-    return changetype<Registrar__getRebalanceParamsResultValue0Struct>(
+    return changetype<LocalRegistrar__getRebalanceParamsResultValue0Struct>(
       result[0].toTuple()
     );
   }
 
   try_getRebalanceParams(): ethereum.CallResult<
-    Registrar__getRebalanceParamsResultValue0Struct
+    LocalRegistrar__getRebalanceParamsResultValue0Struct
   > {
     let result = super.tryCall(
       "getRebalanceParams",
@@ -461,7 +397,7 @@ export class Registrar extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      changetype<Registrar__getRebalanceParamsResultValue0Struct>(
+      changetype<LocalRegistrar__getRebalanceParamsResultValue0Struct>(
         value[0].toTuple()
       )
     );
@@ -492,21 +428,23 @@ export class Registrar extends ethereum.SmartContract {
 
   getStrategyParamsById(
     _strategyId: Bytes
-  ): Registrar__getStrategyParamsByIdResultValue0Struct {
+  ): LocalRegistrar__getStrategyParamsByIdResultValue0Struct {
     let result = super.call(
       "getStrategyParamsById",
       "getStrategyParamsById(bytes4):((uint8,string,address,address))",
       [ethereum.Value.fromFixedBytes(_strategyId)]
     );
 
-    return changetype<Registrar__getStrategyParamsByIdResultValue0Struct>(
+    return changetype<LocalRegistrar__getStrategyParamsByIdResultValue0Struct>(
       result[0].toTuple()
     );
   }
 
   try_getStrategyParamsById(
     _strategyId: Bytes
-  ): ethereum.CallResult<Registrar__getStrategyParamsByIdResultValue0Struct> {
+  ): ethereum.CallResult<
+    LocalRegistrar__getStrategyParamsByIdResultValue0Struct
+  > {
     let result = super.tryCall(
       "getStrategyParamsById",
       "getStrategyParamsById(bytes4):((uint8,string,address,address))",
@@ -517,7 +455,7 @@ export class Registrar extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      changetype<Registrar__getStrategyParamsByIdResultValue0Struct>(
+      changetype<LocalRegistrar__getStrategyParamsByIdResultValue0Struct>(
         value[0].toTuple()
       )
     );
@@ -617,91 +555,24 @@ export class Registrar extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  owner(): Address {
-    let result = super.call("owner", "owner():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_owner(): ethereum.CallResult<Address> {
-    let result = super.tryCall("owner", "owner():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  queryAllStrategies(): Array<Bytes> {
-    let result = super.call(
-      "queryAllStrategies",
-      "queryAllStrategies():(bytes4[])",
-      []
-    );
-
-    return result[0].toBytesArray();
-  }
-
-  try_queryAllStrategies(): ethereum.CallResult<Array<Bytes>> {
-    let result = super.tryCall(
-      "queryAllStrategies",
-      "queryAllStrategies():(bytes4[])",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytesArray());
-  }
-
-  queryConfig(): Registrar__queryConfigResultValue0Struct {
-    let result = super.call(
-      "queryConfig",
-      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address))",
-      []
-    );
-
-    return changetype<Registrar__queryConfigResultValue0Struct>(
-      result[0].toTuple()
-    );
-  }
-
-  try_queryConfig(): ethereum.CallResult<
-    Registrar__queryConfigResultValue0Struct
-  > {
-    let result = super.tryCall(
-      "queryConfig",
-      "queryConfig():((address,address,address,address,address,address,address,address,address,address,address,address,address,address,address,address))",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      changetype<Registrar__queryConfigResultValue0Struct>(value[0].toTuple())
-    );
-  }
-
   queryNetworkConnection(
     networkName: string
-  ): Registrar__queryNetworkConnectionResultResponseStruct {
+  ): LocalRegistrar__queryNetworkConnectionResultResponseStruct {
     let result = super.call(
       "queryNetworkConnection",
       "queryNetworkConnection(string):((uint256,address,address,address,address))",
       [ethereum.Value.fromString(networkName)]
     );
 
-    return changetype<Registrar__queryNetworkConnectionResultResponseStruct>(
-      result[0].toTuple()
-    );
+    return changetype<
+      LocalRegistrar__queryNetworkConnectionResultResponseStruct
+    >(result[0].toTuple());
   }
 
   try_queryNetworkConnection(
     networkName: string
   ): ethereum.CallResult<
-    Registrar__queryNetworkConnectionResultResponseStruct
+    LocalRegistrar__queryNetworkConnectionResultResponseStruct
   > {
     let result = super.tryCall(
       "queryNetworkConnection",
@@ -713,33 +584,10 @@ export class Registrar extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      changetype<Registrar__queryNetworkConnectionResultResponseStruct>(
+      changetype<LocalRegistrar__queryNetworkConnectionResultResponseStruct>(
         value[0].toTuple()
       )
     );
-  }
-
-  queryTokenPriceFeed(token: Address): Address {
-    let result = super.call(
-      "queryTokenPriceFeed",
-      "queryTokenPriceFeed(address):(address)",
-      [ethereum.Value.fromAddress(token)]
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_queryTokenPriceFeed(token: Address): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "queryTokenPriceFeed",
-      "queryTokenPriceFeed(address):(address)",
-      [ethereum.Value.fromAddress(token)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   thisChain(): string {
@@ -1104,104 +952,6 @@ export class SetVaultOperatorApprovedCall__Outputs {
   }
 }
 
-export class UpdateConfigCall extends ethereum.Call {
-  get inputs(): UpdateConfigCall__Inputs {
-    return new UpdateConfigCall__Inputs(this);
-  }
-
-  get outputs(): UpdateConfigCall__Outputs {
-    return new UpdateConfigCall__Outputs(this);
-  }
-}
-
-export class UpdateConfigCall__Inputs {
-  _call: UpdateConfigCall;
-
-  constructor(call: UpdateConfigCall) {
-    this._call = call;
-  }
-
-  get details(): UpdateConfigCallDetailsStruct {
-    return changetype<UpdateConfigCallDetailsStruct>(
-      this._call.inputValues[0].value.toTuple()
-    );
-  }
-}
-
-export class UpdateConfigCall__Outputs {
-  _call: UpdateConfigCall;
-
-  constructor(call: UpdateConfigCall) {
-    this._call = call;
-  }
-}
-
-export class UpdateConfigCallDetailsStruct extends ethereum.Tuple {
-  get accountsContract(): Address {
-    return this[0].toAddress();
-  }
-
-  get apTeamMultisig(): Address {
-    return this[1].toAddress();
-  }
-
-  get treasury(): Address {
-    return this[2].toAddress();
-  }
-
-  get indexFundContract(): Address {
-    return this[3].toAddress();
-  }
-
-  get haloToken(): Address {
-    return this[4].toAddress();
-  }
-
-  get govContract(): Address {
-    return this[5].toAddress();
-  }
-
-  get fundraisingContract(): Address {
-    return this[6].toAddress();
-  }
-
-  get uniswapRouter(): Address {
-    return this[7].toAddress();
-  }
-
-  get uniswapFactory(): Address {
-    return this[8].toAddress();
-  }
-
-  get multisigFactory(): Address {
-    return this[9].toAddress();
-  }
-
-  get multisigEmitter(): Address {
-    return this[10].toAddress();
-  }
-
-  get charityApplications(): Address {
-    return this[11].toAddress();
-  }
-
-  get proxyAdmin(): Address {
-    return this[12].toAddress();
-  }
-
-  get usdcAddress(): Address {
-    return this[13].toAddress();
-  }
-
-  get wMaticAddress(): Address {
-    return this[14].toAddress();
-  }
-
-  get gasFwdFactory(): Address {
-    return this[15].toAddress();
-  }
-}
-
 export class UpdateNetworkConnectionsCall extends ethereum.Call {
   get inputs(): UpdateNetworkConnectionsCall__Inputs {
     return new UpdateNetworkConnectionsCall__Inputs(this);
@@ -1229,8 +979,8 @@ export class UpdateNetworkConnectionsCall__Inputs {
     );
   }
 
-  get action(): string {
-    return this._call.inputValues[2].value.toString();
+  get action(): i32 {
+    return this._call.inputValues[2].value.toI32();
   }
 }
 
@@ -1261,131 +1011,5 @@ export class UpdateNetworkConnectionsCallNetworkInfoStruct extends ethereum.Tupl
 
   get refundAddr(): Address {
     return this[4].toAddress();
-  }
-}
-
-export class UpdateNetworkConnections1Call extends ethereum.Call {
-  get inputs(): UpdateNetworkConnections1Call__Inputs {
-    return new UpdateNetworkConnections1Call__Inputs(this);
-  }
-
-  get outputs(): UpdateNetworkConnections1Call__Outputs {
-    return new UpdateNetworkConnections1Call__Outputs(this);
-  }
-}
-
-export class UpdateNetworkConnections1Call__Inputs {
-  _call: UpdateNetworkConnections1Call;
-
-  constructor(call: UpdateNetworkConnections1Call) {
-    this._call = call;
-  }
-
-  get networkName(): string {
-    return this._call.inputValues[0].value.toString();
-  }
-
-  get networkInfo(): UpdateNetworkConnections1CallNetworkInfoStruct {
-    return changetype<UpdateNetworkConnections1CallNetworkInfoStruct>(
-      this._call.inputValues[1].value.toTuple()
-    );
-  }
-
-  get action(): i32 {
-    return this._call.inputValues[2].value.toI32();
-  }
-}
-
-export class UpdateNetworkConnections1Call__Outputs {
-  _call: UpdateNetworkConnections1Call;
-
-  constructor(call: UpdateNetworkConnections1Call) {
-    this._call = call;
-  }
-}
-
-export class UpdateNetworkConnections1CallNetworkInfoStruct extends ethereum.Tuple {
-  get chainId(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get router(): Address {
-    return this[1].toAddress();
-  }
-
-  get axelarGateway(): Address {
-    return this[2].toAddress();
-  }
-
-  get gasReceiver(): Address {
-    return this[3].toAddress();
-  }
-
-  get refundAddr(): Address {
-    return this[4].toAddress();
-  }
-}
-
-export class UpdateOwnerCall extends ethereum.Call {
-  get inputs(): UpdateOwnerCall__Inputs {
-    return new UpdateOwnerCall__Inputs(this);
-  }
-
-  get outputs(): UpdateOwnerCall__Outputs {
-    return new UpdateOwnerCall__Outputs(this);
-  }
-}
-
-export class UpdateOwnerCall__Inputs {
-  _call: UpdateOwnerCall;
-
-  constructor(call: UpdateOwnerCall) {
-    this._call = call;
-  }
-
-  get newOwner(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class UpdateOwnerCall__Outputs {
-  _call: UpdateOwnerCall;
-
-  constructor(call: UpdateOwnerCall) {
-    this._call = call;
-  }
-}
-
-export class UpdateTokenPriceFeedCall extends ethereum.Call {
-  get inputs(): UpdateTokenPriceFeedCall__Inputs {
-    return new UpdateTokenPriceFeedCall__Inputs(this);
-  }
-
-  get outputs(): UpdateTokenPriceFeedCall__Outputs {
-    return new UpdateTokenPriceFeedCall__Outputs(this);
-  }
-}
-
-export class UpdateTokenPriceFeedCall__Inputs {
-  _call: UpdateTokenPriceFeedCall;
-
-  constructor(call: UpdateTokenPriceFeedCall) {
-    this._call = call;
-  }
-
-  get token(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get priceFeed(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-}
-
-export class UpdateTokenPriceFeedCall__Outputs {
-  _call: UpdateTokenPriceFeedCall;
-
-  constructor(call: UpdateTokenPriceFeedCall) {
-    this._call = call;
   }
 }

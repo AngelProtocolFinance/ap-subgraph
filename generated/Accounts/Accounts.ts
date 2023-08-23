@@ -1277,120 +1277,88 @@ export class Accounts__queryEndowmentDetailsResultValue0Struct extends ethereum.
     return this[7].toBigInt();
   }
 
-  get rebalance(): Accounts__queryEndowmentDetailsResultValue0RebalanceStruct {
-    return changetype<
-      Accounts__queryEndowmentDetailsResultValue0RebalanceStruct
-    >(this[8].toTuple());
-  }
-
   get proposalLink(): BigInt {
-    return this[9].toBigInt();
+    return this[8].toBigInt();
   }
 
   get multisig(): Address {
-    return this[10].toAddress();
+    return this[9].toAddress();
   }
 
   get dao(): Address {
-    return this[11].toAddress();
+    return this[10].toAddress();
   }
 
   get donationMatch(): Address {
-    return this[12].toAddress();
+    return this[11].toAddress();
   }
 
   get donationMatchActive(): boolean {
-    return this[13].toBoolean();
+    return this[12].toBoolean();
   }
 
   get allowlistedBeneficiaries(): Array<Address> {
-    return this[14].toAddressArray();
+    return this[13].toAddressArray();
   }
 
   get allowlistedContributors(): Array<Address> {
-    return this[15].toAddressArray();
+    return this[14].toAddressArray();
   }
 
   get maturityAllowlist(): Array<Address> {
-    return this[16].toAddressArray();
+    return this[15].toAddressArray();
   }
 
   get earlyLockedWithdrawFee(): Accounts__queryEndowmentDetailsResultValue0EarlyLockedWithdrawFeeStruct {
     return changetype<
       Accounts__queryEndowmentDetailsResultValue0EarlyLockedWithdrawFeeStruct
-    >(this[17].toTuple());
+    >(this[16].toTuple());
   }
 
   get withdrawFee(): Accounts__queryEndowmentDetailsResultValue0WithdrawFeeStruct {
     return changetype<
       Accounts__queryEndowmentDetailsResultValue0WithdrawFeeStruct
-    >(this[18].toTuple());
+    >(this[17].toTuple());
   }
 
   get depositFee(): Accounts__queryEndowmentDetailsResultValue0DepositFeeStruct {
     return changetype<
       Accounts__queryEndowmentDetailsResultValue0DepositFeeStruct
-    >(this[19].toTuple());
+    >(this[18].toTuple());
   }
 
   get balanceFee(): Accounts__queryEndowmentDetailsResultValue0BalanceFeeStruct {
     return changetype<
       Accounts__queryEndowmentDetailsResultValue0BalanceFeeStruct
-    >(this[20].toTuple());
+    >(this[19].toTuple());
   }
 
   get settingsController(): Accounts__queryEndowmentDetailsResultValue0SettingsControllerStruct {
     return changetype<
       Accounts__queryEndowmentDetailsResultValue0SettingsControllerStruct
-    >(this[21].toTuple());
+    >(this[20].toTuple());
   }
 
   get parent(): BigInt {
-    return this[22].toBigInt();
+    return this[21].toBigInt();
   }
 
   get ignoreUserSplits(): boolean {
-    return this[23].toBoolean();
+    return this[22].toBoolean();
   }
 
   get splitToLiquid(): Accounts__queryEndowmentDetailsResultValue0SplitToLiquidStruct {
     return changetype<
       Accounts__queryEndowmentDetailsResultValue0SplitToLiquidStruct
-    >(this[24].toTuple());
+    >(this[23].toTuple());
   }
 
   get referralId(): BigInt {
-    return this[25].toBigInt();
+    return this[24].toBigInt();
   }
 
   get gasFwd(): Address {
-    return this[26].toAddress();
-  }
-}
-
-export class Accounts__queryEndowmentDetailsResultValue0RebalanceStruct extends ethereum.Tuple {
-  get rebalanceLiquidProfits(): boolean {
-    return this[0].toBoolean();
-  }
-
-  get lockedRebalanceToLiquid(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get interestDistribution(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get lockedPrincipleToLiquid(): boolean {
-    return this[3].toBoolean();
-  }
-
-  get principleDistribution(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get basis(): BigInt {
-    return this[5].toBigInt();
+    return this[25].toAddress();
   }
 }
 
@@ -2061,7 +2029,7 @@ export class Accounts extends ethereum.SmartContract {
   ): Accounts__queryEndowmentDetailsResultValue0Struct {
     let result = super.call(
       "queryEndowmentDetails",
-      "queryEndowmentDetails(uint32):((address,string,uint256[],uint8,uint8,string,string,uint256,(bool,uint32,uint32,bool,uint32,uint32),uint256,address,address,address,bool,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256,address))",
+      "queryEndowmentDetails(uint32):((address,string,uint256[],uint8,uint8,string,string,uint256,uint256,address,address,address,bool,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256,address))",
       [ethereum.Value.fromUnsignedBigInt(id)]
     );
 
@@ -2075,7 +2043,7 @@ export class Accounts extends ethereum.SmartContract {
   ): ethereum.CallResult<Accounts__queryEndowmentDetailsResultValue0Struct> {
     let result = super.tryCall(
       "queryEndowmentDetails",
-      "queryEndowmentDetails(uint32):((address,string,uint256[],uint8,uint8,string,string,uint256,(bool,uint32,uint32,bool,uint32,uint32),uint256,address,address,address,bool,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256,address))",
+      "queryEndowmentDetails(uint32):((address,string,uint256[],uint8,uint8,string,string,uint256,uint256,address,address,address,bool,address[],address[],address[],(address,uint256),(address,uint256),(address,uint256),(address,uint256),((bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256)),(bool,(address,uint256))),uint32,bool,(uint256,uint256,uint256),uint256,address))",
       [ethereum.Value.fromUnsignedBigInt(id)]
     );
     if (result.reverted) {
@@ -3146,6 +3114,82 @@ export class ManageAllowancesCall__Outputs {
   }
 }
 
+export class RevokeDelegateCall extends ethereum.Call {
+  get inputs(): RevokeDelegateCall__Inputs {
+    return new RevokeDelegateCall__Inputs(this);
+  }
+
+  get outputs(): RevokeDelegateCall__Outputs {
+    return new RevokeDelegateCall__Outputs(this);
+  }
+}
+
+export class RevokeDelegateCall__Inputs {
+  _call: RevokeDelegateCall;
+
+  constructor(call: RevokeDelegateCall) {
+    this._call = call;
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get setting(): i32 {
+    return this._call.inputValues[1].value.toI32();
+  }
+}
+
+export class RevokeDelegateCall__Outputs {
+  _call: RevokeDelegateCall;
+
+  constructor(call: RevokeDelegateCall) {
+    this._call = call;
+  }
+}
+
+export class SetDelegateCall extends ethereum.Call {
+  get inputs(): SetDelegateCall__Inputs {
+    return new SetDelegateCall__Inputs(this);
+  }
+
+  get outputs(): SetDelegateCall__Outputs {
+    return new SetDelegateCall__Outputs(this);
+  }
+}
+
+export class SetDelegateCall__Inputs {
+  _call: SetDelegateCall;
+
+  constructor(call: SetDelegateCall) {
+    this._call = call;
+  }
+
+  get id(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get setting(): i32 {
+    return this._call.inputValues[1].value.toI32();
+  }
+
+  get delegateAddress(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get delegateExpiry(): BigInt {
+    return this._call.inputValues[3].value.toBigInt();
+  }
+}
+
+export class SetDelegateCall__Outputs {
+  _call: SetDelegateCall;
+
+  constructor(call: SetDelegateCall) {
+    this._call = call;
+  }
+}
+
 export class SpendAllowanceCall extends ethereum.Call {
   get inputs(): SpendAllowanceCall__Inputs {
     return new SpendAllowanceCall__Inputs(this);
@@ -3594,52 +3638,6 @@ export class UpdateDafApprovedEndowmentsCall__Outputs {
   _call: UpdateDafApprovedEndowmentsCall;
 
   constructor(call: UpdateDafApprovedEndowmentsCall) {
-    this._call = call;
-  }
-}
-
-export class UpdateDelegateCall extends ethereum.Call {
-  get inputs(): UpdateDelegateCall__Inputs {
-    return new UpdateDelegateCall__Inputs(this);
-  }
-
-  get outputs(): UpdateDelegateCall__Outputs {
-    return new UpdateDelegateCall__Outputs(this);
-  }
-}
-
-export class UpdateDelegateCall__Inputs {
-  _call: UpdateDelegateCall;
-
-  constructor(call: UpdateDelegateCall) {
-    this._call = call;
-  }
-
-  get id(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get setting(): i32 {
-    return this._call.inputValues[1].value.toI32();
-  }
-
-  get action(): i32 {
-    return this._call.inputValues[2].value.toI32();
-  }
-
-  get delegateAddress(): Address {
-    return this._call.inputValues[3].value.toAddress();
-  }
-
-  get delegateExpiry(): BigInt {
-    return this._call.inputValues[4].value.toBigInt();
-  }
-}
-
-export class UpdateDelegateCall__Outputs {
-  _call: UpdateDelegateCall;
-
-  constructor(call: UpdateDelegateCall) {
     this._call = call;
   }
 }
@@ -4263,38 +4261,6 @@ export class UpdateEndowmentDetailsCallDetailsStruct extends ethereum.Tuple {
 
   get image(): string {
     return this[5].toString();
-  }
-
-  get rebalance(): UpdateEndowmentDetailsCallDetailsRebalanceStruct {
-    return changetype<UpdateEndowmentDetailsCallDetailsRebalanceStruct>(
-      this[6].toTuple()
-    );
-  }
-}
-
-export class UpdateEndowmentDetailsCallDetailsRebalanceStruct extends ethereum.Tuple {
-  get rebalanceLiquidProfits(): boolean {
-    return this[0].toBoolean();
-  }
-
-  get lockedRebalanceToLiquid(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get interestDistribution(): BigInt {
-    return this[2].toBigInt();
-  }
-
-  get lockedPrincipleToLiquid(): boolean {
-    return this[3].toBoolean();
-  }
-
-  get principleDistribution(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get basis(): BigInt {
-    return this[5].toBigInt();
   }
 }
 

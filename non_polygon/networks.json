@@ -1,0 +1,12 @@
+{
+    "goerli": {
+        "LocalRegistrar": {
+            "address": "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5",
+            "startBlock": 9384610
+        },
+        "VaultEmitter": {
+            "address": "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5",
+            "startBlock": 1384600
+        }
+    }
+}

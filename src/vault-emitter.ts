@@ -1,22 +1,39 @@
 import { BigInt } from "@graphprotocol/graph-ts"
 import {
     VaultConfigUpdated as VaultConfigUpdatedEvent,
+    VaultCreated as VaultCreatedEvent,
     Deposit as DepositEvent,
     Redeem as RedeemEvent,
-} from "../generated/Vault/Vault"
-import { Endowment, Strategy, Vault, VaultShare } from "../generated/schema"
+} from "../generated/VaultEmitter/VaultEmitter"
+import { Strategy, Vault, VaultShare } from "../generated/schema"
 import { VaultType } from "./helpers"
 
+export function handleVaultCreated(event: VaultCreatedEvent): void {
+    const strategy = Strategy.load(event.params.config.strategyId)
+    if (strategy == null) {
+        return
+    }
+
+    const vault = new Vault(event.params.vault)
+    vault.totalShares = BigInt.zero()
+
+    vault.type =
+        event.params.config.vaultType == VaultType.Locked ? "Locked" : "Liquid"
+    vault.strategy = strategy.id
+    vault.address = event.params.config.strategy
+    vault.baseToken = event.params.config.baseToken
+    vault.yieldToken = event.params.config.yieldToken
+}
+
 export function handleVaultConfigUpdated(event: VaultConfigUpdatedEvent): void {
-    const strategy = Strategy.load(event.params.config.strategySelector)
+    const strategy = Strategy.load(event.params.config.strategyId)
     if (strategy == null) {
         return
     }
 
     let vault = Vault.load(event.params.vault)
     if (vault == null) {
-        vault = new Vault(event.params.vault)
-        vault.totalShares = BigInt.zero()
+        return
     }
 
     vault.type =
@@ -37,10 +54,6 @@ export function handleDeposit(event: DepositEvent): void {
         vaultShare = new VaultShare(vault.id.toHex() + endowId)
         vaultShare.vault = vault.id
         vaultShare.endowmentId = endowId
-        const endowment = Endowment.load(endowId)
-        if (endowment != null) {
-            vaultShare.endowment = endowId
-        }
         vaultShare.deposited = BigInt.zero()
         vaultShare.shares = BigInt.zero()
     }

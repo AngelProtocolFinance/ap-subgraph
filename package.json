@@ -4,7 +4,7 @@
   "scripts": {
     "codegen": "graph codegen ./polygon/subgraph.yaml && graph codegen ./non_polygon/subgraph.yaml",
     "build": "graph build ./polygon/subgraph.yaml && graph build ./non_polygon/subgraph.yaml --network-file ./non_polygon/networks.json --network goerli",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ angel-giving ./polygon/subgraph.yaml && graph deploy --node https://api.studio.thegraph.com/deploy/ angel-giving-goerli ./non_polygon/subgraph.yaml --network-file ./non_polygon/networks.json --network goerli",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ angel-giving ./polygon/subgraph.yaml",
     "create-local": "graph create --node http://localhost:8020/ angel-giving",
     "remove-local": "graph remove --node http://localhost:8020/ angel-giving",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 angel-giving",

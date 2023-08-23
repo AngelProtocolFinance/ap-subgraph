@@ -6,9 +6,9 @@ dataSources:
     name: Accounts
     network: mumbai
     source:
-      address: "0x232A7A490290978D2610f077CC5bcc182Ae47034"
+      address: "0xf04B21CAF20A131588a3B577BB7AD6c8b37b4326"
       abi: Accounts
-      startBlock: 38587615
+      startBlock: 39305168
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -43,9 +43,9 @@ dataSources:
     name: APTeamMultiSig
     network: mumbai
     source:
-      address: "0x58F5663E1029F85Ee77b1AD08241d9e626fa4AA9"
+      address: "0x9fb2Fe98029D760167E74115B09bab97124EbC7E"
       abi: APTeamMultiSig
-      startBlock: 38588293
+      startBlock: 39305147
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -87,9 +87,9 @@ dataSources:
     name: CharityApplications
     network: mumbai
     source:
-      address: "0x34742B1297AFc4E0F08b6511133091B53C3DF427"
+      address: "0x9f4F6436E351Fc04731ac522Ab90C5C1a3a8FDF4"
       abi: CharityApplications
-      startBlock: 38587561
+      startBlock: 39305227
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -141,9 +141,9 @@ dataSources:
     name: EndowmentMultiSigEmitter
     network: mumbai
     source:
-      address: "0xDA1a1113c6768768A510Aa2C1F3247CAA9F17d20"
+      address: "0x083795B5ad3220afe41C0Ff940A11a074e130f22"
       abi: EndowmentMultiSigEmitter
-      startBlock: 38588196
+      startBlock: 39305247
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -183,9 +183,9 @@ dataSources:
     name: Registrar
     network: mumbai
     source:
-      address: "0xe1215B3e150dd298d787D41a4879959D30Dc3939"
+      address: "0xF4A06771BFCADf6B750e92281E19e8d50455763a"
       abi: Registrar
-      startBlock: 38267261
+      startBlock: 39305153
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -205,9 +205,9 @@ dataSources:
     name: VaultEmitter
     network: mumbai
     source:
-      address: "0xe1215B3e150dd298d787D41a4879959D30Dc3939"
+      address: "0xED43EB001680BbcD73469F8AB42bC72C8758727d"
       abi: VaultEmitter
-      startBlock: 38267261
+      startBlock: 39305252
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

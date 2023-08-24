@@ -23,6 +23,12 @@ yarn global add @graphprotocol/graph-cli
 git clone git@github.com:AngelProtocolFinance/ap-subgraph.git
 ```
 
+### 4. Enter subgraph
+
+```
+cd ap-subgraph
+```
+
 ### Install packages
 
 **npm:**
@@ -56,19 +62,13 @@ Open https://thegraph.com/studio/, connect your wallet and copy the *DEPLOY KEY*
 graph auth --studio DEPLOY_KEY
 ```
 
-#### 4. Enter subgraph
-
-```
-cd angel-giving-goerli
-```
-
-#### 5. Build subgraph
+#### 4. Build subgraph
 
 ```
 yarn codegen && yarn build
 ```
 
-#### 6. Deploy subgraph
+#### 5. Deploy subgraph
 
 ```
 yarn deploy

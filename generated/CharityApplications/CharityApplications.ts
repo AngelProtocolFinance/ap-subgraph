@@ -1588,6 +1588,29 @@ export class CharityApplications extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  isProposalConfirmed(proposalId: BigInt): boolean {
+    let result = super.call(
+      "isProposalConfirmed",
+      "isProposalConfirmed(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(proposalId)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isProposalConfirmed(proposalId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isProposalConfirmed",
+      "isProposalConfirmed(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(proposalId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   proposalConfirmations(param0: BigInt): BigInt {
     let result = super.call(
       "proposalConfirmations",

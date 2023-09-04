@@ -87,7 +87,7 @@ type ApplicationConfirmation @entity {
 type Endowment @entity(immutable: true) {
   id: String! # Endowment ID as string
   endowmentType: EndowmentType!
-  closingBeneficiary: ClosingBeneficiary! @derivedFrom(field: "closingEndowment")
+  closingBeneficiary: ClosingBeneficiary @derivedFrom(field: "closingEndowment")
   beneficiaryOf: [ClosingBeneficiary]! @derivedFrom(field: "beneficiaryEndowment")
   balancesLocked: [EndowmentTokenLocked]! @derivedFrom(field: "endowment")
   balancesLiquid: [EndowmentTokenLiquid]! @derivedFrom(field: "endowment")

@@ -98,7 +98,7 @@ type Endowment @entity(immutable: true) {
 
 type ClosingBeneficiary @entity(immutable: true) {
   id: Bytes! # tx hash
-  closingBeneficiary: Endowment
+  closingEndowment: Endowment
   beneficiaryEndowment: Endowment
   beneficiaryWallet: String
 }

@@ -1,6 +1,7 @@
 import { BigInt } from "@graphprotocol/graph-ts"
 import {
   EndowmentCreated as EndowmentCreatedEvent,
+  EndowmentClosed as EndowmentClosedEvent,
   AllowanceSpent as AllowanceSpentEvent,
   AllowanceUpdated as AllowanceUpdatedEvent,
   EndowmentDeposit as EndowmentDepositEvent,
@@ -22,6 +23,24 @@ export function handleEndowmentCreated(event: EndowmentCreatedEvent): void {
   let endow = new Endowment(event.params.endowId.toString())
   endow.endowmentType = (event.params.endowType == EndowmentType.Charity) ? "Charity" : "Normal"
   endow.save()
+}
+
+export function handleEndowmentClosed(event: EndowmentClosedEvent): void {
+  let endow = Endowment.load(event.params.endowId.toString())
+  if (endow != null) {
+    // create and save closing beneficiary record
+    let beneficiary = new ClosingBeneficiary(event.transaction.hash)
+    beneficiary.closingEndowment = endow.id
+    if (event.params.beneficiary.data.addr) {
+      const beneWallet = loadUser(event.params.beneficiary.data.addr)
+      beneficiary.beneficiaryWallet = beneWallet.id
+    }
+    if (event.params.beneficiary.data.endowId) {
+      const beneEndow = Endowment.load(event.params.beneficiary.data.endowId.toString())
+      beneficiary.beneficiaryEndowment = beneEndow.id
+    }
+    beneficiary.save()
+  }
 }
 
 export function handleEndowmentDeposit(event: EndowmentDepositEvent): void {

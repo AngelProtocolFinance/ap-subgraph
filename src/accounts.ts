@@ -30,13 +30,14 @@ export function handleEndowmentClosed(event: EndowmentClosedEvent): void {
   if (endow != null) {
     // create and save closing beneficiary record
     let beneficiary = new ClosingBeneficiary(event.transaction.hash)
+    beneficiary.closingEndowment = endow.id
     if (event.params.beneficiary.data.addr) {
       const beneWallet = loadUser(event.params.beneficiary.data.addr)
-      beneficiary.wallet = beneWallet.id
+      beneficiary.beneficiaryWallet = beneWallet.id
     }
     if (event.params.beneficiary.data.endowId) {
       const beneEndow = Endowment.load(event.params.beneficiary.data.endowId.toString())
-      beneficiary.endowment = beneEndow.id
+      beneficiary.beneficiaryEndowment = beneEndow.id
     }
     beneficiary.save()
   }

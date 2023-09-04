@@ -26,7 +26,7 @@ type User @entity(immutable: true) {
   multiSigs: [MultiSigOwner]! @derivedFrom(field: "owner")
   applicationProposals: [ApplicationProposal]! @derivedFrom(field: "proposer")
   tokenAllowances: [EndowmentTokenAllowanceSpender]! @derivedFrom(field: "spender")
-  closingBeneficiary: ClosingBeneficiary @derivedFrom(field: "wallet")
+  beneficiaryOf: [ClosingBeneficiary]! @derivedFrom(field: "beneficiaryWallet")
 }
 
 type MultiSig @entity {
@@ -87,7 +87,8 @@ type ApplicationConfirmation @entity {
 type Endowment @entity(immutable: true) {
   id: String! # Endowment ID as string
   endowmentType: EndowmentType!
-  closingBeneficiary: ClosingBeneficiary @derivedFrom(field: "endowment")
+  closingBeneficiary: ClosingBeneficiary! @derivedFrom(field: "closingEndowment")
+  beneficiaryOf: [ClosingBeneficiary]! @derivedFrom(field: "beneficiaryEndowment")
   balancesLocked: [EndowmentTokenLocked]! @derivedFrom(field: "endowment")
   balancesLiquid: [EndowmentTokenLiquid]! @derivedFrom(field: "endowment")
   deposits: [EndowmentDepositTransaction]! @derivedFrom(field: "endowment")
@@ -97,8 +98,9 @@ type Endowment @entity(immutable: true) {
 
 type ClosingBeneficiary @entity(immutable: true) {
   id: Bytes! # tx hash
-  endowment: Endowment
-  wallet: String
+  closingBeneficiary: Endowment
+  beneficiaryEndowment: Endowment
+  beneficiaryWallet: String
 }
 
 type EndowmentTokenLocked @entity {

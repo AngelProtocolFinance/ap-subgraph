@@ -75,6 +75,16 @@ export class User extends Entity {
       "tokenAllowances"
     );
   }
+
+  get beneficiaryOf(): ClosingBeneficiaryLoader {
+    return new ClosingBeneficiaryLoader(
+      "User",
+      this.get("id")!
+        .toBytes()
+        .toHexString(),
+      "beneficiaryOf"
+    );
+  }
 }
 
 export class MultiSig extends Entity {
@@ -763,6 +773,26 @@ export class Endowment extends Entity {
     this.set("endowmentType", Value.fromString(value));
   }
 
+  get closingBeneficiary(): ClosingBeneficiaryLoader {
+    return new ClosingBeneficiaryLoader(
+      "Endowment",
+      this.get("id")!
+        .toBytes()
+        .toHexString(),
+      "closingBeneficiary"
+    );
+  }
+
+  get beneficiaryOf(): ClosingBeneficiaryLoader {
+    return new ClosingBeneficiaryLoader(
+      "Endowment",
+      this.get("id")!
+        .toBytes()
+        .toHexString(),
+      "beneficiaryOf"
+    );
+  }
+
   get balancesLocked(): EndowmentTokenLockedLoader {
     return new EndowmentTokenLockedLoader(
       "Endowment",
@@ -807,6 +837,97 @@ export class Endowment extends Entity {
         .toHexString(),
       "swaps"
     );
+  }
+}
+
+export class ClosingBeneficiary extends Entity {
+  constructor(id: Bytes) {
+    super();
+    this.set("id", Value.fromBytes(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save ClosingBeneficiary entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.BYTES,
+        `Entities of type ClosingBeneficiary must have an ID of type Bytes but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("ClosingBeneficiary", id.toBytes().toHexString(), this);
+    }
+  }
+
+  static loadInBlock(id: Bytes): ClosingBeneficiary | null {
+    return changetype<ClosingBeneficiary | null>(
+      store.get_in_block("ClosingBeneficiary", id.toHexString())
+    );
+  }
+
+  static load(id: Bytes): ClosingBeneficiary | null {
+    return changetype<ClosingBeneficiary | null>(
+      store.get("ClosingBeneficiary", id.toHexString())
+    );
+  }
+
+  get id(): Bytes {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set id(value: Bytes) {
+    this.set("id", Value.fromBytes(value));
+  }
+
+  get closingEndowment(): string {
+    let value = this.get("closingEndowment");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set closingEndowment(value: string) {
+    this.set("closingEndowment", Value.fromString(value));
+  }
+
+  get beneficiaryEndowment(): string | null {
+    let value = this.get("beneficiaryEndowment");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set beneficiaryEndowment(value: string | null) {
+    if (!value) {
+      this.unset("beneficiaryEndowment");
+    } else {
+      this.set("beneficiaryEndowment", Value.fromString(<string>value));
+    }
+  }
+
+  get beneficiaryWallet(): Bytes | null {
+    let value = this.get("beneficiaryWallet");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set beneficiaryWallet(value: Bytes | null) {
+    if (!value) {
+      this.unset("beneficiaryWallet");
+    } else {
+      this.set("beneficiaryWallet", Value.fromBytes(<Bytes>value));
+    }
   }
 }
 
@@ -1550,38 +1671,24 @@ export class Strategy extends Entity {
     this.set("state", Value.fromString(value));
   }
 
-  get vaultLocked(): Bytes | null {
-    let value = this.get("vaultLocked");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
+  get vaultLocked(): VaultLoader {
+    return new VaultLoader(
+      "Strategy",
+      this.get("id")!
+        .toBytes()
+        .toHexString(),
+      "vaultLocked"
+    );
   }
 
-  set vaultLocked(value: Bytes | null) {
-    if (!value) {
-      this.unset("vaultLocked");
-    } else {
-      this.set("vaultLocked", Value.fromBytes(<Bytes>value));
-    }
-  }
-
-  get vaultLiquid(): Bytes | null {
-    let value = this.get("vaultLiquid");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set vaultLiquid(value: Bytes | null) {
-    if (!value) {
-      this.unset("vaultLiquid");
-    } else {
-      this.set("vaultLiquid", Value.fromBytes(<Bytes>value));
-    }
+  get vaultLiquid(): VaultLoader {
+    return new VaultLoader(
+      "Strategy",
+      this.get("id")!
+        .toBytes()
+        .toHexString(),
+      "vaultLiquid"
+    );
   }
 }
 
@@ -1855,6 +1962,24 @@ export class EndowmentTokenAllowanceSpenderLoader extends Entity {
   }
 }
 
+export class ClosingBeneficiaryLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): ClosingBeneficiary[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<ClosingBeneficiary[]>(value);
+  }
+}
+
 export class MultiSigTransactionLoader extends Entity {
   _entity: string;
   _field: string;
@@ -1996,6 +2121,24 @@ export class EndowmentSwapTransactionLoader extends Entity {
   load(): EndowmentSwapTransaction[] {
     let value = store.loadRelated(this._entity, this._id, this._field);
     return changetype<EndowmentSwapTransaction[]>(value);
+  }
+}
+
+export class VaultLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): Vault[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<Vault[]>(value);
   }
 }
 

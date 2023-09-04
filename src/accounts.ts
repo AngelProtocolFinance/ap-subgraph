@@ -16,6 +16,7 @@ import {
   EndowmentDepositTransaction,
   EndowmentWithdrawTransaction,
   EndowmentSwapTransaction,
+  ClosingBeneficiary,
 } from "../generated/schema"
 import { EndowmentType, VaultType, loadUser } from "./helpers"
 
@@ -37,7 +38,7 @@ export function handleEndowmentClosed(event: EndowmentClosedEvent): void {
     }
     if (event.params.beneficiary.data.endowId) {
       const beneEndow = Endowment.load(event.params.beneficiary.data.endowId.toString())
-      beneficiary.beneficiaryEndowment = beneEndow.id
+      beneficiary.beneficiaryEndowment = beneEndow!.id
     }
     beneficiary.save()
   }

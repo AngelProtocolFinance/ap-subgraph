@@ -26,7 +26,7 @@ type User @entity(immutable: true) {
   multiSigs: [MultiSigOwner]! @derivedFrom(field: "owner")
   applicationProposals: [ApplicationProposal]! @derivedFrom(field: "proposer")
   tokenAllowances: [EndowmentTokenAllowanceSpender]! @derivedFrom(field: "spender")
-  beneficiaryOf: [ClosingBeneficiary]! @derivedFrom(field: "beneficiaryWallet")
+  beneficiaryOf: [ClosingBeneficiary!]! @derivedFrom(field: "beneficiaryWallet")
 }
 
 type MultiSig @entity {
@@ -88,7 +88,7 @@ type Endowment @entity(immutable: true) {
   id: String! # Endowment ID as string
   endowmentType: EndowmentType!
   closingBeneficiary: ClosingBeneficiary @derivedFrom(field: "closingEndowment")
-  beneficiaryOf: [ClosingBeneficiary]! @derivedFrom(field: "beneficiaryEndowment")
+  beneficiaryOf: [ClosingBeneficiary!]! @derivedFrom(field: "beneficiaryEndowment")
   balancesLocked: [EndowmentTokenLocked]! @derivedFrom(field: "endowment")
   balancesLiquid: [EndowmentTokenLiquid]! @derivedFrom(field: "endowment")
   deposits: [EndowmentDepositTransaction]! @derivedFrom(field: "endowment")
@@ -100,7 +100,7 @@ type ClosingBeneficiary @entity(immutable: true) {
   id: Bytes! # tx hash
   closingEndowment: Endowment!
   beneficiaryEndowment: Endowment
-  beneficiaryWallet: String
+  beneficiaryWallet: User
 }
 
 type EndowmentTokenLocked @entity {
@@ -161,8 +161,8 @@ type Strategy @entity {
   id: Bytes! # strategy selector
   network: String!
   state: StrategyApprovalState!
-  vaultLocked: Vault
-  vaultLiquid: Vault
+  vaultLocked: Vault @derivedFrom(field: "strategy")
+  vaultLiquid: Vault @derivedFrom(field: "strategy")
 }
 
 type Vault @entity {

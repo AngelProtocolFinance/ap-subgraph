@@ -1960,6 +1960,29 @@ export class Accounts extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  isDafApprovedEndowment(id: BigInt): boolean {
+    let result = super.call(
+      "isDafApprovedEndowment",
+      "isDafApprovedEndowment(uint32):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(id)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isDafApprovedEndowment(id: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isDafApprovedEndowment",
+      "isDafApprovedEndowment(uint32):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(id)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   queryAllowance(endowId: BigInt, spender: Address, token: Address): BigInt {
     let result = super.call(
       "queryAllowance",

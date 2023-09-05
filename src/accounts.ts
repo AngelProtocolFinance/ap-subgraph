@@ -61,7 +61,13 @@ export function handleEndowmentClosed(event: EndowmentClosedEvent): void {
     }
 
     // update it w/ new beneficiary id
-    oldEndow.beneficiaryEndowment = beneEndowId.toString()
+    if (beneEndowId.gt(BigInt.zero())) {
+      oldEndow.beneficiaryEndowment = endow.beneficiaryEndowment
+      oldEndow.beneficiaryWallet = null
+    } else {
+      oldEndow.beneficiaryWallet = endow.beneficiaryWallet
+      oldEndow.beneficiaryEndowment = null
+    }
     oldEndow.save()
   }
 }

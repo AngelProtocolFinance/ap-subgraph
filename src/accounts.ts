@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, store } from "@graphprotocol/graph-ts"
 import {
   EndowmentCreated as EndowmentCreatedEvent,
   EndowmentClosed as EndowmentClosedEvent,
@@ -41,6 +41,13 @@ export function handleEndowmentClosed(event: EndowmentClosedEvent): void {
       beneficiary.beneficiaryEndowment = beneEndow!.id
     }
     beneficiary.save()
+
+    // remove existing beneficiary record in the case of re-linking
+    if (endow.closingBeneficiary != null) {
+      store.remove("ClosingBeneficiary", endow.closingBeneficiary)
+    }
+    // set beneficiary on the endowment record
+    endow.closingBeneficiary = beneficiary.id
   }
 }
 

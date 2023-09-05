@@ -76,8 +76,8 @@ export class User extends Entity {
     );
   }
 
-  get beneficiaryOf(): ClosingBeneficiaryLoader {
-    return new ClosingBeneficiaryLoader(
+  get beneficiaryOf(): EndowmentLoader {
+    return new EndowmentLoader(
       "User",
       this.get("id")!.toString(),
       "beneficiaryOf"
@@ -771,8 +771,8 @@ export class Endowment extends Entity {
     this.set("endowmentType", Value.fromString(value));
   }
 
-  get closingBeneficiary(): string | null {
-    let value = this.get("closingBeneficiary");
+  get beneficiaryEndowment(): string | null {
+    let value = this.get("beneficiaryEndowment");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -780,16 +780,33 @@ export class Endowment extends Entity {
     }
   }
 
-  set closingBeneficiary(value: string | null) {
+  set beneficiaryEndowment(value: string | null) {
     if (!value) {
-      this.unset("closingBeneficiary");
+      this.unset("beneficiaryEndowment");
     } else {
-      this.set("closingBeneficiary", Value.fromString(<string>value));
+      this.set("beneficiaryEndowment", Value.fromString(<string>value));
     }
   }
 
-  get beneficiaryOf(): ClosingBeneficiaryLoader {
-    return new ClosingBeneficiaryLoader(
+  get beneficiaryWallet(): Bytes | null {
+    let value = this.get("beneficiaryWallet");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set beneficiaryWallet(value: Bytes | null) {
+    if (!value) {
+      this.unset("beneficiaryWallet");
+    } else {
+      this.set("beneficiaryWallet", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get beneficiaryOf(): EndowmentLoader {
+    return new EndowmentLoader(
       "Endowment",
       this.get("id")!.toString(),
       "beneficiaryOf"
@@ -840,92 +857,6 @@ export class Endowment extends Entity {
         .toHexString(),
       "swaps"
     );
-  }
-}
-
-export class ClosingBeneficiary extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save ClosingBeneficiary entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type ClosingBeneficiary must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
-      );
-      store.set("ClosingBeneficiary", id.toString(), this);
-    }
-  }
-
-  static loadInBlock(id: string): ClosingBeneficiary | null {
-    return changetype<ClosingBeneficiary | null>(
-      store.get_in_block("ClosingBeneficiary", id)
-    );
-  }
-
-  static load(id: string): ClosingBeneficiary | null {
-    return changetype<ClosingBeneficiary | null>(
-      store.get("ClosingBeneficiary", id)
-    );
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get closingEndowment(): EndowmentLoader {
-    return new EndowmentLoader(
-      "ClosingBeneficiary",
-      this.get("id")!.toString(),
-      "closingEndowment"
-    );
-  }
-
-  get beneficiaryEndowment(): string | null {
-    let value = this.get("beneficiaryEndowment");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set beneficiaryEndowment(value: string | null) {
-    if (!value) {
-      this.unset("beneficiaryEndowment");
-    } else {
-      this.set("beneficiaryEndowment", Value.fromString(<string>value));
-    }
-  }
-
-  get beneficiaryWallet(): Bytes | null {
-    let value = this.get("beneficiaryWallet");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set beneficiaryWallet(value: Bytes | null) {
-    if (!value) {
-      this.unset("beneficiaryWallet");
-    } else {
-      this.set("beneficiaryWallet", Value.fromBytes(<Bytes>value));
-    }
   }
 }
 
@@ -1960,7 +1891,7 @@ export class EndowmentTokenAllowanceSpenderLoader extends Entity {
   }
 }
 
-export class ClosingBeneficiaryLoader extends Entity {
+export class EndowmentLoader extends Entity {
   _entity: string;
   _field: string;
   _id: string;
@@ -1972,9 +1903,9 @@ export class ClosingBeneficiaryLoader extends Entity {
     this._field = field;
   }
 
-  load(): ClosingBeneficiary[] {
+  load(): Endowment[] {
     let value = store.loadRelated(this._entity, this._id, this._field);
-    return changetype<ClosingBeneficiary[]>(value);
+    return changetype<Endowment[]>(value);
   }
 }
 
@@ -2119,24 +2050,6 @@ export class EndowmentSwapTransactionLoader extends Entity {
   load(): EndowmentSwapTransaction[] {
     let value = store.loadRelated(this._entity, this._id, this._field);
     return changetype<EndowmentSwapTransaction[]>(value);
-  }
-}
-
-export class EndowmentLoader extends Entity {
-  _entity: string;
-  _field: string;
-  _id: string;
-
-  constructor(entity: string, id: string, field: string) {
-    super();
-    this._entity = entity;
-    this._id = id;
-    this._field = field;
-  }
-
-  load(): Endowment[] {
-    let value = store.loadRelated(this._entity, this._id, this._field);
-    return changetype<Endowment[]>(value);
   }
 }
 

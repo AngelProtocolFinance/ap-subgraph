@@ -1,4 +1,4 @@
-import { BigInt, log, store } from "@graphprotocol/graph-ts"
+import { BigInt, log } from "@graphprotocol/graph-ts"
 import {
   AllowanceSpent as AllowanceSpentEvent,
   AllowanceUpdated as AllowanceUpdatedEvent,
@@ -9,7 +9,6 @@ import {
   TokenSwapped as TokenSwappedEvent
 } from "../generated/Accounts/Accounts"
 import {
-  ClosingBeneficiary,
   Endowment,
   EndowmentDepositTransaction,
   EndowmentSwapTransaction,
@@ -21,7 +20,6 @@ import {
 import { 
   EndowmentType,
   VaultType,
-  loadClosingBeneficiary,
   loadUser
 } from "./helpers"
 
@@ -39,15 +37,33 @@ export function handleEndowmentClosed(event: EndowmentClosedEvent): void {
     return
   }
 
-  // create and save closing beneficiary record
-  const closingBeneficiary = loadClosingBeneficiary(event.params.beneficiary.data)
-
   // set beneficiary on the endowment record
-  endow.closingBeneficiary = closingBeneficiary.id
+  const beneEndowId = event.params.beneficiary.data.endowId
+  if (beneEndowId.gt(BigInt.zero())) {
+    let beneEndow = Endowment.load(beneEndowId.toString())
+    if (beneEndow == null) {
+      log.error("Endowment with ID: '{}' does not exist", [beneEndowId.toString()])
+    }
+    endow.beneficiaryEndowment = beneEndowId.toString()
+  } else {
+    const beneWallet = loadUser(event.params.beneficiary.data.addr)
+    endow.beneficiaryWallet = beneWallet.id
+  }
   endow.save()
 
-  // for all re-linked endowments in this closing
-  relink(event.params.relinked, closingBeneficiary)
+  // re-link all endowments that had this closing one as the beneficiary
+  for (let i = 0; i < event.params.relinked.length; i++) {
+    const relinkedEndowId = event.params.relinked[i].toString()
+    let oldEndow = Endowment.load(relinkedEndowId)
+    if (oldEndow == null) {
+      log.error("Relinked Endowment with ID: '{}' does not exist", [relinkedEndowId])
+      continue
+    }
+
+    // update it w/ new beneficiary id
+    oldEndow.beneficiaryEndowment = beneEndowId.toString()
+    oldEndow.save()
+  }
 }
 
 export function handleEndowmentDeposit(event: EndowmentDepositEvent): void {
@@ -237,42 +253,6 @@ export function handleTokenSwapped(event: TokenSwappedEvent): void {
         tokenOut.amount = tokenOut.amount.plus(event.params.amountOut)
         tokenOut.save()
       }
-    }
-  }
-}
-
-
-function relink(relinkedEndows: BigInt[], closingBeneficiary: ClosingBeneficiary): void {
-  for (let i = 0; i < relinkedEndows.length; i++) {
-    const relinkedEndowId = relinkedEndows[i].toString()
-    let oldEndow = Endowment.load(relinkedEndowId)
-    if (oldEndow == null) {
-      log.error("Relinked Endowment with ID: '{}' does not exist", [relinkedEndowId])
-      continue
-    }
-
-    let oldClosingBeneficiaryId = oldEndow.closingBeneficiary
-    // update it w/ new beneficiary id
-    oldEndow.closingBeneficiary = closingBeneficiary.id
-    oldEndow.save()
-
-    // now that the entity table is updated, check if old closingBeneficiary record
-    // has any other related endowments and if not, remove it
-    if (oldClosingBeneficiaryId == null) {
-      log.error("Endowment with ID: '{}' had no previous closing beneficiary", [relinkedEndowId])
-      continue
-    }
-    oldClosingBeneficiaryId = oldClosingBeneficiaryId!
-
-    const oldClosingBeneficiary = ClosingBeneficiary.load(oldClosingBeneficiaryId)
-    if (oldClosingBeneficiary == null) {
-      log.error("ClosingBeneficiary with ID: '{}' does not exist", [oldClosingBeneficiaryId])
-      continue
-    }
-
-    const closingEndowments = oldClosingBeneficiary.closingEndowment.load()
-    if (closingEndowments.length === 0) {
-      store.remove("ClosingBeneficiary", oldClosingBeneficiary.id)
     }
   }
 }

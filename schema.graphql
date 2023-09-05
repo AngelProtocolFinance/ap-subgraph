@@ -87,7 +87,7 @@ type ApplicationConfirmation @entity {
 type Endowment @entity {
   id: String! # Endowment ID as string
   endowmentType: EndowmentType!
-  closingBeneficiary: ClosingBeneficiary @derivedFrom(field: "closingEndowment")
+  closingBeneficiary: ClosingBeneficiary
   beneficiaryOf: [ClosingBeneficiary]! @derivedFrom(field: "beneficiaryEndowment")
   balancesLocked: [EndowmentTokenLocked]! @derivedFrom(field: "endowment")
   balancesLiquid: [EndowmentTokenLiquid]! @derivedFrom(field: "endowment")
@@ -98,7 +98,7 @@ type Endowment @entity {
 
 type ClosingBeneficiary @entity {
   id: Bytes! # tx hash
-  closingEndowment: Endowment!
+  closingEndowment: [Endowment!]! @derivedFrom(field: "closingBeneficiary")
   beneficiaryEndowment: Endowment
   beneficiaryWallet: User
 }

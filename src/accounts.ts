@@ -31,7 +31,6 @@ export function handleEndowmentClosed(event: EndowmentClosedEvent): void {
   if (endow != null) {
     // create and save closing beneficiary record
     let beneficiary = new ClosingBeneficiary(event.transaction.hash)
-    beneficiary.closingEndowment = endow.id
     if (event.params.beneficiary.data.addr) {
       const beneWallet = loadUser(event.params.beneficiary.data.addr)
       beneficiary.beneficiaryWallet = beneWallet.id
@@ -49,12 +48,25 @@ export function handleEndowmentClosed(event: EndowmentClosedEvent): void {
     // for all re-linked endowments in this closing
     for (let i = 0; i < event.params.relinked.length; i++) {
       let oldEndow = Endowment.load(event.params.relinked[i].toString())
-      if (oldEndow != null) {
-        // remove their closingBeneficiary record
-        store.remove("ClosingBeneficiary", oldEndow.closingBeneficiary)
-        // and update it w/ new beneficiary id
-        oldEndow.closingBeneficiary = beneficiary.id
-        oldEndow.save()
+      if (oldEndow == null) {
+        continue
+      }
+      const oldClosingBeneficiaryId = oldEndow.closingBeneficiary
+      // update it w/ new beneficiary id
+      oldEndow.closingBeneficiary = beneficiary.id
+      oldEndow.save()
+
+      // now that the entity table is updated, check if old closingBeneficiary record
+      // has any other related endowments and if not, remove it
+      if (!oldClosingBeneficiaryId) {
+        return
+      }
+      const oldClosingBeneficiary = ClosingBeneficiary.load(oldClosingBeneficiaryId)
+      if (oldClosingBeneficiary != null) {
+        const closingEndowments = oldClosingBeneficiary.closingEndowment.load()
+        if (closingEndowments.length === 0) {
+          store.remove("ClosingBeneficiary", oldClosingBeneficiary.id.toHex())
+        }
       }
     }
   }

@@ -773,14 +773,21 @@ export class Endowment extends Entity {
     this.set("endowmentType", Value.fromString(value));
   }
 
-  get closingBeneficiary(): ClosingBeneficiaryLoader {
-    return new ClosingBeneficiaryLoader(
-      "Endowment",
-      this.get("id")!
-        .toBytes()
-        .toHexString(),
-      "closingBeneficiary"
-    );
+  get closingBeneficiary(): Bytes | null {
+    let value = this.get("closingBeneficiary");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set closingBeneficiary(value: Bytes | null) {
+    if (!value) {
+      this.unset("closingBeneficiary");
+    } else {
+      this.set("closingBeneficiary", Value.fromBytes(<Bytes>value));
+    }
   }
 
   get beneficiaryOf(): ClosingBeneficiaryLoader {
@@ -883,17 +890,12 @@ export class ClosingBeneficiary extends Entity {
     this.set("id", Value.fromBytes(value));
   }
 
-  get closingEndowment(): string {
-    let value = this.get("closingEndowment");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set closingEndowment(value: string) {
-    this.set("closingEndowment", Value.fromString(value));
+  get closingEndowment(): EndowmentLoader {
+    return new EndowmentLoader(
+      "ClosingBeneficiary",
+      this.get("id")!.toString(),
+      "closingEndowment"
+    );
   }
 
   get beneficiaryEndowment(): string | null {
@@ -2121,6 +2123,24 @@ export class EndowmentSwapTransactionLoader extends Entity {
   load(): EndowmentSwapTransaction[] {
     let value = store.loadRelated(this._entity, this._id, this._field);
     return changetype<EndowmentSwapTransaction[]>(value);
+  }
+}
+
+export class EndowmentLoader extends Entity {
+  _entity: string;
+  _field: string;
+  _id: string;
+
+  constructor(entity: string, id: string, field: string) {
+    super();
+    this._entity = entity;
+    this._id = id;
+    this._field = field;
+  }
+
+  load(): Endowment[] {
+    let value = store.loadRelated(this._entity, this._id, this._field);
+    return changetype<Endowment[]>(value);
   }
 }
 

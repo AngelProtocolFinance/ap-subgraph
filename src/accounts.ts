@@ -42,12 +42,21 @@ export function handleEndowmentClosed(event: EndowmentClosedEvent): void {
     }
     beneficiary.save()
 
-    // remove existing beneficiary record in the case of re-linking
-    if (endow.closingBeneficiary != null) {
-      store.remove("ClosingBeneficiary", endow.closingBeneficiary)
-    }
     // set beneficiary on the endowment record
     endow.closingBeneficiary = beneficiary.id
+    endow.save()
+
+    // for all re-linked endowments in this closing
+    for (let i = 0; i < event.params.relinked.length; i++) {
+      let oldEndow = Endowment.load(event.params.relinked[i].toString())
+      if (oldEndow != null) {
+        // remove their closingBeneficiary record
+        store.remove("ClosingBeneficiary", oldEndow.closingBeneficiary)
+        // and update it w/ new beneficiary id
+        oldEndow.closingBeneficiary = beneficiary.id
+        oldEndow.save()
+      }
+    }
   }
 }
 

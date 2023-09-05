@@ -84,11 +84,11 @@ type ApplicationConfirmation @entity {
 }
 
 ### Accounts - Endowment
-type Endowment @entity(immutable: true) {
+type Endowment @entity {
   id: String! # Endowment ID as string
   endowmentType: EndowmentType!
   closingBeneficiary: ClosingBeneficiary @derivedFrom(field: "closingEndowment")
-  beneficiaryOf: [ClosingBeneficiary!]! @derivedFrom(field: "beneficiaryEndowment")
+  beneficiaryOf: [ClosingBeneficiary]! @derivedFrom(field: "beneficiaryEndowment")
   balancesLocked: [EndowmentTokenLocked]! @derivedFrom(field: "endowment")
   balancesLiquid: [EndowmentTokenLiquid]! @derivedFrom(field: "endowment")
   deposits: [EndowmentDepositTransaction]! @derivedFrom(field: "endowment")
@@ -96,7 +96,7 @@ type Endowment @entity(immutable: true) {
   swaps: [EndowmentSwapTransaction]! @derivedFrom(field: "endowment")
 }
 
-type ClosingBeneficiary @entity(immutable: true) {
+type ClosingBeneficiary @entity {
   id: Bytes! # tx hash
   closingEndowment: Endowment!
   beneficiaryEndowment: Endowment

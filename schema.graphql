@@ -96,7 +96,7 @@ type Endowment @entity {
   swaps: [EndowmentSwapTransaction]! @derivedFrom(field: "endowment")
 }
 
-type ClosingBeneficiary @entity {
+type ClosingBeneficiary @entity(immutable: true) {
   id: String! # Either beneficiary Endowment ID or beneficiary wallet address
   closingEndowment: [Endowment!]! @derivedFrom(field: "closingBeneficiary")
   beneficiaryEndowment: Endowment

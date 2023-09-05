@@ -188,6 +188,10 @@ export class EndowmentClosed__Params {
       this._event.parameters[1].value.toTuple()
     );
   }
+
+  get relinked(): Array<BigInt> {
+    return this._event.parameters[2].value.toBigIntArray();
+  }
 }
 
 export class EndowmentClosedBeneficiaryStruct extends ethereum.Tuple {
@@ -1958,6 +1962,56 @@ export class Accounts extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getEndowmentBeneficiaries(id: BigInt): Array<BigInt> {
+    let result = super.call(
+      "getEndowmentBeneficiaries",
+      "getEndowmentBeneficiaries(uint32):(uint32[])",
+      [ethereum.Value.fromUnsignedBigInt(id)]
+    );
+
+    return result[0].toBigIntArray();
+  }
+
+  try_getEndowmentBeneficiaries(
+    id: BigInt
+  ): ethereum.CallResult<Array<BigInt>> {
+    let result = super.tryCall(
+      "getEndowmentBeneficiaries",
+      "getEndowmentBeneficiaries(uint32):(uint32[])",
+      [ethereum.Value.fromUnsignedBigInt(id)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
+  }
+
+  getWalletBeneficiaries(addr: Address): Array<BigInt> {
+    let result = super.call(
+      "getWalletBeneficiaries",
+      "getWalletBeneficiaries(address):(uint32[])",
+      [ethereum.Value.fromAddress(addr)]
+    );
+
+    return result[0].toBigIntArray();
+  }
+
+  try_getWalletBeneficiaries(
+    addr: Address
+  ): ethereum.CallResult<Array<BigInt>> {
+    let result = super.tryCall(
+      "getWalletBeneficiaries",
+      "getWalletBeneficiaries(address):(uint32[])",
+      [ethereum.Value.fromAddress(addr)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
   }
 
   isDafApprovedEndowment(id: BigInt): boolean {

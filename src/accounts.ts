@@ -1,24 +1,27 @@
-import { BigInt, store } from "@graphprotocol/graph-ts"
+import { BigInt, log } from "@graphprotocol/graph-ts"
 import {
-  EndowmentCreated as EndowmentCreatedEvent,
-  EndowmentClosed as EndowmentClosedEvent,
   AllowanceSpent as AllowanceSpentEvent,
   AllowanceUpdated as AllowanceUpdatedEvent,
+  EndowmentClosed as EndowmentClosedEvent,
+  EndowmentCreated as EndowmentCreatedEvent,
   EndowmentDeposit as EndowmentDepositEvent,
   EndowmentWithdraw as EndowmentWithdrawEvent,
   TokenSwapped as TokenSwappedEvent
- } from "../generated/Accounts/Accounts"
+} from "../generated/Accounts/Accounts"
 import {
   Endowment,
-  EndowmentTokenLocked,
-  EndowmentTokenLiquid,
-  EndowmentTokenAllowanceSpender,
   EndowmentDepositTransaction,
-  EndowmentWithdrawTransaction,
   EndowmentSwapTransaction,
-  ClosingBeneficiary,
+  EndowmentTokenAllowanceSpender,
+  EndowmentTokenLiquid,
+  EndowmentTokenLocked,
+  EndowmentWithdrawTransaction,
 } from "../generated/schema"
-import { EndowmentType, VaultType, loadUser } from "./helpers"
+import { 
+  EndowmentType,
+  VaultType,
+  loadUser
+} from "./helpers"
 
 export function handleEndowmentCreated(event: EndowmentCreatedEvent): void {
   let endow = new Endowment(event.params.endowId.toString())
@@ -27,36 +30,45 @@ export function handleEndowmentCreated(event: EndowmentCreatedEvent): void {
 }
 
 export function handleEndowmentClosed(event: EndowmentClosedEvent): void {
-  let endow = Endowment.load(event.params.endowId.toString())
-  if (endow != null) {
-    // create and save closing beneficiary record
-    let beneficiary = new ClosingBeneficiary(event.transaction.hash)
-    beneficiary.closingEndowment = endow.id
-    if (event.params.beneficiary.data.addr) {
-      const beneWallet = loadUser(event.params.beneficiary.data.addr)
-      beneficiary.beneficiaryWallet = beneWallet.id
-    }
-    if (event.params.beneficiary.data.endowId) {
-      const beneEndow = Endowment.load(event.params.beneficiary.data.endowId.toString())
-      beneficiary.beneficiaryEndowment = beneEndow!.id
-    }
-    beneficiary.save()
+  const endowId = event.params.endowId.toString()
+  let endow = Endowment.load(endowId)
+  if (endow == null) {
+    log.error("Endowment with ID: '{}' does not exist", [endowId])
+    return
+  }
 
-    // set beneficiary on the endowment record
-    endow.closingBeneficiary = beneficiary.id
-    endow.save()
-
-    // for all re-linked endowments in this closing
-    for (let i = 0; i < event.params.relinked.length; i++) {
-      let oldEndow = Endowment.load(event.params.relinked[i].toString())
-      if (oldEndow != null) {
-        // remove their closingBeneficiary record
-        store.remove("ClosingBeneficiary", oldEndow.closingBeneficiary)
-        // and update it w/ new beneficiary id
-        oldEndow.closingBeneficiary = beneficiary.id
-        oldEndow.save()
-      }
+  // set beneficiary on the endowment record
+  const beneEndowId = event.params.beneficiary.data.endowId
+  if (beneEndowId.gt(BigInt.zero())) {
+    let beneEndow = Endowment.load(beneEndowId.toString())
+    if (beneEndow == null) {
+      log.error("Endowment with ID: '{}' does not exist", [beneEndowId.toString()])
     }
+    endow.beneficiaryEndowment = beneEndowId.toString()
+  } else {
+    const beneWallet = loadUser(event.params.beneficiary.data.addr)
+    endow.beneficiaryWallet = beneWallet.id
+  }
+  endow.save()
+
+  // re-link all endowments that had this closing one as the beneficiary
+  for (let i = 0; i < event.params.relinked.length; i++) {
+    const relinkedEndowId = event.params.relinked[i].toString()
+    let oldEndow = Endowment.load(relinkedEndowId)
+    if (oldEndow == null) {
+      log.error("Relinked Endowment with ID: '{}' does not exist", [relinkedEndowId])
+      continue
+    }
+
+    // update it w/ new beneficiary id
+    if (beneEndowId.gt(BigInt.zero())) {
+      oldEndow.beneficiaryEndowment = endow.beneficiaryEndowment
+      oldEndow.beneficiaryWallet = null
+    } else {
+      oldEndow.beneficiaryWallet = endow.beneficiaryWallet
+      oldEndow.beneficiaryEndowment = null
+    }
+    oldEndow.save()
   }
 }
 

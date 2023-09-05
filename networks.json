@@ -1,0 +1,64 @@
+{
+    "goerli": {
+        "LocalRegistrar": {
+            "address": "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5",
+            "startBlock": 9384610
+        },
+        "VaultEmitter": {
+            "address": "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5",
+            "startBlock": 1384600
+        }
+    },
+    "mumbai": {
+        "Accounts": {
+            "address": "0x6FB00FA229752A5806f0C32849F95b10C2A4ea72",
+            "startBlock": 39779905
+        },
+        "APTeamMultiSig": {
+            "address": "0x87256931eEA25BD1B11a89C0D68384B920357DcC",
+            "startBlock": 39779881
+        },
+        "CharityApplications": {
+            "address": "0xEbcEED7A12532F2307Cc8B2223bFA572093B3B64",
+            "startBlock": 39779967
+        },
+        "EndowmentMultiSigEmitter": {
+            "address": "0x1eB3A06d17735e5cDFd629104116367da1792C8b",
+            "startBlock": 39779985
+        },
+        "Registrar": {
+            "address": "0x4C9BA17841B62d052E7D1C7d7540af6B84f65866",
+            "startBlock": 39779888
+        },
+        "VaultEmitter": {
+            "address": "0xA4EB585D234ed2eDAeBcA3417925bD4E000e0C7f",
+            "startBlock": 39779991
+        }
+    },
+    "polygon": {
+        "Accounts": {
+            "address": "0x6FB00FA229752A5806f0C32849F95b10C2A4ea72",
+            "startBlock": 39779905
+        },
+        "APTeamMultiSig": {
+            "address": "0x87256931eEA25BD1B11a89C0D68384B920357DcC",
+            "startBlock": 39779881
+        },
+        "CharityApplications": {
+            "address": "0xEbcEED7A12532F2307Cc8B2223bFA572093B3B64",
+            "startBlock": 39779967
+        },
+        "EndowmentMultiSigEmitter": {
+            "address": "0x1eB3A06d17735e5cDFd629104116367da1792C8b",
+            "startBlock": 39779985
+        },
+        "Registrar": {
+            "address": "0x4C9BA17841B62d052E7D1C7d7540af6B84f65866",
+            "startBlock": 39779888
+        },
+        "VaultEmitter": {
+            "address": "0xA4EB585D234ed2eDAeBcA3417925bD4E000e0C7f",
+            "startBlock": 39779991
+        }
+    }
+}

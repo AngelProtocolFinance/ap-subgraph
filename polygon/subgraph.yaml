@@ -6,8 +6,8 @@ dataSources:
     name: Accounts
     network: mumbai
     source:
-      address: "0x6FB00FA229752A5806f0C32849F95b10C2A4ea72"
       abi: Accounts
+      address: "0x6FB00FA229752A5806f0C32849F95b10C2A4ea72"
       startBlock: 39779905
     mapping:
       kind: ethereum/events
@@ -43,8 +43,8 @@ dataSources:
     name: APTeamMultiSig
     network: mumbai
     source:
-      address: "0x87256931eEA25BD1B11a89C0D68384B920357DcC"
       abi: APTeamMultiSig
+      address: "0x87256931eEA25BD1B11a89C0D68384B920357DcC"
       startBlock: 39779881
     mapping:
       kind: ethereum/events
@@ -87,8 +87,8 @@ dataSources:
     name: CharityApplications
     network: mumbai
     source:
-      address: "0xEbcEED7A12532F2307Cc8B2223bFA572093B3B64"
       abi: CharityApplications
+      address: "0xEbcEED7A12532F2307Cc8B2223bFA572093B3B64"
       startBlock: 39779967
     mapping:
       kind: ethereum/events
@@ -141,8 +141,8 @@ dataSources:
     name: EndowmentMultiSigEmitter
     network: mumbai
     source:
-      address: "0x1eB3A06d17735e5cDFd629104116367da1792C8b"
       abi: EndowmentMultiSigEmitter
+      address: "0x1eB3A06d17735e5cDFd629104116367da1792C8b"
       startBlock: 39779985
     mapping:
       kind: ethereum/events
@@ -183,8 +183,8 @@ dataSources:
     name: Registrar
     network: mumbai
     source:
-      address: "0x4C9BA17841B62d052E7D1C7d7540af6B84f65866"
       abi: Registrar
+      address: "0x4C9BA17841B62d052E7D1C7d7540af6B84f65866"
       startBlock: 39779888
     mapping:
       kind: ethereum/events
@@ -205,8 +205,8 @@ dataSources:
     name: VaultEmitter
     network: mumbai
     source:
-      address: "0xA4EB585D234ed2eDAeBcA3417925bD4E000e0C7f"
       abi: VaultEmitter
+      address: "0xA4EB585D234ed2eDAeBcA3417925bD4E000e0C7f"
       startBlock: 39779991
     mapping:
       kind: ethereum/events

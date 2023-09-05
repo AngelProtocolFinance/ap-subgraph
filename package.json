@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen ./polygon/subgraph.yaml && graph codegen ./sidechain/subgraph.yaml",
     "build": "function f() { graph build ./$1/subgraph.yaml --network $2; }; f",
-    "deploy": "function f() { graph deploy --node https://api.studio.thegraph.com/deploy/ angel-giving ./$1/subgraph.yaml --network $2; }; f",
-    "create-local": "graph create --node http://localhost:8020/ angel-giving",
-    "remove-local": "graph remove --node http://localhost:8020/ angel-giving",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 angel-giving",
+    "deploy": "function f() { graph deploy --node https://api.studio.thegraph.com/deploy/ $1 ./$2/subgraph.yaml --network $3; }; f",
+    "create-local": "function f() { graph create --node http://localhost:8020/ $1; }; f",
+    "remove-local": "function f() { graph remove --node http://localhost:8020/ $1; }; f",
+    "deploy-local": "function f() { graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 $1; }; f",
     "test": "graph test"
   },
   "dependencies": {

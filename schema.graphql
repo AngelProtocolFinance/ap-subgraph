@@ -97,7 +97,7 @@ type Endowment @entity {
 }
 
 type ClosingBeneficiary @entity {
-  id: Bytes! # tx hash
+  id: String! # Either beneficiary Endowment ID or beneficiary wallet address
   closingEndowment: [Endowment!]! @derivedFrom(field: "closingBeneficiary")
   beneficiaryEndowment: Endowment
   beneficiaryWallet: User

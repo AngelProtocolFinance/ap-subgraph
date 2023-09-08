@@ -4,7 +4,7 @@ schema:
 dataSources:
   - kind: ethereum
     name: Accounts
-    network: polygon
+    network: matic
     source:
       abi: Accounts
       address: "0xf3f48A60EbA732aC2993e11eC93eAD782Ab237e4"
@@ -43,7 +43,7 @@ dataSources:
       file: ../src/accounts.ts
   - kind: ethereum
     name: APTeamMultiSig
-    network: polygon
+    network: matic
     source:
       abi: APTeamMultiSig
       address: "0x52E2657Ab33B5A540D277737374d72CfB75c8D98"
@@ -87,7 +87,7 @@ dataSources:
       file: ../src/ap-team-multi-sig.ts
   - kind: ethereum
     name: CharityApplications
-    network: polygon
+    network: matic
     source:
       abi: CharityApplications
       address: "0x723ca90Ab7A2778F8D8bAc07c789cA989909367e"
@@ -141,7 +141,7 @@ dataSources:
       file: ../src/charity-applications.ts
   - kind: ethereum
     name: EndowmentMultiSigEmitter
-    network: polygon
+    network: matic
     source:
       abi: EndowmentMultiSigEmitter
       address: "0x1411A8Be58c84d1351f679581d388A34790ce6AD"
@@ -183,7 +183,7 @@ dataSources:
       file: ../src/endowment-multi-sig.ts
   - kind: ethereum
     name: Registrar
-    network: polygon
+    network: matic
     source:
       abi: Registrar
       address: "0xE43146c332603072F11ca0c191910F613B1D096F"
@@ -205,7 +205,7 @@ dataSources:
       file: ../src/registrar.ts
   - kind: ethereum
     name: VaultEmitter
-    network: polygon
+    network: matic
     source:
       abi: VaultEmitter
       address: "0x549c05870A4889bA79B3E5743493932c0fdF34BA"

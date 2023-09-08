@@ -44,7 +44,7 @@ export function handleEndowmentClosed(event: EndowmentClosedEvent): void {
     if (beneEndow == null) {
       log.error("Endowment with ID: '{}' does not exist", [beneEndowId.toString()])
     }
-    endow.beneficiaryEndowment = beneEndowId.toString()
+    endow.beneficiaryEndowment = beneEndow.id
   } else {
     const beneWallet = loadUser(event.params.beneficiary.data.addr)
     endow.beneficiaryWallet = beneWallet.id
@@ -62,10 +62,10 @@ export function handleEndowmentClosed(event: EndowmentClosedEvent): void {
 
     // update it w/ new beneficiary id
     if (beneEndowId.gt(BigInt.zero())) {
-      oldEndow.beneficiaryEndowment = endow.beneficiaryEndowment
+      oldEndow.beneficiaryEndowment = beneEndow.id
       oldEndow.beneficiaryWallet = null
     } else {
-      oldEndow.beneficiaryWallet = endow.beneficiaryWallet
+      oldEndow.beneficiaryWallet = beneWallet.id
       oldEndow.beneficiaryEndowment = null
     }
     oldEndow.save()

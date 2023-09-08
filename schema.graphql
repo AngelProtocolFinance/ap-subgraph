@@ -89,7 +89,7 @@ type Endowment @entity {
   endowmentType: EndowmentType!
   beneficiaryEndowment: Endowment
   beneficiaryWallet: User
-  beneficiaryOf: [Endowment!]! @derivedFrom(field: "beneficiaryEndowment")
+  beneficiaryOf: [Endowment]! @derivedFrom(field: "beneficiaryEndowment")
   balancesLocked: [EndowmentTokenLocked]! @derivedFrom(field: "endowment")
   balancesLiquid: [EndowmentTokenLiquid]! @derivedFrom(field: "endowment")
   deposits: [EndowmentDepositTransaction]! @derivedFrom(field: "endowment")

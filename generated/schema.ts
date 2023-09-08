@@ -832,9 +832,7 @@ export class Endowment extends Entity {
   get deposits(): EndowmentDepositTransactionLoader {
     return new EndowmentDepositTransactionLoader(
       "Endowment",
-      this.get("id")!
-        .toBytes()
-        .toHexString(),
+      this.get("id")!.toString(),
       "deposits"
     );
   }
@@ -842,9 +840,7 @@ export class Endowment extends Entity {
   get withdrawals(): EndowmentWithdrawTransactionLoader {
     return new EndowmentWithdrawTransactionLoader(
       "Endowment",
-      this.get("id")!
-        .toBytes()
-        .toHexString(),
+      this.get("id")!.toString(),
       "withdrawals"
     );
   }
@@ -852,9 +848,7 @@ export class Endowment extends Entity {
   get swaps(): EndowmentSwapTransactionLoader {
     return new EndowmentSwapTransactionLoader(
       "Endowment",
-      this.get("id")!
-        .toBytes()
-        .toHexString(),
+      this.get("id")!.toString(),
       "swaps"
     );
   }
@@ -1603,9 +1597,7 @@ export class Strategy extends Entity {
   get vaultLocked(): VaultLoader {
     return new VaultLoader(
       "Strategy",
-      this.get("id")!
-        .toBytes()
-        .toHexString(),
+      this.get("id")!.toString(),
       "vaultLocked"
     );
   }
@@ -1613,9 +1605,7 @@ export class Strategy extends Entity {
   get vaultLiquid(): VaultLoader {
     return new VaultLoader(
       "Strategy",
-      this.get("id")!
-        .toBytes()
-        .toHexString(),
+      this.get("id")!.toString(),
       "vaultLiquid"
     );
   }

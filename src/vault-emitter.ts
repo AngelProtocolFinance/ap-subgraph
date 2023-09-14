@@ -8,6 +8,11 @@ import {
 import { Strategy, Vault, VaultShare } from "../generated/schema"
 import { VaultType } from "./helpers"
 
+/**
+ * Assumes vaults are created *after* a strategy is deployed and registered in LocalRegistrar
+ * (see ./local-registrar.ts > handleStrategyParamsUpdated)
+ * @param event VaultCreated event
+ */
 export function handleVaultCreated(event: VaultCreatedEvent): void {
     let strategy = Strategy.load(event.params.config.strategyId)
     if (strategy == null) {

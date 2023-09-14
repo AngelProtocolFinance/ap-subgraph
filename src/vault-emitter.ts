@@ -57,18 +57,28 @@ export function handleDeposit(event: DepositEvent): void {
     vaultShare.deposited = vaultShare.deposited.plus(event.params.amount)
     vaultShare.shares = vaultShare.shares.plus(event.params.sharesReceived)
     vaultShare.save()
+
+    vault.totalShares = vault.totalShares.plus(event.params.sharesReceived)
+    vault.save()
 }
 
 export function handleRedeem(event: RedeemEvent): void {
     const vault = Vault.load(event.params.vault)
-    if (vault == null) return
+    if (vault == null) {
+        return
+    }
     const vaultShare = VaultShare.load(
         vault.id.toHex() + event.params.endowId.toString()
     )
-    if (vaultShare == null) return
+    if (vaultShare == null) {
+        return
+    }
     vaultShare.deposited = vaultShare.deposited.minus(
         event.params.amountRedeemed
     )
     vaultShare.shares = vaultShare.shares.minus(event.params.shares)
     vaultShare.save()
+
+    vault.totalShares = vault.totalShares.minus(event.params.shares)
+    vault.save()
 }

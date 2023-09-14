@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Accounts
-    network: matic
+    network: mumbai
     source:
       abi: Accounts
-      address: "0xf3f48A60EbA732aC2993e11eC93eAD782Ab237e4"
-      startBlock: 47277325
+      address: "0x543dDFcAFAF31629b46cb8c108633cA8A11F31cc"
+      startBlock: 39780871
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -43,11 +43,11 @@ dataSources:
       file: ../src/accounts.ts
   - kind: ethereum
     name: APTeamMultiSig
-    network: matic
+    network: mumbai
     source:
       abi: APTeamMultiSig
-      address: "0x52E2657Ab33B5A540D277737374d72CfB75c8D98"
-      startBlock: 47277300
+      address: "0x2e163f5362a24635f5536d1b5feEb709C7821abd"
+      startBlock: 39780851
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -87,11 +87,11 @@ dataSources:
       file: ../src/ap-team-multi-sig.ts
   - kind: ethereum
     name: CharityApplications
-    network: matic
+    network: mumbai
     source:
       abi: CharityApplications
-      address: "0x723ca90Ab7A2778F8D8bAc07c789cA989909367e"
-      startBlock: 47277580
+      address: "0x0fe705c721fade290c49c190f90c1968229e44Df"
+      startBlock: 39780937
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -141,11 +141,11 @@ dataSources:
       file: ../src/charity-applications.ts
   - kind: ethereum
     name: EndowmentMultiSigEmitter
-    network: matic
+    network: mumbai
     source:
       abi: EndowmentMultiSigEmitter
-      address: "0x1411A8Be58c84d1351f679581d388A34790ce6AD"
-      startBlock: 47277609
+      address: "0x6F1Dc1ff90363aB80369963140A469bB311ae883"
+      startBlock: 39780960
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -183,11 +183,11 @@ dataSources:
       file: ../src/endowment-multi-sig.ts
   - kind: ethereum
     name: Registrar
-    network: matic
+    network: mumbai
     source:
       abi: Registrar
-      address: "0xE43146c332603072F11ca0c191910F613B1D096F"
-      startBlock: 47277306
+      address: "0x129C401C221a7C7FaD2E7102fE43a0B18651f24e"
+      startBlock: 39780857
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -205,11 +205,11 @@ dataSources:
       file: ../src/registrar.ts
   - kind: ethereum
     name: VaultEmitter
-    network: matic
+    network: mumbai
     source:
       abi: VaultEmitter
-      address: "0x549c05870A4889bA79B3E5743493932c0fdF34BA"
-      startBlock: 47277616
+      address: "0x0f26FaB9d3F22d12764007685404d5c5612fE92f"
+      startBlock: 39780965
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

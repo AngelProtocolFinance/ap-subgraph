@@ -9,10 +9,12 @@ import { Strategy, Vault, VaultShare } from "../generated/schema"
 import { VaultType } from "./helpers"
 
 export function handleVaultCreated(event: VaultCreatedEvent): void {
-    const strategy = Strategy.load(event.params.config.strategyId)
+    let strategy = Strategy.load(event.params.config.strategyId)
     if (strategy == null) {
-        return
+        throw new Error(`Strategy "${event.params.config.strategyId}" does not exist`)
     }
+    strategy.address = event.params.config.strategy
+    strategy.save()
 
     const vault = new Vault(event.params.vault)
     vault.totalShares = BigInt.zero()
@@ -20,28 +22,25 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.type =
         event.params.config.vaultType == VaultType.Locked ? "Locked" : "Liquid"
     vault.strategy = strategy.id
-    vault.address = event.params.config.strategy
+    vault.address = event.params.vault
     vault.baseToken = event.params.config.baseToken
     vault.yieldToken = event.params.config.yieldToken
+    vault.save()
 }
 
 export function handleVaultConfigUpdated(event: VaultConfigUpdatedEvent): void {
-    const strategy = Strategy.load(event.params.config.strategyId)
-    if (strategy == null) {
-        return
-    }
-
     let vault = Vault.load(event.params.vault)
     if (vault == null) {
-        return
+        throw new Error(`Vault "${event.params.vault}" does not exist`)
     }
 
-    vault.type =
-        event.params.config.vaultType == VaultType.Locked ? "Locked" : "Liquid"
-    vault.strategy = strategy.id
-    vault.address = event.params.config.strategy
-    vault.baseToken = event.params.config.baseToken
-    vault.yieldToken = event.params.config.yieldToken
+    const strategy = Strategy.load(vault.strategy)
+    if (strategy == null) {
+        throw new Error(`Strategy "${vault.strategy}" does not exist`)
+    }
+
+    strategy.address = event.params.config.strategy
+    strategy.save()
 }
 
 export function handleDeposit(event: DepositEvent): void {

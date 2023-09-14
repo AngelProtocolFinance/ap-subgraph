@@ -87,6 +87,7 @@ type ApplicationConfirmation @entity {
 type Endowment @entity {
   id: String! # Endowment ID as string
   endowmentType: EndowmentType!
+  name: String!
   beneficiaryEndowment: Endowment
   beneficiaryWallet: User
   beneficiaryOf: [Endowment!]! @derivedFrom(field: "beneficiaryEndowment")

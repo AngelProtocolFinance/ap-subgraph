@@ -28,7 +28,7 @@ dataSources:
       eventHandlers:
         - event: EndowmentClosed(uint256,((uint32,address),uint8),uint32[])
           handler: handleEndowmentClosed
-        - event: EndowmentCreated(uint256,uint8)
+        - event: EndowmentCreated(uint256,uint8,string)
           handler: handleEndowmentCreated
         - event: EndowmentDeposit(uint256,address,uint256,uint256)
           handler: handleEndowmentDeposit

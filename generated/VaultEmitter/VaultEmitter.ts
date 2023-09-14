@@ -40,6 +40,46 @@ export class Deposit__Params {
   }
 }
 
+export class Initialized extends ethereum.Event {
+  get params(): Initialized__Params {
+    return new Initialized__Params(this);
+  }
+}
+
+export class Initialized__Params {
+  _event: Initialized;
+
+  constructor(event: Initialized) {
+    this._event = event;
+  }
+
+  get version(): i32 {
+    return this._event.parameters[0].value.toI32();
+  }
+}
+
+export class OwnershipTransferred extends ethereum.Event {
+  get params(): OwnershipTransferred__Params {
+    return new OwnershipTransferred__Params(this);
+  }
+}
+
+export class OwnershipTransferred__Params {
+  _event: OwnershipTransferred;
+
+  constructor(event: OwnershipTransferred) {
+    this._event = event;
+  }
+
+  get previousOwner(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get newOwner(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+}
+
 export class Redeem extends ethereum.Event {
   get params(): Redeem__Params {
     return new Redeem__Params(this);
@@ -95,40 +135,12 @@ export class VaultConfigUpdated__Params {
 }
 
 export class VaultConfigUpdatedConfigStruct extends ethereum.Tuple {
-  get vaultType(): i32 {
-    return this[0].toI32();
-  }
-
-  get strategyId(): Bytes {
-    return this[1].toBytes();
-  }
-
   get strategy(): Address {
-    return this[2].toAddress();
+    return this[0].toAddress();
   }
 
   get registrar(): Address {
-    return this[3].toAddress();
-  }
-
-  get baseToken(): Address {
-    return this[4].toAddress();
-  }
-
-  get yieldToken(): Address {
-    return this[5].toAddress();
-  }
-
-  get apTokenName(): string {
-    return this[6].toString();
-  }
-
-  get apTokenSymbol(): string {
-    return this[7].toString();
-  }
-
-  get admin(): Address {
-    return this[8].toAddress();
+    return this[1].toAddress();
   }
 }
 
@@ -188,15 +200,52 @@ export class VaultCreatedConfigStruct extends ethereum.Tuple {
   get apTokenSymbol(): string {
     return this[7].toString();
   }
-
-  get admin(): Address {
-    return this[8].toAddress();
-  }
 }
 
 export class VaultEmitter extends ethereum.SmartContract {
   static bind(address: Address): VaultEmitter {
     return new VaultEmitter("VaultEmitter", address);
+  }
+
+  owner(): Address {
+    let result = super.call("owner", "owner():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_owner(): ethereum.CallResult<Address> {
+    let result = super.tryCall("owner", "owner():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+}
+
+export class ConstructorCall extends ethereum.Call {
+  get inputs(): ConstructorCall__Inputs {
+    return new ConstructorCall__Inputs(this);
+  }
+
+  get outputs(): ConstructorCall__Outputs {
+    return new ConstructorCall__Outputs(this);
+  }
+}
+
+export class ConstructorCall__Inputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+}
+
+export class ConstructorCall__Outputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
   }
 }
 
@@ -238,6 +287,32 @@ export class DepositCall__Outputs {
   _call: DepositCall;
 
   constructor(call: DepositCall) {
+    this._call = call;
+  }
+}
+
+export class InitializeCall extends ethereum.Call {
+  get inputs(): InitializeCall__Inputs {
+    return new InitializeCall__Inputs(this);
+  }
+
+  get outputs(): InitializeCall__Outputs {
+    return new InitializeCall__Outputs(this);
+  }
+}
+
+export class InitializeCall__Inputs {
+  _call: InitializeCall;
+
+  constructor(call: InitializeCall) {
+    this._call = call;
+  }
+}
+
+export class InitializeCall__Outputs {
+  _call: InitializeCall;
+
+  constructor(call: InitializeCall) {
     this._call = call;
   }
 }
@@ -284,6 +359,62 @@ export class RedeemCall__Outputs {
   }
 }
 
+export class RenounceOwnershipCall extends ethereum.Call {
+  get inputs(): RenounceOwnershipCall__Inputs {
+    return new RenounceOwnershipCall__Inputs(this);
+  }
+
+  get outputs(): RenounceOwnershipCall__Outputs {
+    return new RenounceOwnershipCall__Outputs(this);
+  }
+}
+
+export class RenounceOwnershipCall__Inputs {
+  _call: RenounceOwnershipCall;
+
+  constructor(call: RenounceOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class RenounceOwnershipCall__Outputs {
+  _call: RenounceOwnershipCall;
+
+  constructor(call: RenounceOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class TransferOwnershipCall extends ethereum.Call {
+  get inputs(): TransferOwnershipCall__Inputs {
+    return new TransferOwnershipCall__Inputs(this);
+  }
+
+  get outputs(): TransferOwnershipCall__Outputs {
+    return new TransferOwnershipCall__Outputs(this);
+  }
+}
+
+export class TransferOwnershipCall__Inputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+
+  get newOwner(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class TransferOwnershipCall__Outputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+}
+
 export class VaultConfigUpdatedCall extends ethereum.Call {
   get inputs(): VaultConfigUpdatedCall__Inputs {
     return new VaultConfigUpdatedCall__Inputs(this);
@@ -321,40 +452,12 @@ export class VaultConfigUpdatedCall__Outputs {
 }
 
 export class VaultConfigUpdatedCallConfigStruct extends ethereum.Tuple {
-  get vaultType(): i32 {
-    return this[0].toI32();
-  }
-
-  get strategyId(): Bytes {
-    return this[1].toBytes();
-  }
-
   get strategy(): Address {
-    return this[2].toAddress();
+    return this[0].toAddress();
   }
 
   get registrar(): Address {
-    return this[3].toAddress();
-  }
-
-  get baseToken(): Address {
-    return this[4].toAddress();
-  }
-
-  get yieldToken(): Address {
-    return this[5].toAddress();
-  }
-
-  get apTokenName(): string {
-    return this[6].toString();
-  }
-
-  get apTokenSymbol(): string {
-    return this[7].toString();
-  }
-
-  get admin(): Address {
-    return this[8].toAddress();
+    return this[1].toAddress();
   }
 }
 
@@ -425,9 +528,5 @@ export class VaultCreatedCallConfigStruct extends ethereum.Tuple {
 
   get apTokenSymbol(): string {
     return this[7].toString();
-  }
-
-  get admin(): Address {
-    return this[8].toAddress();
   }
 }

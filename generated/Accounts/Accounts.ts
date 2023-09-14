@@ -235,7 +235,7 @@ export class EndowmentCreated__Params {
     return this._event.parameters[1].value.toI32();
   }
 
-  get param2(): string {
+  get name(): string {
     return this._event.parameters[2].value.toString();
   }
 }

@@ -234,6 +234,10 @@ export class EndowmentCreated__Params {
   get endowType(): i32 {
     return this._event.parameters[1].value.toI32();
   }
+
+  get name(): string {
+    return this._event.parameters[2].value.toString();
+  }
 }
 
 export class EndowmentDeposit extends ethereum.Event {
@@ -471,8 +475,8 @@ export class RefundNeededParam0Struct extends ethereum.Tuple {
     return this[2].toBytes();
   }
 
-  get accountIds(): Array<BigInt> {
-    return this[3].toBigIntArray();
+  get accountId(): BigInt {
+    return this[3].toBigInt();
   }
 
   get token(): Address {
@@ -563,8 +567,8 @@ export class UnexpectedTokensParam0Struct extends ethereum.Tuple {
     return this[2].toBytes();
   }
 
-  get accountIds(): Array<BigInt> {
-    return this[3].toBigIntArray();
+  get accountId(): BigInt {
+    return this[3].toBigInt();
   }
 
   get token(): Address {

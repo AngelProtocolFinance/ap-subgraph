@@ -26,6 +26,7 @@ import {
 export function handleEndowmentCreated(event: EndowmentCreatedEvent): void {
   let endow = new Endowment(event.params.endowId.toString())
   endow.endowmentType = (event.params.endowType == EndowmentType.Charity) ? "Charity" : "Normal"
+  endow.name = event.params.name
   endow.save()
 }
 

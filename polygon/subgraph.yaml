@@ -28,7 +28,7 @@ dataSources:
       eventHandlers:
         - event: EndowmentClosed(uint256,((uint32,address),uint8),uint32[])
           handler: handleEndowmentClosed
-        - event: EndowmentCreated(uint256,uint8)
+        - event: EndowmentCreated(uint256,uint8,string)
           handler: handleEndowmentCreated
         - event: EndowmentDeposit(uint256,address,uint256,uint256)
           handler: handleEndowmentDeposit
@@ -225,8 +225,8 @@ dataSources:
           handler: handleDeposit
         - event: Redeem(uint32,address,uint256,uint256)
           handler: handleRedeem
-        - event: VaultConfigUpdated(address,(uint8,bytes4,address,address,address,address,string,string,address))
+        - event: VaultConfigUpdated(address,(address,address))
           handler: handleVaultConfigUpdated
-        - event: VaultCreated(address,(uint8,bytes4,address,address,address,address,string,string,address))
+        - event: VaultCreated(address,(uint8,bytes4,address,address,address,address,string,string))
           handler: handleVaultCreated
       file: ../src/vault-emitter.ts

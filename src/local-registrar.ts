@@ -8,7 +8,10 @@ import { StrategyApprovalState } from "./helpers"
 export function handleStrategyParamsUpdated(
     event: StrategyParamsUpdatedEvent
 ): void {
-    const strategy = new Strategy(event.params._strategyId)
+    let strategy = Strategy.load(event.params._strategyId)
+    if (strategy == null) {
+        strategy = new Strategy(event.params._strategyId)
+    }
     strategy.network = event.params._network
     strategy.state = getStrategyApprovalState(event.params._approvalState)
     strategy.save()

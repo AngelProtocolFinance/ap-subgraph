@@ -32,20 +32,6 @@ export class AccountsContractStorageUpdated__Params {
   }
 }
 
-export class ConfigUpdated extends ethereum.Event {
-  get params(): ConfigUpdated__Params {
-    return new ConfigUpdated__Params(this);
-  }
-}
-
-export class ConfigUpdated__Params {
-  _event: ConfigUpdated;
-
-  constructor(event: ConfigUpdated) {
-    this._event = event;
-  }
-}
-
 export class FeeSettingsUpdated extends ethereum.Event {
   get params(): FeeSettingsUpdated__Params {
     return new FeeSettingsUpdated__Params(this);
@@ -94,24 +80,6 @@ export class GasFeeUpdated__Params {
   }
 }
 
-export class Initialized extends ethereum.Event {
-  get params(): Initialized__Params {
-    return new Initialized__Params(this);
-  }
-}
-
-export class Initialized__Params {
-  _event: Initialized;
-
-  constructor(event: Initialized) {
-    this._event = event;
-  }
-
-  get version(): i32 {
-    return this._event.parameters[0].value.toI32();
-  }
-}
-
 export class NetworkConnectionPosted extends ethereum.Event {
   get params(): NetworkConnectionPosted__Params {
     return new NetworkConnectionPosted__Params(this);
@@ -145,28 +113,6 @@ export class NetworkConnectionRemoved__Params {
 
   get chainId(): BigInt {
     return this._event.parameters[0].value.toBigInt();
-  }
-}
-
-export class OwnershipTransferred extends ethereum.Event {
-  get params(): OwnershipTransferred__Params {
-    return new OwnershipTransferred__Params(this);
-  }
-}
-
-export class OwnershipTransferred__Params {
-  _event: OwnershipTransferred;
-
-  constructor(event: OwnershipTransferred) {
-    this._event = event;
-  }
-
-  get previousOwner(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get newOwner(): Address {
-    return this._event.parameters[1].value.toAddress();
   }
 }
 
@@ -623,29 +569,6 @@ export class Registrar extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getVaultEmitterAddress(): Address {
-    let result = super.call(
-      "getVaultEmitterAddress",
-      "getVaultEmitterAddress():(address)",
-      []
-    );
-
-    return result[0].toAddress();
-  }
-
-  try_getVaultEmitterAddress(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "getVaultEmitterAddress",
-      "getVaultEmitterAddress():(address)",
-      []
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
   getVaultOperatorApproved(_operator: Address): boolean {
     let result = super.call(
       "getVaultOperatorApproved",
@@ -832,150 +755,6 @@ export class Registrar extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
-  }
-}
-
-export class ConstructorCall extends ethereum.Call {
-  get inputs(): ConstructorCall__Inputs {
-    return new ConstructorCall__Inputs(this);
-  }
-
-  get outputs(): ConstructorCall__Outputs {
-    return new ConstructorCall__Outputs(this);
-  }
-}
-
-export class ConstructorCall__Inputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
-export class ConstructorCall__Outputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
-export class InitializeCall extends ethereum.Call {
-  get inputs(): InitializeCall__Inputs {
-    return new InitializeCall__Inputs(this);
-  }
-
-  get outputs(): InitializeCall__Outputs {
-    return new InitializeCall__Outputs(this);
-  }
-}
-
-export class InitializeCall__Inputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
-  }
-
-  get details(): InitializeCallDetailsStruct {
-    return changetype<InitializeCallDetailsStruct>(
-      this._call.inputValues[0].value.toTuple()
-    );
-  }
-}
-
-export class InitializeCall__Outputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
-  }
-}
-
-export class InitializeCallDetailsStruct extends ethereum.Tuple {
-  get apTeamMultisig(): Address {
-    return this[0].toAddress();
-  }
-
-  get treasury(): Address {
-    return this[1].toAddress();
-  }
-
-  get router(): Address {
-    return this[2].toAddress();
-  }
-
-  get axelarGateway(): Address {
-    return this[3].toAddress();
-  }
-
-  get axelarGasService(): Address {
-    return this[4].toAddress();
-  }
-
-  get networkName(): string {
-    return this[5].toString();
-  }
-
-  get refundAddr(): Address {
-    return this[6].toAddress();
-  }
-}
-
-export class Initialize1Call extends ethereum.Call {
-  get inputs(): Initialize1Call__Inputs {
-    return new Initialize1Call__Inputs(this);
-  }
-
-  get outputs(): Initialize1Call__Outputs {
-    return new Initialize1Call__Outputs(this);
-  }
-}
-
-export class Initialize1Call__Inputs {
-  _call: Initialize1Call;
-
-  constructor(call: Initialize1Call) {
-    this._call = call;
-  }
-
-  get _chain(): string {
-    return this._call.inputValues[0].value.toString();
-  }
-}
-
-export class Initialize1Call__Outputs {
-  _call: Initialize1Call;
-
-  constructor(call: Initialize1Call) {
-    this._call = call;
-  }
-}
-
-export class RenounceOwnershipCall extends ethereum.Call {
-  get inputs(): RenounceOwnershipCall__Inputs {
-    return new RenounceOwnershipCall__Inputs(this);
-  }
-
-  get outputs(): RenounceOwnershipCall__Outputs {
-    return new RenounceOwnershipCall__Outputs(this);
-  }
-}
-
-export class RenounceOwnershipCall__Inputs {
-  _call: RenounceOwnershipCall;
-
-  constructor(call: RenounceOwnershipCall) {
-    this._call = call;
-  }
-}
-
-export class RenounceOwnershipCall__Outputs {
-  _call: RenounceOwnershipCall;
-
-  constructor(call: RenounceOwnershipCall) {
-    this._call = call;
   }
 }
 
@@ -1202,11 +981,11 @@ export class SetStrategyParamsCall__Inputs {
     return this._call.inputValues[1].value.toString();
   }
 
-  get _lockAddr(): Address {
+  get _liqAddr(): Address {
     return this._call.inputValues[2].value.toAddress();
   }
 
-  get _liqAddr(): Address {
+  get _lockAddr(): Address {
     return this._call.inputValues[3].value.toAddress();
   }
 
@@ -1291,36 +1070,6 @@ export class SetUniswapAddressesCall__Outputs {
   }
 }
 
-export class SetVaultEmitterAddressCall extends ethereum.Call {
-  get inputs(): SetVaultEmitterAddressCall__Inputs {
-    return new SetVaultEmitterAddressCall__Inputs(this);
-  }
-
-  get outputs(): SetVaultEmitterAddressCall__Outputs {
-    return new SetVaultEmitterAddressCall__Outputs(this);
-  }
-}
-
-export class SetVaultEmitterAddressCall__Inputs {
-  _call: SetVaultEmitterAddressCall;
-
-  constructor(call: SetVaultEmitterAddressCall) {
-    this._call = call;
-  }
-
-  get _vaultEmitter(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class SetVaultEmitterAddressCall__Outputs {
-  _call: SetVaultEmitterAddressCall;
-
-  constructor(call: SetVaultEmitterAddressCall) {
-    this._call = call;
-  }
-}
-
 export class SetVaultOperatorApprovedCall extends ethereum.Call {
   get inputs(): SetVaultOperatorApprovedCall__Inputs {
     return new SetVaultOperatorApprovedCall__Inputs(this);
@@ -1351,36 +1100,6 @@ export class SetVaultOperatorApprovedCall__Outputs {
   _call: SetVaultOperatorApprovedCall;
 
   constructor(call: SetVaultOperatorApprovedCall) {
-    this._call = call;
-  }
-}
-
-export class TransferOwnershipCall extends ethereum.Call {
-  get inputs(): TransferOwnershipCall__Inputs {
-    return new TransferOwnershipCall__Inputs(this);
-  }
-
-  get outputs(): TransferOwnershipCall__Outputs {
-    return new TransferOwnershipCall__Outputs(this);
-  }
-}
-
-export class TransferOwnershipCall__Inputs {
-  _call: TransferOwnershipCall;
-
-  constructor(call: TransferOwnershipCall) {
-    this._call = call;
-  }
-
-  get newOwner(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class TransferOwnershipCall__Outputs {
-  _call: TransferOwnershipCall;
-
-  constructor(call: TransferOwnershipCall) {
     this._call = call;
   }
 }
@@ -1510,8 +1229,8 @@ export class UpdateNetworkConnectionsCall__Inputs {
     );
   }
 
-  get action(): i32 {
-    return this._call.inputValues[2].value.toI32();
+  get action(): string {
+    return this._call.inputValues[2].value.toString();
   }
 }
 
@@ -1542,6 +1261,98 @@ export class UpdateNetworkConnectionsCallNetworkInfoStruct extends ethereum.Tupl
 
   get refundAddr(): Address {
     return this[4].toAddress();
+  }
+}
+
+export class UpdateNetworkConnections1Call extends ethereum.Call {
+  get inputs(): UpdateNetworkConnections1Call__Inputs {
+    return new UpdateNetworkConnections1Call__Inputs(this);
+  }
+
+  get outputs(): UpdateNetworkConnections1Call__Outputs {
+    return new UpdateNetworkConnections1Call__Outputs(this);
+  }
+}
+
+export class UpdateNetworkConnections1Call__Inputs {
+  _call: UpdateNetworkConnections1Call;
+
+  constructor(call: UpdateNetworkConnections1Call) {
+    this._call = call;
+  }
+
+  get networkName(): string {
+    return this._call.inputValues[0].value.toString();
+  }
+
+  get networkInfo(): UpdateNetworkConnections1CallNetworkInfoStruct {
+    return changetype<UpdateNetworkConnections1CallNetworkInfoStruct>(
+      this._call.inputValues[1].value.toTuple()
+    );
+  }
+
+  get action(): i32 {
+    return this._call.inputValues[2].value.toI32();
+  }
+}
+
+export class UpdateNetworkConnections1Call__Outputs {
+  _call: UpdateNetworkConnections1Call;
+
+  constructor(call: UpdateNetworkConnections1Call) {
+    this._call = call;
+  }
+}
+
+export class UpdateNetworkConnections1CallNetworkInfoStruct extends ethereum.Tuple {
+  get chainId(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get router(): Address {
+    return this[1].toAddress();
+  }
+
+  get axelarGateway(): Address {
+    return this[2].toAddress();
+  }
+
+  get gasReceiver(): Address {
+    return this[3].toAddress();
+  }
+
+  get refundAddr(): Address {
+    return this[4].toAddress();
+  }
+}
+
+export class UpdateOwnerCall extends ethereum.Call {
+  get inputs(): UpdateOwnerCall__Inputs {
+    return new UpdateOwnerCall__Inputs(this);
+  }
+
+  get outputs(): UpdateOwnerCall__Outputs {
+    return new UpdateOwnerCall__Outputs(this);
+  }
+}
+
+export class UpdateOwnerCall__Inputs {
+  _call: UpdateOwnerCall;
+
+  constructor(call: UpdateOwnerCall) {
+    this._call = call;
+  }
+
+  get newOwner(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class UpdateOwnerCall__Outputs {
+  _call: UpdateOwnerCall;
+
+  constructor(call: UpdateOwnerCall) {
+    this._call = call;
   }
 }
 

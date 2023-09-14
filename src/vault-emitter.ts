@@ -11,7 +11,7 @@ import { VaultType } from "./helpers"
 export function handleVaultCreated(event: VaultCreatedEvent): void {
     let strategy = Strategy.load(event.params.config.strategyId)
     if (strategy == null) {
-        throw new Error(`Strategy "${event.params.config.strategyId}" does not exist`)
+        return
     }
     strategy.address = event.params.config.strategy
     strategy.save()
@@ -31,14 +31,12 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
 export function handleVaultConfigUpdated(event: VaultConfigUpdatedEvent): void {
     let vault = Vault.load(event.params.vault)
     if (vault == null) {
-        throw new Error(`Vault "${event.params.vault}" does not exist`)
+        return
     }
-
     const strategy = Strategy.load(vault.strategy)
     if (strategy == null) {
-        throw new Error(`Strategy "${vault.strategy}" does not exist`)
+        return
     }
-
     strategy.address = event.params.config.strategy
     strategy.save()
 }

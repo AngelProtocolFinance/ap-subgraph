@@ -14,12 +14,10 @@ import { VaultType } from "./helpers"
  * @param event VaultCreated event
  */
 export function handleVaultCreated(event: VaultCreatedEvent): void {
-    let strategy = Strategy.load(event.params.config.strategyId)
+    const strategy = Strategy.load(event.params.config.strategyId)
     if (strategy == null) {
         return
     }
-    strategy.address = event.params.config.strategy
-    strategy.save()
 
     const vault = new Vault(event.params.vault)
     vault.totalShares = BigInt.zero()
@@ -31,19 +29,6 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.baseToken = event.params.config.baseToken
     vault.yieldToken = event.params.config.yieldToken
     vault.save()
-}
-
-export function handleVaultConfigUpdated(event: VaultConfigUpdatedEvent): void {
-    let vault = Vault.load(event.params.vault)
-    if (vault == null) {
-        return
-    }
-    const strategy = Strategy.load(vault.strategy)
-    if (strategy == null) {
-        return
-    }
-    strategy.address = event.params.config.strategy
-    strategy.save()
 }
 
 export function handleDeposit(event: DepositEvent): void {

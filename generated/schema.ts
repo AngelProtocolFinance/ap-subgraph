@@ -1587,23 +1587,6 @@ export class Strategy extends Entity {
     this.set("id", Value.fromBytes(value));
   }
 
-  get address(): Bytes | null {
-    let value = this.get("address");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBytes();
-    }
-  }
-
-  set address(value: Bytes | null) {
-    if (!value) {
-      this.unset("address");
-    } else {
-      this.set("address", Value.fromBytes(<Bytes>value));
-    }
-  }
-
   get network(): string {
     let value = this.get("network");
     if (!value || value.kind == ValueKind.NULL) {

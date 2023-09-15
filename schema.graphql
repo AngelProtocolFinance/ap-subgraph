@@ -154,7 +154,6 @@ type EndowmentSwapTransaction @entity(immutable: true) {
 
 type Strategy @entity {
   id: Bytes! # strategy selector
-  address: Bytes # gets populated when Vaults are created
   network: String!
   state: StrategyApprovalState!
   vaultLocked: Vault @derivedFrom(field: "strategy")

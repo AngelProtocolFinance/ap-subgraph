@@ -40,46 +40,6 @@ export class Deposit__Params {
   }
 }
 
-export class Initialized extends ethereum.Event {
-  get params(): Initialized__Params {
-    return new Initialized__Params(this);
-  }
-}
-
-export class Initialized__Params {
-  _event: Initialized;
-
-  constructor(event: Initialized) {
-    this._event = event;
-  }
-
-  get version(): i32 {
-    return this._event.parameters[0].value.toI32();
-  }
-}
-
-export class OwnershipTransferred extends ethereum.Event {
-  get params(): OwnershipTransferred__Params {
-    return new OwnershipTransferred__Params(this);
-  }
-}
-
-export class OwnershipTransferred__Params {
-  _event: OwnershipTransferred;
-
-  constructor(event: OwnershipTransferred) {
-    this._event = event;
-  }
-
-  get previousOwner(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get newOwner(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
 export class Redeem extends ethereum.Event {
   get params(): Redeem__Params {
     return new Redeem__Params(this);
@@ -206,47 +166,6 @@ export class VaultEmitter extends ethereum.SmartContract {
   static bind(address: Address): VaultEmitter {
     return new VaultEmitter("VaultEmitter", address);
   }
-
-  owner(): Address {
-    let result = super.call("owner", "owner():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_owner(): ethereum.CallResult<Address> {
-    let result = super.tryCall("owner", "owner():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-}
-
-export class ConstructorCall extends ethereum.Call {
-  get inputs(): ConstructorCall__Inputs {
-    return new ConstructorCall__Inputs(this);
-  }
-
-  get outputs(): ConstructorCall__Outputs {
-    return new ConstructorCall__Outputs(this);
-  }
-}
-
-export class ConstructorCall__Inputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
-}
-
-export class ConstructorCall__Outputs {
-  _call: ConstructorCall;
-
-  constructor(call: ConstructorCall) {
-    this._call = call;
-  }
 }
 
 export class DepositCall extends ethereum.Call {
@@ -291,32 +210,6 @@ export class DepositCall__Outputs {
   }
 }
 
-export class InitializeCall extends ethereum.Call {
-  get inputs(): InitializeCall__Inputs {
-    return new InitializeCall__Inputs(this);
-  }
-
-  get outputs(): InitializeCall__Outputs {
-    return new InitializeCall__Outputs(this);
-  }
-}
-
-export class InitializeCall__Inputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
-  }
-}
-
-export class InitializeCall__Outputs {
-  _call: InitializeCall;
-
-  constructor(call: InitializeCall) {
-    this._call = call;
-  }
-}
-
 export class RedeemCall extends ethereum.Call {
   get inputs(): RedeemCall__Inputs {
     return new RedeemCall__Inputs(this);
@@ -355,62 +248,6 @@ export class RedeemCall__Outputs {
   _call: RedeemCall;
 
   constructor(call: RedeemCall) {
-    this._call = call;
-  }
-}
-
-export class RenounceOwnershipCall extends ethereum.Call {
-  get inputs(): RenounceOwnershipCall__Inputs {
-    return new RenounceOwnershipCall__Inputs(this);
-  }
-
-  get outputs(): RenounceOwnershipCall__Outputs {
-    return new RenounceOwnershipCall__Outputs(this);
-  }
-}
-
-export class RenounceOwnershipCall__Inputs {
-  _call: RenounceOwnershipCall;
-
-  constructor(call: RenounceOwnershipCall) {
-    this._call = call;
-  }
-}
-
-export class RenounceOwnershipCall__Outputs {
-  _call: RenounceOwnershipCall;
-
-  constructor(call: RenounceOwnershipCall) {
-    this._call = call;
-  }
-}
-
-export class TransferOwnershipCall extends ethereum.Call {
-  get inputs(): TransferOwnershipCall__Inputs {
-    return new TransferOwnershipCall__Inputs(this);
-  }
-
-  get outputs(): TransferOwnershipCall__Outputs {
-    return new TransferOwnershipCall__Outputs(this);
-  }
-}
-
-export class TransferOwnershipCall__Inputs {
-  _call: TransferOwnershipCall;
-
-  constructor(call: TransferOwnershipCall) {
-    this._call = call;
-  }
-
-  get newOwner(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-}
-
-export class TransferOwnershipCall__Outputs {
-  _call: TransferOwnershipCall;
-
-  constructor(call: TransferOwnershipCall) {
     this._call = call;
   }
 }

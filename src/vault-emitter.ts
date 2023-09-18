@@ -8,6 +8,11 @@ import {
 import { Strategy, Vault, VaultShare } from "../generated/schema"
 import { VaultType } from "./helpers"
 
+/**
+ * Assumes vaults are created *after* a strategy is deployed and registered in LocalRegistrar
+ * (see ./local-registrar.ts > handleStrategyParamsUpdated)
+ * @param event VaultCreated event
+ */
 export function handleVaultCreated(event: VaultCreatedEvent): void {
     const strategy = Strategy.load(event.params.config.strategyId)
     if (strategy == null) {
@@ -20,28 +25,10 @@ export function handleVaultCreated(event: VaultCreatedEvent): void {
     vault.type =
         event.params.config.vaultType == VaultType.Locked ? "Locked" : "Liquid"
     vault.strategy = strategy.id
-    vault.address = event.params.config.strategy
+    vault.address = event.params.vault
     vault.baseToken = event.params.config.baseToken
     vault.yieldToken = event.params.config.yieldToken
-}
-
-export function handleVaultConfigUpdated(event: VaultConfigUpdatedEvent): void {
-    const strategy = Strategy.load(event.params.config.strategyId)
-    if (strategy == null) {
-        return
-    }
-
-    let vault = Vault.load(event.params.vault)
-    if (vault == null) {
-        return
-    }
-
-    vault.type =
-        event.params.config.vaultType == VaultType.Locked ? "Locked" : "Liquid"
-    vault.strategy = strategy.id
-    vault.address = event.params.config.strategy
-    vault.baseToken = event.params.config.baseToken
-    vault.yieldToken = event.params.config.yieldToken
+    vault.save()
 }
 
 export function handleDeposit(event: DepositEvent): void {
@@ -60,18 +47,28 @@ export function handleDeposit(event: DepositEvent): void {
     vaultShare.deposited = vaultShare.deposited.plus(event.params.amount)
     vaultShare.shares = vaultShare.shares.plus(event.params.sharesReceived)
     vaultShare.save()
+
+    vault.totalShares = vault.totalShares.plus(event.params.sharesReceived)
+    vault.save()
 }
 
 export function handleRedeem(event: RedeemEvent): void {
     const vault = Vault.load(event.params.vault)
-    if (vault == null) return
+    if (vault == null) {
+        return
+    }
     const vaultShare = VaultShare.load(
         vault.id.toHex() + event.params.endowId.toString()
     )
-    if (vaultShare == null) return
+    if (vaultShare == null) {
+        return
+    }
     vaultShare.deposited = vaultShare.deposited.minus(
         event.params.amountRedeemed
     )
     vaultShare.shares = vaultShare.shares.minus(event.params.shares)
     vaultShare.save()
+
+    vault.totalShares = vault.totalShares.minus(event.params.shares)
+    vault.save()
 }

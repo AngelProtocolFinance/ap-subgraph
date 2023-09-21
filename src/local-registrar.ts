@@ -8,6 +8,7 @@ import { StrategyApprovalState } from "./helpers"
 /**
  * We register a new strategy being created the first time it is set in the LocalRegistrar contract.
  * As long as it's not registered in there, we can ignore it.
+ * 
  * IMPORTANT: This assumes the following flow:
  * 1. Strategy contract deployed
  * 2. Strategy registered with LocalRegistrar.setStratParams (vaults' addresses set to address(0))
@@ -24,6 +25,8 @@ export function handleStrategyParamsUpdated(
     }
     strategy.network = event.params._network
     strategy.state = getStrategyApprovalState(event.params._approvalState)
+    strategy.vaultLiquid = event.params._liqAddr
+    strategy.vaultLocked = event.params._lockAddr
     strategy.save()
 }
 

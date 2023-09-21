@@ -1,30 +1,17 @@
 import { BigInt } from "@graphprotocol/graph-ts"
 import {
-    VaultConfigUpdated as VaultConfigUpdatedEvent,
     VaultCreated as VaultCreatedEvent,
     Deposit as DepositEvent,
     Redeem as RedeemEvent,
 } from "../generated/VaultEmitter/VaultEmitter"
-import { Strategy, Vault, VaultShare } from "../generated/schema"
+import { Vault, VaultShare } from "../generated/schema"
 import { VaultType } from "./helpers"
 
-/**
- * Assumes vaults are created *after* a strategy is deployed and registered in LocalRegistrar
- * (see ./local-registrar.ts > handleStrategyParamsUpdated)
- * @param event VaultCreated event
- */
 export function handleVaultCreated(event: VaultCreatedEvent): void {
-    const strategy = Strategy.load(event.params.config.strategyId)
-    if (strategy == null) {
-        return
-    }
-
     const vault = new Vault(event.params.vault)
     vault.totalShares = BigInt.zero()
-
-    vault.type =
-        event.params.config.vaultType == VaultType.Locked ? "Locked" : "Liquid"
-    vault.strategy = strategy.id
+    vault.type = event.params.config.vaultType == VaultType.Locked ? "Locked" : "Liquid"
+    vault.strategyId = event.params.config.strategyId
     vault.address = event.params.vault
     vault.baseToken = event.params.config.baseToken
     vault.yieldToken = event.params.config.yieldToken

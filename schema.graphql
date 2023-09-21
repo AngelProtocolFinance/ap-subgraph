@@ -156,8 +156,7 @@ type Strategy @entity {
   id: Bytes! # strategy selector
   network: String!
   state: StrategyApprovalState!
-  vaultLocked: Vault @derivedFrom(field: "strategy")
-  vaultLiquid: Vault @derivedFrom(field: "strategy")
+  vaults: [Vault!]! @derivedFrom(field: "strategy")
 }
 
 type Vault @entity {

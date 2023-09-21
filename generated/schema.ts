@@ -1613,23 +1613,13 @@ export class Strategy extends Entity {
     this.set("state", Value.fromString(value));
   }
 
-  get vaultLocked(): VaultLoader {
+  get vaults(): VaultLoader {
     return new VaultLoader(
       "Strategy",
       this.get("id")!
         .toBytes()
         .toHexString(),
-      "vaultLocked"
-    );
-  }
-
-  get vaultLiquid(): VaultLoader {
-    return new VaultLoader(
-      "Strategy",
-      this.get("id")!
-        .toBytes()
-        .toHexString(),
-      "vaultLiquid"
+      "vaults"
     );
   }
 }

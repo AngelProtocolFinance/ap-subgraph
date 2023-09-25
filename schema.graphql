@@ -156,13 +156,14 @@ type Strategy @entity {
   id: Bytes! # strategy selector
   network: String!
   state: StrategyApprovalState!
-  vaults: [Vault!]! @derivedFrom(field: "strategy")
+  vaultLocked: Bytes! # vault might be deployed on another network, so no need to directly tie it to Vault below
+  vaultLiquid: Bytes! # vault might be deployed on another network, so no need to directly tie it to Vault below
 }
 
 type Vault @entity {
   id: Bytes! # Vault.address
   type: AccountType!
-  strategy: Strategy!
+  strategyId: Bytes! # vault might be deployed on another network, so no need to directly tie it to Strategy
   address: Bytes!
   baseToken: Bytes!
   yieldToken: Bytes!

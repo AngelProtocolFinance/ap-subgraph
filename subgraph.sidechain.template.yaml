@@ -1,14 +1,21 @@
 specVersion: 0.0.5
 schema:
-  file: ../schema.graphql
+  file: ./schema.graphql
+{{#grafting.enabled}}
+features:
+  - grafting
+graft:
+  base: {{grafting.base}}
+  block: {{grafting.block}}
+{{/grafting.enabled}}
 dataSources:
   - kind: ethereum
     name: LocalRegistrar
-    network: goerli
+    network: {{network}}
     source:
       abi: LocalRegistrar
-      address: "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5"
-      startBlock: 9384610
+      address: "{{contracts.LocalRegistrar.address}}"
+      startBlock: {{contracts.LocalRegistrar.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -17,20 +24,20 @@ dataSources:
         - Strategy
       abis:
         - name: LocalRegistrar
-          file: ../abis/LocalRegistrar.json
+          file: ./abis/LocalRegistrar.json
       eventHandlers:
         - event: StrategyApprovalUpdated(bytes4,uint8)
           handler: handleStrategyApprovalUpdated
         - event: StrategyParamsUpdated(bytes4,string,address,address,uint8)
           handler: handleStrategyParamsUpdated
-      file: ../src/local-registrar.ts
+      file: ./src/local-registrar.ts
   - kind: ethereum
     name: VaultEmitter
-    network: goerli
+    network: {{network}}
     source:
       abi: VaultEmitter
-      address: "0xD3d0B4fFF90c36e1a31d478e35d699f432428Ae5"
-      startBlock: 1384600
+      address: "{{contracts.VaultEmitter.address}}"
+      startBlock: {{contracts.VaultEmitter.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -40,7 +47,7 @@ dataSources:
         - VaultShare
       abis:
         - name: VaultEmitter
-          file: ../abis/VaultEmitter.json
+          file: ./abis/VaultEmitter.json
       eventHandlers:
         - event: Deposit(uint32,address,uint256,uint256)
           handler: handleDeposit
@@ -48,4 +55,4 @@ dataSources:
           handler: handleRedeem
         - event: VaultCreated(address,(uint8,bytes4,address,address,address,address,string,string))
           handler: handleVaultCreated
-      file: ../src/vault-emitter.ts
+      file: ./src/vault-emitter.ts

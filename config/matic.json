@@ -1,0 +1,34 @@
+{
+    "grafting": {
+        "enabled": false,
+        "base": "",
+        "block": 0
+    },
+    "contracts": {
+        "Accounts": {
+            "address": "0xf3f48A60EbA732aC2993e11eC93eAD782Ab237e4",
+            "startBlock": 47277325
+        },
+        "APTeamMultiSig": {
+            "address": "0x52E2657Ab33B5A540D277737374d72CfB75c8D98",
+            "startBlock": 47277300
+        },
+        "CharityApplications": {
+            "address": "0x723ca90Ab7A2778F8D8bAc07c789cA989909367e",
+            "startBlock": 47277580
+        },
+        "EndowmentMultiSigEmitter": {
+            "address": "0x1411A8Be58c84d1351f679581d388A34790ce6AD",
+            "startBlock": 47277609
+        },
+        "Registrar": {
+            "address": "0xE43146c332603072F11ca0c191910F613B1D096F",
+            "startBlock": 47277306
+        },
+        "VaultEmitter": {
+            "address": "0x549c05870A4889bA79B3E5743493932c0fdF34BA",
+            "startBlock": 47277616
+        }
+    },
+    "network": "matic"
+}

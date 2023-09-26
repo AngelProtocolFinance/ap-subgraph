@@ -1,14 +1,21 @@
 specVersion: 0.0.5
 schema:
-  file: ../schema.graphql
+  file: ./schema.graphql
+{{#grafting.enabled}}
+features:
+  - grafting
+graft:
+  base: {{grafting.base}}
+  block: {{grafting.block}}
+{{/grafting.enabled}}
 dataSources:
   - kind: ethereum
     name: Accounts
-    network: matic
+    network: {{network}}
     source:
       abi: Accounts
-      address: "0xf3f48A60EbA732aC2993e11eC93eAD782Ab237e4"
-      startBlock: 47277325
+      address: "{{contracts.Accounts.address}}"
+      startBlock: {{contracts.Accounts.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -24,7 +31,7 @@ dataSources:
         - EndowmentSwapTransaction
       abis:
         - name: Accounts
-          file: ../abis/Accounts.json
+          file: ./abis/Accounts.json
       eventHandlers:
         - event: EndowmentClosed(uint256,((uint32,address),uint8),uint32[])
           handler: handleEndowmentClosed
@@ -40,14 +47,14 @@ dataSources:
           handler: handleAllowanceSpent
         - event: TokenSwapped(uint256,uint8,address,uint256,address,uint256)
           handler: handleTokenSwapped
-      file: ../src/accounts.ts
+      file: ./src/accounts.ts
   - kind: ethereum
     name: APTeamMultiSig
-    network: matic
+    network: {{network}}
     source:
       abi: APTeamMultiSig
-      address: "0x52E2657Ab33B5A540D277737374d72CfB75c8D98"
-      startBlock: 47277300
+      address: "{{contracts.APTeamMultiSig.address}}"
+      startBlock: {{contracts.APTeamMultiSig.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -60,7 +67,7 @@ dataSources:
         - TransactionConfirmation
       abis:
         - name: APTeamMultiSig
-          file: ../abis/APTeamMultiSig.json
+          file: ./abis/APTeamMultiSig.json
       eventHandlers:
         - event: InitializedMultiSig(address,address[],uint256,bool,uint256)
           handler: handleInitializedMultiSig
@@ -84,14 +91,14 @@ dataSources:
           handler: handleTransactionExecuted
         - event: TransactionConfirmationRevoked(address,address,uint256)
           handler: handleTransactionConfirmationRevoked
-      file: ../src/ap-team-multi-sig.ts
+      file: ./src/ap-team-multi-sig.ts
   - kind: ethereum
     name: CharityApplications
-    network: matic
+    network: {{network}}
     source:
       abi: CharityApplications
-      address: "0x723ca90Ab7A2778F8D8bAc07c789cA989909367e"
-      startBlock: 47277580
+      address: "{{contracts.CharityApplications.address}}"
+      startBlock: {{contracts.CharityApplications.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -106,7 +113,7 @@ dataSources:
         - ApplicationConfirmation
       abis:
         - name: CharityApplications
-          file: ../abis/CharityApplications.json
+          file: ./abis/CharityApplications.json
       eventHandlers:
         - event: InitializedMultiSig(address,address[],uint256,bool,uint256)
           handler: handleInitializedMultiSig
@@ -138,14 +145,14 @@ dataSources:
           handler: handleApplicationExecuted
         - event: ApplicationProposed(uint256,address,string,uint256,bytes)
           handler: handleApplicationProposed
-      file: ../src/charity-applications.ts
+      file: ./src/charity-applications.ts
   - kind: ethereum
     name: EndowmentMultiSigEmitter
-    network: matic
+    network: {{network}}
     source:
       abi: EndowmentMultiSigEmitter
-      address: "0x1411A8Be58c84d1351f679581d388A34790ce6AD"
-      startBlock: 47277609
+      address: "{{contracts.EndowmentMultiSigEmitter.address}}"
+      startBlock: {{contracts.EndowmentMultiSigEmitter.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -158,7 +165,7 @@ dataSources:
         - TransactionConfirmation
       abis:
         - name: EndowmentMultiSigEmitter
-          file: ../abis/EndowmentMultiSigEmitter.json
+          file: ./abis/EndowmentMultiSigEmitter.json
       eventHandlers:
         - event: EndowmentMultisigCreated(address,uint256,address,address[],uint256,bool,uint256)
           handler: handleEndowmentMultisigCreated
@@ -180,14 +187,14 @@ dataSources:
           handler: handleTransactionExecuted
         - event: TransactionConfirmationRevoked(uint256,address,uint256)
           handler: handleTransactionConfirmationRevoked
-      file: ../src/endowment-multi-sig.ts
+      file: ./src/endowment-multi-sig.ts
   - kind: ethereum
     name: Registrar
-    network: matic
+    network: {{network}}
     source:
       abi: Registrar
-      address: "0xE43146c332603072F11ca0c191910F613B1D096F"
-      startBlock: 47277306
+      address: "{{contracts.Registrar.address}}"
+      startBlock: {{contracts.Registrar.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -196,20 +203,20 @@ dataSources:
         - Strategy
       abis:
         - name: Registrar
-          file: ../abis/Registrar.json
+          file: ./abis/Registrar.json
       eventHandlers:
         - event: StrategyApprovalUpdated(bytes4,uint8)
           handler: handleStrategyApprovalUpdated
         - event: StrategyParamsUpdated(bytes4,string,address,address,uint8)
           handler: handleStrategyParamsUpdated
-      file: ../src/registrar.ts
+      file: ./src/registrar.ts
   - kind: ethereum
     name: VaultEmitter
-    network: matic
+    network: {{network}}
     source:
       abi: VaultEmitter
-      address: "0x549c05870A4889bA79B3E5743493932c0fdF34BA"
-      startBlock: 47277616
+      address: "{{contracts.VaultEmitter.address}}"
+      startBlock: {{contracts.VaultEmitter.startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -219,7 +226,7 @@ dataSources:
         - VaultShare
       abis:
         - name: VaultEmitter
-          file: ../abis/VaultEmitter.json
+          file: ./abis/VaultEmitter.json
       eventHandlers:
         - event: Deposit(uint32,address,uint256,uint256)
           handler: handleDeposit
@@ -227,4 +234,4 @@ dataSources:
           handler: handleRedeem
         - event: VaultCreated(address,(uint8,bytes4,address,address,address,address,string,string))
           handler: handleVaultCreated
-      file: ../src/vault-emitter.ts
+      file: ./src/vault-emitter.ts

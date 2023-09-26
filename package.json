@@ -2,9 +2,12 @@
   "name": "angel-giving",
   "license": "UNLICENSED",
   "scripts": {
-    "codegen": "graph codegen ./polygon/subgraph.yaml && graph codegen ./sidechain/subgraph.yaml",
-    "build": "function f() { graph build ./$1/subgraph.yaml --network $2; }; f",
-    "deploy": "function f() { graph auth --studio $1 && graph deploy --node https://api.studio.thegraph.com/deploy/ $2 ./$3/subgraph.yaml --network $4 ${@:5}; }; f",
+    "prepare:mumbai": "mustache config/mumbai.json subgraph.polygon.template.yaml > subgraph.yaml",
+    "prepare:matic": "mustache config/matic.json subgraph.polygon.template.yaml > subgraph.yaml",
+    "prepare:goerli": "mustache config/goerli.json subgraph.sidechain.template.yaml > subgraph.yaml",
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "function f() { graph auth --studio $1 && graph deploy --node https://api.studio.thegraph.com/deploy/ $2 ${@:3}; }; f",
     "create-local": "function f() { graph create --node http://localhost:8020/ $1; }; f",
     "remove-local": "function f() { graph remove --node http://localhost:8020/ $1; }; f",
     "deploy-local": "function f() { graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 $1; }; f",
@@ -12,7 +15,8 @@
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "^0.58.0",
-    "@graphprotocol/graph-ts": "^0.31.0"
+    "@graphprotocol/graph-ts": "^0.31.0",
+    "mustache": "^4.2.0"
   },
   "devDependencies": {
     "matchstick-as": "^0.5.2"

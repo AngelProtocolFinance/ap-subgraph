@@ -7,7 +7,7 @@
     "prepare:goerli": "mustache config/goerli.json subgraph.sidechain.template.yaml > subgraph.yaml",
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "function f() { graph auth --studio $1 && graph deploy --node https://api.studio.thegraph.com/deploy/ $2 ${@:3}; }; f",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/",
     "create-local": "function f() { graph create --node http://localhost:8020/ $1; }; f",
     "remove-local": "function f() { graph remove --node http://localhost:8020/ $1; }; f",
     "deploy-local": "function f() { graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 $1; }; f",

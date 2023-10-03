@@ -134,12 +134,16 @@ export function handleEndowmentWithdraw(event: EndowmentWithdrawEvent): void {
     let endowTokenId = endow.id + event.params.tokenAddress.toHex()
     if (event.params.accountType == VaultType.Locked) {
       let tokenLocked = EndowmentTokenLocked.load(endowTokenId)
-      tokenLocked.amount = tokenLocked.amount.minus(event.params.amount)
-      tokenLocked.save()
+      if (tokenLocked != null) {
+        tokenLocked.amount = tokenLocked.amount.minus(event.params.amount)
+        tokenLocked.save()
+      }
     } else {
       let tokenLiquid = EndowmentTokenLiquid.load(endowTokenId)
-      tokenLiquid.amount = tokenLiquid.amount.minus(event.params.amount)
-      tokenLiquid.save()
+      if (tokenLiquid != null) {
+        tokenLiquid.amount = tokenLiquid.amount.minus(event.params.amount)
+        tokenLiquid.save()
+      }
     }
   }
 }

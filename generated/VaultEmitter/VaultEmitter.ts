@@ -95,12 +95,40 @@ export class VaultConfigUpdated__Params {
 }
 
 export class VaultConfigUpdatedConfigStruct extends ethereum.Tuple {
+  get vaultType(): i32 {
+    return this[0].toI32();
+  }
+
+  get strategyId(): Bytes {
+    return this[1].toBytes();
+  }
+
   get strategy(): Address {
-    return this[0].toAddress();
+    return this[2].toAddress();
   }
 
   get registrar(): Address {
-    return this[1].toAddress();
+    return this[3].toAddress();
+  }
+
+  get baseToken(): Address {
+    return this[4].toAddress();
+  }
+
+  get yieldToken(): Address {
+    return this[5].toAddress();
+  }
+
+  get apTokenName(): string {
+    return this[6].toString();
+  }
+
+  get apTokenSymbol(): string {
+    return this[7].toString();
+  }
+
+  get admin(): Address {
+    return this[8].toAddress();
   }
 }
 
@@ -159,6 +187,10 @@ export class VaultCreatedConfigStruct extends ethereum.Tuple {
 
   get apTokenSymbol(): string {
     return this[7].toString();
+  }
+
+  get admin(): Address {
+    return this[8].toAddress();
   }
 }
 
@@ -289,12 +321,40 @@ export class VaultConfigUpdatedCall__Outputs {
 }
 
 export class VaultConfigUpdatedCallConfigStruct extends ethereum.Tuple {
+  get vaultType(): i32 {
+    return this[0].toI32();
+  }
+
+  get strategyId(): Bytes {
+    return this[1].toBytes();
+  }
+
   get strategy(): Address {
-    return this[0].toAddress();
+    return this[2].toAddress();
   }
 
   get registrar(): Address {
-    return this[1].toAddress();
+    return this[3].toAddress();
+  }
+
+  get baseToken(): Address {
+    return this[4].toAddress();
+  }
+
+  get yieldToken(): Address {
+    return this[5].toAddress();
+  }
+
+  get apTokenName(): string {
+    return this[6].toString();
+  }
+
+  get apTokenSymbol(): string {
+    return this[7].toString();
+  }
+
+  get admin(): Address {
+    return this[8].toAddress();
   }
 }
 
@@ -365,5 +425,9 @@ export class VaultCreatedCallConfigStruct extends ethereum.Tuple {
 
   get apTokenSymbol(): string {
     return this[7].toString();
+  }
+
+  get admin(): Address {
+    return this[8].toAddress();
   }
 }
